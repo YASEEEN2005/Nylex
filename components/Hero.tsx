@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, animate } from "framer-motion";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -15,8 +15,17 @@ export default function Hero() {
   // Smooth springs for scroll animation
   const smoothScrollProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 20 });
 
-  // Progressive drawing of the functional SVG blue path
-  const pathLength = useTransform(smoothScrollProgress, [0, 0.8], [0.1, 1]);
+  // Automated entry drawing animation of the functional SVG blue path (completes in 2s)
+  const lineProgress = useMotionValue(0.1);
+  const pathLength = useSpring(lineProgress, { stiffness: 45, damping: 15 });
+
+  useEffect(() => {
+    const controls = animate(lineProgress, 1, {
+      duration: 2.0,
+      ease: [0.16, 1, 0.3, 1]
+    });
+    return () => controls.stop();
+  }, []);
 
   // Different parallax speeds for floating UI cards
   const yCard1 = useTransform(smoothScrollProgress, [0, 1], [0, -35]);
