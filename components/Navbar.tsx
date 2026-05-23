@@ -14,8 +14,8 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-      <div className="bg-white/80 backdrop-blur-md border border-slate-100 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.015)] px-6 py-4 flex items-center justify-between transition-all duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.025)]">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pointer-events-none">
+      <div className="pointer-events-auto bg-white/80 backdrop-blur-md border border-slate-100 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.015)] px-6 py-4 flex items-center justify-between transition-all duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.025)]">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center cursor-pointer hover:opacity-90 transition-opacity">
