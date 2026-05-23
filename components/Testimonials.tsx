@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const testimonials = [
+const defaultTestimonials = [
   {
     quote: "Nylex team is professional, fast and delivers outstanding quality. Highly recommended!",
     author: "Rohit Sharma",
@@ -26,78 +27,275 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
-  const [activeIdx, setActiveIdx] = useState(0);
+const colorOptions = [
+  { class: "bg-blue-600", label: "Blue" },
+  { class: "bg-emerald-600", label: "Emerald" },
+  { class: "bg-purple-600", label: "Purple" },
+  { class: "bg-rose-600", label: "Rose" },
+  { class: "bg-amber-500", label: "Amber" },
+];
 
+export default function Testimonials() {
+  const [list, setList] = useState(defaultTestimonials);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [showForm, setShowForm] = useState(false);
+
+  // Form inputs
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [quote, setQuote] = useState("");
+  const [chosenColor, setChosenColor] = useState("bg-blue-600");
+
+  // Load custom testimonials from LocalStorage on mount
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIdx((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(timer);
+    try {
+      const stored = localStorage.getItem("nylex_user_reviews");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setList([...defaultTestimonials, ...parsed]);
+        }
+      }
+    } catch (e) {
+      console.error("Local storage error:", e);
+    }
   }, []);
 
+  // Auto-rotating timer
+  useEffect(() => {
+    if (showForm) return; // pause rotation while writing review
+
+    const timer = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % list.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [list.length, showForm]);
+
+  // Form Submit Handler
+  const handlePublish = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !quote.trim()) return;
+
+    // Build Initials
+    const initials = name
+      .trim()
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+
+    const newReview = {
+      quote: quote.trim(),
+      author: name.trim(),
+      role: role.trim() || "Independent Reviewer",
+      avatarColor: chosenColor,
+      initials: initials || "UX",
+    };
+
+    const updatedList = [...list, newReview];
+    setList(updatedList);
+
+    // Save client reviews only to LocalStorage
+    try {
+      const stored = localStorage.getItem("nylex_user_reviews");
+      const currentStored = stored ? JSON.parse(stored) : [];
+      localStorage.setItem(
+        "nylex_user_reviews",
+        JSON.stringify([...currentStored, newReview])
+      );
+    } catch (err) {
+      console.error(err);
+    }
+
+    // Set view to newly published review
+    setActiveIdx(updatedList.length - 1);
+
+    // Clear and hide form
+    setName("");
+    setRole("");
+    setQuote("");
+    setChosenColor("bg-blue-600");
+    setShowForm(false);
+  };
+
   return (
-    <div className="bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[350px]">
+    <div className="bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] transition-all duration-300">
+      
       <div>
-        {/* Label & Quote Icon */}
-        <div className="flex items-center justify-between mb-8">
-          <span className="text-[10px] tracking-[0.2em] font-extrabold uppercase text-blue-600">Clients Love Us</span>
-          <span className="text-blue-600 text-5xl font-serif leading-none select-none opacity-20">“</span>
-        </div>
+        {/* Card Header Nav */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-[10px] tracking-[0.2em] font-extrabold uppercase text-blue-600">
+            {showForm ? "Share Your Experience" : "Clients Love Us"}
+          </span>
 
-        {/* Testimonial Quote - Fully Responsive Dynamic Height */}
-        <div className="relative overflow-visible">
-          {testimonials.map((t, idx) => {
-            const isActive = idx === activeIdx;
-            return (
-              <div
-                key={idx}
-                className={`transition-all duration-500 flex flex-col justify-center ${
-                  isActive 
-                    ? "opacity-100 translate-x-0 relative z-10" 
-                    : "opacity-0 translate-x-4 pointer-events-none absolute top-0 left-0 w-full"
-                }`}
-              >
-                <p className="text-slate-800 text-lg md:text-xl font-bold leading-relaxed">
-                  {t.quote}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Footer User Info & Dots */}
-      <div className="pt-8 border-t border-slate-50 flex items-center justify-between mt-6">
-        {/* User Card */}
-        <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full ${testimonials[activeIdx].avatarColor} flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
-            {testimonials[activeIdx].initials}
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-slate-800 transition-all duration-300">
-              {testimonials[activeIdx].author}
-            </h4>
-            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-              {testimonials[activeIdx].role}
-            </p>
-          </div>
-        </div>
-
-        {/* Carousel Dots */}
-        <div className="flex items-center gap-2">
-          {testimonials.map((_, idx) => (
+          {!showForm ? (
             <button
-              key={idx}
-              onClick={() => setActiveIdx(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                idx === activeIdx ? "w-6 bg-blue-600" : "w-2 bg-slate-200 hover:bg-slate-300"
-              }`}
-            />
-          ))}
+              onClick={() => setShowForm(true)}
+              className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400 hover:text-blue-600 border border-slate-100 hover:border-blue-100/50 bg-slate-50/50 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition-all duration-300 cursor-pointer"
+            >
+              + Write Review
+            </button>
+          ) : (
+            <span className="text-blue-600 text-3xl font-serif leading-none select-none opacity-20">“</span>
+          )}
         </div>
+
+        {/* Dynamic Display Area */}
+        <AnimatePresence mode="wait">
+          {!showForm ? (
+            <motion.div
+              key="carousel"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="relative min-h-[140px]"
+            >
+              {list.map((t, idx) => {
+                const isActive = idx === activeIdx;
+                return (
+                  <div
+                    key={idx}
+                    className={`transition-all duration-500 flex flex-col justify-center ${
+                      isActive
+                        ? "opacity-100 translate-x-0 relative z-10"
+                        : "opacity-0 translate-x-4 pointer-events-none absolute top-0 left-0 w-full"
+                    }`}
+                  >
+                    <p className="text-slate-800 text-base sm:text-lg lg:text-xl font-bold leading-relaxed">
+                      {t.quote}
+                    </p>
+                  </div>
+                );
+              })}
+            </motion.div>
+          ) : (
+            <motion.form
+              key="review-form"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              onSubmit={handlePublish}
+              className="space-y-4 pt-1"
+            >
+              {/* Review Textarea */}
+              <div className="space-y-1">
+                <label className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Your Review</label>
+                <textarea
+                  required
+                  rows={2}
+                  maxLength={180}
+                  value={quote}
+                  onChange={(e) => setQuote(e.target.value)}
+                  placeholder="The site speed is outstanding! Absolutely transformed our metric scoreboards..."
+                  className="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-xl p-2.5 focus:outline-none focus:border-blue-500/30 focus:bg-white transition-all resize-none"
+                />
+              </div>
+
+              {/* Name & Role Inputs */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Full Name</label>
+                  <input
+                    required
+                    type="text"
+                    maxLength={30}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Rohit Sharma"
+                    className="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-2 focus:outline-none focus:border-blue-500/30 focus:bg-white transition-all"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Company / Role</label>
+                  <input
+                    type="text"
+                    maxLength={35}
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    placeholder="Founder, Nexora"
+                    className="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-2 focus:outline-none focus:border-blue-500/30 focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Avatar Color Choice */}
+              <div className="space-y-1.5 pt-1">
+                <label className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block">Profile Color Accent</label>
+                <div className="flex items-center gap-2">
+                  {colorOptions.map((opt) => (
+                    <button
+                      key={opt.class}
+                      type="button"
+                      onClick={() => setChosenColor(opt.class)}
+                      className={`w-5 h-5 rounded-full ${opt.class} transition-all duration-200 cursor-pointer ${
+                        chosenColor === opt.class
+                          ? "ring-2 ring-blue-500 ring-offset-2 scale-110"
+                          : "opacity-80 hover:opacity-100"
+                      }`}
+                      aria-label={`Select ${opt.label} color`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  type="submit"
+                  className="flex-1 bg-blue-600 text-white hover:bg-blue-700 py-2 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  Publish Review
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="bg-slate-50 hover:bg-slate-100 border border-slate-100 hover:border-slate-200 text-slate-500 px-4 py-2 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.form>
+          )}
+        </AnimatePresence>
       </div>
+
+      {/* Footer Info Display & Switchers */}
+      {!showForm && list[activeIdx] && (
+        <div className="pt-6 border-t border-slate-50 flex items-center justify-between mt-6">
+          {/* User Profile Card */}
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-full ${list[activeIdx].avatarColor} flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0`}>
+              {list[activeIdx].initials}
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-800 transition-all duration-300">
+                {list[activeIdx].author}
+              </h4>
+              <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                {list[activeIdx].role}
+              </p>
+            </div>
+          </div>
+
+          {/* Carousel Slider Controls */}
+          <div className="flex items-center gap-2">
+            {list.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIdx(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  idx === activeIdx ? "w-6 bg-blue-600" : "w-2 bg-slate-200 hover:bg-slate-300"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
