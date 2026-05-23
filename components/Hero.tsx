@@ -162,7 +162,7 @@ export default function Hero() {
       {/* Pinned sticky screen grid */}
       <div className="relative lg:sticky lg:top-0 w-full min-h-screen lg:h-screen flex flex-col justify-center overflow-visible lg:overflow-hidden bg-transparent py-10 lg:py-0">
         
-        <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+        <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center pt-28 lg:pt-20 pb-12 lg:pb-0">
           
           {/* Left Side: Typography */}
           <section className="lg:col-span-6 flex flex-col space-y-4 lg:space-y-3 z-10 text-left">
@@ -253,7 +253,7 @@ export default function Hero() {
           </section>
 
           {/* Right Side: Pinned Interactive Storyboard Dashboard */}
-          <section className="lg:col-span-6 relative w-full h-full min-h-[280px] lg:min-h-[380px] flex items-center justify-center">
+          <section className="hidden lg:flex lg:col-span-6 relative w-full h-full lg:min-h-[380px] items-center justify-center">
             
             {/* Main Visual Chassis Box (Dashboard outline) */}
             <motion.div 
@@ -462,7 +462,7 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.6 }}
               transition={{ delay: 1, duration: 0.8 }}
-              className="absolute bottom-[-6%] left-[90px] hidden lg:flex items-center gap-2 text-[8px] font-extrabold text-slate-400 uppercase tracking-widest select-none pointer-events-none"
+              className="absolute bottom-[-18px] left-[90px] hidden lg:flex items-center gap-2 text-[8px] font-extrabold text-slate-400 uppercase tracking-widest select-none pointer-events-none"
             >
               <div className="w-3.5 h-6 border-2 border-slate-300 rounded-full p-1 flex justify-center">
                 <motion.div 
