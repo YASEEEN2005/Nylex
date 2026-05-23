@@ -15,45 +15,24 @@ const projects = [
       "👥 Multi-Role portals: Specialized Client, Seller and Admin dashboards built on React 19 + Express"
     ],
     mockup: (
-      <div className="w-full h-full bg-[#0a0d14] rounded-t-2xl p-4 flex flex-col relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500 text-white">
+      <div className="w-full h-full bg-[#0a0d14] rounded-t-2xl flex flex-col relative overflow-hidden text-white">
         {/* Browser Top Bar */}
-        <div className="flex justify-between items-center mb-4 border-b border-slate-800 pb-2">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-slate-900 bg-[#0b0e14]">
           <div className="flex gap-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500"></span>
             <span className="w-2 h-2 rounded-full bg-amber-500"></span>
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           </div>
-          <span className="text-[7px] text-slate-500 font-mono">swiftcart.vercel.app</span>
+          <span className="text-[7.5px] text-slate-500 font-mono">swiftcart.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Mock Content */}
-        <div className="flex-1 flex flex-col gap-3">
-          {/* Header */}
-          <div className="flex justify-between items-center">
-            <span className="text-xs font-black tracking-wider text-blue-500">SWIFTCART</span>
-            <div className="w-16 h-4 bg-slate-800 rounded-full flex items-center justify-center text-[7px] font-bold text-slate-400">
-              🛒 Cart (3)
-            </div>
-          </div>
-          {/* Product Cards and Recommendations */}
-          <div className="grid grid-cols-12 gap-2 mt-1">
-            <div className="col-span-8 bg-slate-900 border border-slate-800 rounded-xl p-2.5 space-y-1">
-              <div className="flex items-center gap-1">
-                <span className="text-[8px] bg-blue-500/20 text-blue-400 px-1 rounded font-bold">AI Recommended</span>
-              </div>
-              <div className="h-1.5 bg-slate-700 rounded w-5/6"></div>
-              <div className="h-1 bg-slate-800 rounded w-1/2"></div>
-            </div>
-            <div className="col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex flex-col justify-between items-center text-center">
-              <span className="text-[10px] text-emerald-400 font-black">Verified</span>
-              <div className="w-full h-1 bg-slate-700 rounded"></div>
-            </div>
-          </div>
-          {/* Live indicator */}
-          <div className="flex items-center gap-1.5 text-[8px] font-semibold text-slate-400 mt-auto">
-            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping"></span>
-            <span>MERN Stack + Razorpay + Firebase</span>
-          </div>
+        {/* Image Content */}
+        <div className="flex-1 relative overflow-hidden bg-slate-950">
+          <img 
+            src="/images/full stack ecomerce.png" 
+            alt="SwiftCart Screenshot" 
+            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+          />
         </div>
       </div>
     ),
@@ -70,40 +49,24 @@ const projects = [
       "⚙️ Cmd Palette & Settings: Keyboard macOS-style command palette and centralized preferences engine"
     ],
     mockup: (
-      <div className="w-full h-full bg-[#050608] rounded-t-2xl p-4 flex flex-col relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500 text-white">
+      <div className="w-full h-full bg-[#050608] rounded-t-2xl flex flex-col relative overflow-hidden text-white">
         {/* Browser Top Bar */}
-        <div className="flex justify-between items-center mb-4 border-b border-slate-900/60 pb-2">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-slate-900 bg-[#0a0b0d]">
           <div className="flex gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-slate-800"></span>
-            <span className="w-2 h-2 rounded-full bg-slate-800"></span>
-            <span className="w-2 h-2 rounded-full bg-slate-800"></span>
+            <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           </div>
-          <span className="text-[7px] text-slate-500 font-mono">the-gallery.vercel.app</span>
+          <span className="text-[7.5px] text-slate-500 font-mono">the-gallery.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Mock Content */}
-        <div className="flex-1 grid grid-cols-12 gap-2">
-          {/* Main Focus Bento Box */}
-          <div className="col-span-7 bg-slate-950/80 border border-slate-900/80 rounded-xl p-2.5 flex flex-col justify-between">
-            <div>
-              <span className="text-[7px] text-purple-400 font-black uppercase tracking-widest block">Main Focus</span>
-              <span className="text-[10px] font-bold text-white block mt-0.5">Finish Portfolio Dev</span>
-            </div>
-            <div className="flex items-center gap-1 text-[7px] text-slate-500">
-              <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
-              <span>25:00 Pomodoro</span>
-            </div>
-          </div>
-          {/* Side Weather and AI assistant Bento Box */}
-          <div className="col-span-5 flex flex-col gap-2">
-            <div className="flex-1 bg-slate-950/80 border border-slate-900/80 rounded-xl p-2 flex items-center justify-between">
-              <span className="text-[11px] font-black text-white">24°C</span>
-              <span className="text-[8px] text-slate-400">☀️ Sunny</span>
-            </div>
-            <div className="flex-1 bg-purple-950/30 border border-purple-900/20 rounded-xl p-2 flex items-center justify-center text-[7px] font-bold text-purple-400 gap-1">
-              💬 AI Active
-            </div>
-          </div>
+        {/* Image Content */}
+        <div className="flex-1 relative overflow-hidden bg-slate-950">
+          <img 
+            src="/images/personal dashboard.png" 
+            alt="The Gallery Screenshot" 
+            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+          />
         </div>
       </div>
     ),
@@ -120,35 +83,24 @@ const projects = [
       "📅 Localized Booking widgets: Interactive weather gauges and optimized modular accommodation checkout"
     ],
     mockup: (
-      <div className="w-full h-full bg-[#f8f6f2] rounded-t-2xl p-4 flex flex-col relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500 text-[#2c3e2e]">
+      <div className="w-full h-full bg-[#f8f6f2] rounded-t-2xl flex flex-col relative overflow-hidden">
         {/* Browser Top Bar */}
-        <div className="flex justify-between items-center mb-4 border-b border-[#e9e4d9] pb-2">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-[#e9e4d9] bg-[#f0ede6]">
           <div className="flex gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#d0c8b6]"></span>
-            <span className="w-2 h-2 rounded-full bg-[#d0c8b6]"></span>
-            <span className="w-2 h-2 rounded-full bg-[#d0c8b6]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#c0b8a6]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#c0b8a6]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#c0b8a6]"></span>
           </div>
-          <span className="text-[7px] text-[#8e8470] font-mono">vanyaa-retreat.vercel.app</span>
+          <span className="text-[7.5px] text-[#8e8470] font-mono">vanyaa-retreat.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Mock Content */}
-        <div className="flex-1 flex flex-col gap-2">
-          {/* Serif Header */}
-          <div className="text-center py-1">
-            <span className="font-serif italic text-xs tracking-wider text-[#1e2e20]">Vanyaa Sanctuary</span>
-            <div className="w-6 h-[1px] bg-[#8e8470] mx-auto mt-0.5"></div>
-          </div>
-          {/* Luxury Card Grid */}
-          <div className="grid grid-cols-12 gap-2 flex-1">
-            <div className="col-span-8 bg-white border border-[#eae6dc] rounded-xl p-2 flex flex-col justify-between">
-              <span className="text-[8px] font-bold text-[#1e2e20]">Premium Villa Suite</span>
-              <span className="text-[7px] text-[#8e8470] leading-tight block">Wayanad Rainforest sanctuary</span>
-            </div>
-            <div className="col-span-4 bg-[#1e2e20] rounded-xl p-2 flex flex-col justify-between items-center text-white">
-              <span className="text-[7px] uppercase tracking-widest font-extrabold text-[#d0c8b6]">3D Map</span>
-              <span className="text-[9px]">🗺️</span>
-            </div>
-          </div>
+        {/* Image Content */}
+        <div className="flex-1 relative overflow-hidden bg-[#e9e4d9]">
+          <img 
+            src="/images/vaniya resort.png" 
+            alt="Vanyaa Retreat Screenshot" 
+            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+          />
         </div>
       </div>
     ),
@@ -165,38 +117,24 @@ const projects = [
       "✨ Reveal-On-Scroll transitions: Custom viewport tracking triggers content motion states"
     ],
     mockup: (
-      <div className="w-full h-full bg-[#0a0705] rounded-t-2xl p-4 flex flex-col relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500 text-white">
+      <div className="w-full h-full bg-[#0a0705] rounded-t-2xl flex flex-col relative overflow-hidden text-white">
         {/* Browser Top Bar */}
-        <div className="flex justify-between items-center mb-4 border-b border-stone-900 pb-2">
+        <div className="flex justify-between items-center px-4 py-2 border-b border-stone-900 bg-[#140e0a]">
           <div className="flex gap-1.5">
             <span className="w-2 h-2 rounded-full bg-stone-800"></span>
             <span className="w-2 h-2 rounded-full bg-stone-800"></span>
             <span className="w-2 h-2 rounded-full bg-stone-800"></span>
           </div>
-          <span className="text-[7px] text-stone-600 font-mono">grilax-dining.vercel.app</span>
+          <span className="text-[7.5px] text-stone-600 font-mono">grilax-dining.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Mock Content */}
-        <div className="flex-1 flex flex-col gap-2.5">
-          {/* Header */}
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">GRILAX</span>
-            <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[6px] font-bold px-1.5 py-0.5 rounded-full">
-              📍 2.4 km away
-            </div>
-          </div>
-          {/* Dish layout */}
-          <div className="bg-stone-950 border border-stone-900 rounded-xl p-2.5 flex items-center justify-between gap-2">
-            <div className="space-y-1">
-              <span className="text-[8px] font-bold text-white block">Traditional Sadhya</span>
-              <span className="text-[6px] text-stone-500 block">Authenthic Kerala Cuisine</span>
-            </div>
-            <span className="text-[8px] bg-red-500/20 text-red-400 px-1 rounded font-bold">🌶️ Spicy</span>
-          </div>
-          {/* Booking CTA Button */}
-          <div className="bg-amber-500 text-stone-950 rounded-xl py-1 text-center text-[8px] font-bold mt-auto cursor-pointer">
-            Reserve Table via WhatsApp
-          </div>
+        {/* Image Content */}
+        <div className="flex-1 relative overflow-hidden bg-stone-950">
+          <img 
+            src="/images/Grilex.png" 
+            alt="Grilax App Screenshot" 
+            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+          />
         </div>
       </div>
     ),

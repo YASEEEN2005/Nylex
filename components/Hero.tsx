@@ -84,12 +84,12 @@ export default function Hero() {
   return (
     <main 
       ref={containerRef}
-      className="relative w-full min-h-[90vh] bg-transparent flex flex-col justify-center overflow-visible py-16 lg:py-24"
+      className="relative w-full min-h-[75vh] bg-transparent flex flex-col justify-center overflow-visible py-10 lg:py-16"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
         
         {/* Left Side: Typography */}
-        <section className="lg:col-span-6 flex flex-col space-y-8 z-10 text-left">
+        <section className="lg:col-span-6 flex flex-col space-y-6 z-10 text-left">
           
           {/* Subtle Tagline */}
           <motion.div 
@@ -177,7 +177,7 @@ export default function Hero() {
         </section>
 
         {/* Right Side: Interactive Animated UI Dashboard */}
-        <section className="lg:col-span-6 relative w-full h-full min-h-[350px] lg:min-h-[480px] flex items-center justify-center">
+        <section className="lg:col-span-6 relative w-full h-full min-h-[300px] lg:min-h-[420px] flex items-center justify-center">
           
           {/* Main Visual Chassis Box (Dashboard outline) */}
           <motion.div 
