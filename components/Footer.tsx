@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -100,8 +101,8 @@ export default function Footer() {
           © {new Date().getFullYear()} NYLEX. All rights reserved.
         </span>
         <div className="flex items-center gap-6">
-          <a href="#" className="text-xs text-slate-400 hover:text-slate-600 font-semibold transition-colors">Privacy Policy</a>
-          <a href="#" className="text-xs text-slate-400 hover:text-slate-600 font-semibold transition-colors">Terms & Conditions</a>
+          <Link href="/privacy" className="text-xs text-slate-400 hover:text-slate-600 font-semibold transition-colors">Privacy Policy</Link>
+          <Link href="/terms" className="text-xs text-slate-400 hover:text-slate-600 font-semibold transition-colors">Terms & Conditions</Link>
         </div>
       </div>
     </footer>
