@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
+import TechSandbox from "@/components/TechSandbox";
 import Process from "@/components/Process";
 import Work from "@/components/Work";
 import Testimonials from "@/components/Testimonials";
@@ -26,6 +27,9 @@ export default function Home() {
 
       {/* Services Section */}
       <Services />
+
+      {/* Performance & Technology Showcase Sandbox */}
+      <TechSandbox />
 
       {/* Process Section */}
       <Process />
