@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function SmoothScroll() {
   useEffect(() => {
@@ -22,8 +23,14 @@ export default function SmoothScroll() {
 
     requestAnimationFrame(raf);
 
+    // Refresh ScrollTrigger once Lenis smooth scroll has successfully initiated
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1000);
+
     return () => {
       lenis.destroy();
+      clearTimeout(refreshTimer);
     };
   }, []);
 

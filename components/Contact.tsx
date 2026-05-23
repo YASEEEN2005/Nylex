@@ -9,7 +9,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
-    
+
     setStatus("sending");
     setTimeout(() => {
       setStatus("success");
@@ -37,8 +37,8 @@ export default function Contact() {
 
           {/* Contact Details cards */}
           <div className="space-y-4 max-w-sm">
-            <a 
-              href="mailto:buildwithnylex@gmail.com" 
+            <a
+              href="mailto:buildwithnylex@gmail.com"
               className="flex items-center gap-4 p-4 border border-slate-100 rounded-2xl hover:border-blue-200/50 hover:bg-slate-50/50 transition-all duration-300 group"
             >
               <div className="w-10 h-10 bg-blue-50 border border-blue-100/50 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform duration-300">
@@ -91,24 +91,24 @@ export default function Contact() {
               {/* Name */}
               <div className="space-y-2">
                 <label htmlFor="form-name" className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Your Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   id="form-name"
-                  placeholder="John Doe" 
+                  placeholder="John Doe"
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                   required
                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-300 focus:bg-white transition-all duration-200"
                 />
               </div>
-              
+
               {/* Email */}
               <div className="space-y-2">
                 <label htmlFor="form-email" className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Your Email</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   id="form-email"
-                  placeholder="john@example.com" 
+                  placeholder="john@example.com"
                   value={formState.email}
                   onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                   required
@@ -121,10 +121,10 @@ export default function Contact() {
               {/* Phone */}
               <div className="space-y-2">
                 <label htmlFor="form-phone" className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Your Phone (Optional)</label>
-                <input 
-                  type="tel" 
+                <input
+                  type="tel"
                   id="form-phone"
-                  placeholder="+91 89215 92748" 
+                  placeholder="+91 89215 92748"
                   value={formState.phone}
                   onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                   className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-300 focus:bg-white transition-all duration-200"
@@ -135,10 +135,10 @@ export default function Contact() {
             {/* Message */}
             <div className="space-y-2">
               <label htmlFor="form-msg" className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Your Message</label>
-              <textarea 
-                rows={4} 
+              <textarea
+                rows={4}
                 id="form-msg"
-                placeholder="Tell us about your project..." 
+                placeholder="Tell us about your project..."
                 value={formState.message}
                 onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                 required
@@ -156,17 +156,17 @@ export default function Contact() {
                   <span>Thank you! Your message has been sent successfully.</span>
                 </div>
               ) : (
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={status === "sending"}
                   className="w-full sm:w-auto bg-black text-white hover:bg-slate-900 disabled:bg-slate-400 px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-md font-bold text-sm cursor-pointer group"
                 >
                   {status === "sending" ? "Sending..." : "Send Message"}
-                  <svg 
-                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor" 
+                  <svg
+                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     strokeWidth="2.5"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />

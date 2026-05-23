@@ -51,7 +51,7 @@ export default function Services() {
   return (
     <section id="services" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-t border-slate-100/80">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
-        
+
         {/* Header Left */}
         <div className="lg:col-span-6 space-y-3">
           <span className="text-xs tracking-[0.2em] font-extrabold uppercase text-blue-600">What We Do</span>
@@ -72,7 +72,7 @@ export default function Services() {
       {/* Services Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {services.map((svc, idx) => (
-          <div 
+          <div
             key={idx}
             className="bg-white border border-slate-100 rounded-3xl p-8 shadow-[0_10px_30px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:border-blue-200/50 hover:translate-y-[-6px] transition-all duration-300 flex flex-col justify-between min-h-[250px] group cursor-pointer"
           >

@@ -8,7 +8,7 @@ type TechTab = "legacy" | "react" | "nylex";
 export default function TechSandbox() {
   // Sandbox state
   const [activeTab, setActiveTab] = useState<TechTab>("nylex");
-  
+
   // Slider state
   const [sliderPos, setSliderPos] = useState(50); // percentage (0-100)
   const [isDragging, setIsDragging] = useState(false);
@@ -92,14 +92,14 @@ export default function TechSandbox() {
 
   return (
     <section id="insights" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-t border-slate-100/80">
-      
+
       {/* Header Info */}
       <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100/50 text-[10px] font-extrabold uppercase tracking-widest text-blue-600">
           ⚙️ Performance & Tech Lab
         </div>
         <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] leading-none font-black text-black tracking-tight uppercase">
-          We Don't Just Design.<br/>
+          We Don't Just Design.<br />
           <span className="text-blue-600">We Engineer Speeds.</span>
         </h2>
         <p className="text-slate-500 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
@@ -109,10 +109,10 @@ export default function TechSandbox() {
 
       {/* Main Bento Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-        
+
         {/* Play 1: Tech Comparison Sandbox */}
         <div className="lg:col-span-7 bg-white border border-slate-100 rounded-[32px] p-6 lg:p-8 shadow-[0_15px_50px_rgba(0,0,0,0.015)] flex flex-col justify-between overflow-hidden relative">
-          
+
           <div className="space-y-6">
             <div className="flex justify-between items-start gap-4">
               <div>
@@ -128,11 +128,10 @@ export default function TechSandbox() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 min-w-[120px] text-center px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all duration-300 cursor-pointer ${
-                    activeTab === tab 
-                      ? "bg-white text-blue-600 shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-100" 
+                  className={`flex-1 min-w-[120px] text-center px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all duration-300 cursor-pointer ${activeTab === tab
+                      ? "bg-white text-blue-600 shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-100"
                       : "text-slate-500 hover:text-slate-900 bg-transparent border border-transparent"
-                  }`}
+                    }`}
                 >
                   {tabData[tab].name}
                 </button>
@@ -141,7 +140,7 @@ export default function TechSandbox() {
 
             {/* Performance Metric Scorecards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-              
+
               {/* Speed LCP card */}
               <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl flex flex-col justify-between">
                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">LCP Load Speed</span>
@@ -257,7 +256,7 @@ export default function TechSandbox() {
 
         {/* Play 2: Before / After Split-Screen Viewport Slider */}
         <div className="lg:col-span-5 bg-white border border-slate-100 rounded-[32px] p-6 lg:p-8 shadow-[0_15px_50px_rgba(0,0,0,0.015)] flex flex-col justify-between">
-          
+
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-black text-black uppercase tracking-tight">2. Design & Speed Slider</h3>
@@ -265,7 +264,7 @@ export default function TechSandbox() {
             </div>
 
             {/* Slider Container Chassis */}
-            <div 
+            <div
               ref={sliderContainerRef}
               onPointerDown={handlePointerDown}
               className="relative w-full h-[220px] bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden cursor-ew-resize select-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.01)]"
@@ -287,7 +286,7 @@ export default function TechSandbox() {
               </div>
 
               {/* NYLEX OPTIMIZED FRONT LAYOUT (Top Layer - Width controlled by sliderPos) */}
-              <div 
+              <div
                 className="absolute inset-y-0 left-0 h-full p-4 flex flex-col justify-between bg-white border-r border-blue-500/30 overflow-hidden z-10 transition-shadow"
                 style={{ width: `${sliderPos}%` }}
               >
@@ -311,7 +310,7 @@ export default function TechSandbox() {
               </div>
 
               {/* Sliding Handle (The dragging line indicator) */}
-              <div 
+              <div
                 className="absolute inset-y-0 w-[2px] bg-blue-600 z-20 pointer-events-none flex items-center justify-center"
                 style={{ left: `${sliderPos}%` }}
               >

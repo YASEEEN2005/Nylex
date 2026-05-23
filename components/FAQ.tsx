@@ -52,10 +52,9 @@ export default function FAQ() {
               </button>
 
               {/* Animated content collapse */}
-              <div 
-                className={`grid transition-all duration-300 ease-in-out ${
-                  isOpen ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
-                }`}
+              <div
+                className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+                  }`}
               >
                 <div className="overflow-hidden">
                   <p className="text-slate-500 text-sm leading-relaxed font-medium pr-8">

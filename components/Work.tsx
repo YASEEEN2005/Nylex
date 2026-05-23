@@ -29,9 +29,9 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-slate-950">
-          <Image 
-            src="/images/full stack ecomerce.png" 
-            alt="SwiftCart Screenshot" 
+          <Image
+            src="/images/full stack ecomerce.png"
+            alt="SwiftCart Screenshot"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
@@ -65,9 +65,9 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-slate-950">
-          <Image 
-            src="/images/personal dashboard.png" 
-            alt="The Gallery Screenshot" 
+          <Image
+            src="/images/personal dashboard.png"
+            alt="The Gallery Screenshot"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
@@ -101,9 +101,9 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-[#e9e4d9]">
-          <Image 
-            src="/images/vaniya resort.png" 
-            alt="Vanyaa Retreat Screenshot" 
+          <Image
+            src="/images/vaniya resort.png"
+            alt="Vanyaa Retreat Screenshot"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
@@ -137,9 +137,9 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-stone-950">
-          <Image 
-            src="/images/Grilex.png" 
-            alt="Grilax App Screenshot" 
+          <Image
+            src="/images/Grilex.png"
+            alt="Grilax App Screenshot"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
@@ -195,16 +195,16 @@ export default function Work() {
 
           <div className="flex items-center justify-between">
             {/* View All Work / Contact trigger */}
-            <a 
-              href="#contact" 
+            <a
+              href="#contact"
               className="inline-flex items-center gap-1.5 group text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors"
             >
               Start a Project
-              <svg 
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor" 
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
                 strokeWidth="2.5"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -213,14 +213,14 @@ export default function Work() {
 
             {/* Slider arrows */}
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 onClick={handlePrev}
                 aria-label="Previous Project"
                 className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:scale-95 transition-all cursor-pointer"
               >
                 <span className="text-lg">←</span>
               </button>
-              <button 
+              <button
                 onClick={handleNext}
                 aria-label="Next Project"
                 className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:scale-95 transition-all cursor-pointer"
@@ -233,7 +233,7 @@ export default function Work() {
       </div>
 
       {/* Cards Container snap-scroll list */}
-      <div 
+      <div
         ref={scrollContainerRef}
         className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
         style={{
@@ -242,7 +242,7 @@ export default function Work() {
         }}
       >
         {projects.map((proj, idx) => (
-          <div 
+          <div
             key={idx}
             className="w-[90vw] sm:w-[480px] shrink-0 snap-start flex flex-col bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_35px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.03)] hover:border-blue-200/40 hover:-translate-y-1 transition-all duration-300 group"
           >
@@ -276,10 +276,10 @@ export default function Work() {
 
               {/* Action Buttons: GitHub & Live Demo */}
               <div className="mt-6 pt-4 border-t border-slate-50 flex items-center gap-3">
-                <a 
-                  href={proj.github} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={proj.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex-1 bg-slate-50 hover:bg-slate-100 border border-slate-100 hover:border-slate-200 text-slate-800 text-center font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
                 >
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -287,10 +287,10 @@ export default function Work() {
                   </svg>
                   GitHub
                 </a>
-                <a 
-                  href={proj.demo} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={proj.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-[0_4px_12px_rgba(0,102,255,0.15)] hover:shadow-[0_4px_20px_rgba(0,102,255,0.25)]"
                 >
                   Live Demo

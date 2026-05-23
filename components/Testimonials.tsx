@@ -155,7 +155,7 @@ export default function Testimonials() {
 
   return (
     <div className="bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] transition-all duration-300">
-      
+
       <div>
         {/* Card Header Nav */}
         <div className="flex items-center justify-between mb-6">
@@ -195,11 +195,10 @@ export default function Testimonials() {
                 return (
                   <div
                     key={idx}
-                    className={`transition-all duration-500 flex flex-col justify-center ${
-                      isActive
+                    className={`transition-all duration-500 flex flex-col justify-center ${isActive
                         ? "opacity-100 translate-x-0 relative z-10"
                         : "opacity-0 translate-x-4 pointer-events-none absolute top-0 left-0 w-full"
-                    }`}
+                      }`}
                   >
                     <p className="text-slate-800 text-base sm:text-lg lg:text-xl font-bold leading-relaxed">
                       {t.quote}
@@ -268,11 +267,10 @@ export default function Testimonials() {
                       key={opt.class}
                       type="button"
                       onClick={() => setChosenColor(opt.class)}
-                      className={`w-5 h-5 rounded-full ${opt.class} transition-all duration-200 cursor-pointer ${
-                        chosenColor === opt.class
+                      className={`w-5 h-5 rounded-full ${opt.class} transition-all duration-200 cursor-pointer ${chosenColor === opt.class
                           ? "ring-2 ring-blue-500 ring-offset-2 scale-110"
                           : "opacity-80 hover:opacity-100"
-                      }`}
+                        }`}
                       aria-label={`Select ${opt.label} color`}
                     />
                   ))}
@@ -325,9 +323,8 @@ export default function Testimonials() {
                 key={idx}
                 onClick={() => setActiveIdx(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  idx === activeIdx ? "w-6 bg-blue-600" : "w-2 bg-slate-200 hover:bg-slate-300"
-                }`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${idx === activeIdx ? "w-6 bg-blue-600" : "w-2 bg-slate-200 hover:bg-slate-300"
+                  }`}
               />
             ))}
           </div>
