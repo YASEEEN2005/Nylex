@@ -8,9 +8,13 @@ export default function Navbar() {
       <div className="bg-white/80 backdrop-blur-md border border-slate-100 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.015)] px-6 py-4 flex items-center justify-between transition-all duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.025)]">
         {/* Logo */}
         <div className="flex items-center">
-          <span className="font-extrabold text-xl tracking-[0.35em] text-slate-900 cursor-pointer hover:opacity-80 transition-opacity">
-            NYLEX
-          </span>
+          <a href="#" className="flex items-center cursor-pointer hover:opacity-90 transition-opacity">
+            <img 
+              src="/logo.png" 
+              alt="NYLEX Logo" 
+              className="h-8 w-auto object-contain"
+            />
+          </a>
         </div>
 
         {/* Navigation Links */}
