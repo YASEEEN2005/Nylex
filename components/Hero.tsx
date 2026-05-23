@@ -27,14 +27,25 @@ export default function Hero() {
     return () => controls.stop();
   }, []);
 
-  // Different parallax speeds for floating UI cards
-  const yCard1 = useTransform(smoothScrollProgress, [0, 1], [0, -35]);
-  const yCard2 = useTransform(smoothScrollProgress, [0, 1], [0, 25]);
-  const yCard3 = useTransform(smoothScrollProgress, [0, 1], [0, -15]);
+  // Parallax shifts & dispersion animations for floating UI cards on scroll
+  const yCard1 = useTransform(smoothScrollProgress, [0, 1], [0, -120]);
+  const xCard1Scroll = useTransform(smoothScrollProgress, [0, 1], [0, 45]);
+  const opCard1 = useTransform(smoothScrollProgress, [0, 0.6], [1, 0]);
 
-  // Background dashboard fade, reveal blur and upward shift
-  const opacityBg = useTransform(smoothScrollProgress, [0, 0.8], [1, 0.35]);
-  const yBg = useTransform(smoothScrollProgress, [0, 0.8], [0, -30]);
+  const yCard2 = useTransform(smoothScrollProgress, [0, 1], [0, 100]);
+  const xCard2Scroll = useTransform(smoothScrollProgress, [0, 1], [0, 35]);
+  const opCard2 = useTransform(smoothScrollProgress, [0, 0.6], [1, 0]);
+
+  const yCard3 = useTransform(smoothScrollProgress, [0, 1], [0, -50]);
+  const xCard3Scroll = useTransform(smoothScrollProgress, [0, 1], [0, -75]);
+  const opCard3 = useTransform(smoothScrollProgress, [0, 0.6], [1, 0]);
+
+  // Background dashboard 3D rotation, shrink scale, and vertical lift on scroll
+  const opacityBg = useTransform(smoothScrollProgress, [0, 0.8], [1, 0.25]);
+  const scaleBg = useTransform(smoothScrollProgress, [0, 1], [1, 0.88]);
+  const rotateXBg = useTransform(smoothScrollProgress, [0, 1], [0, -12]);
+  const rotateYBg = useTransform(smoothScrollProgress, [0, 1], [0, 6]);
+  const yBg = useTransform(smoothScrollProgress, [0, 1], [0, -60]);
 
   // Magnetic Button Physics
   const buttonX = useMotionValue(0);
@@ -190,7 +201,14 @@ export default function Hero() {
           
           {/* Main Visual Chassis Box (Dashboard outline) */}
           <motion.div 
-            style={{ opacity: opacityBg, y: yBg }}
+            style={{ 
+              opacity: opacityBg, 
+              y: yBg,
+              scale: scaleBg,
+              rotateX: rotateXBg,
+              rotateY: rotateYBg,
+              transformPerspective: 1000
+            }}
             initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
@@ -268,7 +286,14 @@ export default function Hero() {
 
           {/* Floating Card 1: Performance (Top Right) */}
           <motion.div 
-            style={{ y: yCard1, rotateX: rotX1, rotateY: rotY1, transformStyle: "preserve-3d" }}
+            style={{ 
+              y: yCard1, 
+              x: xCard1Scroll,
+              opacity: opCard1,
+              rotateX: rotX1, 
+              rotateY: rotY1, 
+              transformStyle: "preserve-3d" 
+            }}
             onMouseMove={(e) => handleCardMouseMove(e, 1)}
             onMouseLeave={() => handleCardMouseLeave(1)}
             className="absolute top-[6%] -right-2 lg:right-[1%] xl:right-[8%] w-[140px] lg:w-[155px] bg-white border border-slate-100 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.025)] p-3 lg:p-3.5 z-20 cursor-pointer transition-shadow duration-300 hover:shadow-[0_15px_30px_rgba(0,0,0,0.05)]"
@@ -295,7 +320,14 @@ export default function Hero() {
 
           {/* Floating Card 2: Status (Bottom Right) */}
           <motion.div 
-            style={{ y: yCard2, rotateX: rotX2, rotateY: rotY2, transformStyle: "preserve-3d" }}
+            style={{ 
+              y: yCard2, 
+              x: xCard2Scroll,
+              opacity: opCard2,
+              rotateX: rotX2, 
+              rotateY: rotY2, 
+              transformStyle: "preserve-3d" 
+            }}
             onMouseMove={(e) => handleCardMouseMove(e, 2)}
             onMouseLeave={() => handleCardMouseLeave(2)}
             className="absolute bottom-[8%] -right-2 lg:right-[3%] xl:right-[10%] w-[155px] lg:w-[170px] bg-white border border-slate-100 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.025)] p-3 lg:p-3.5 z-20 cursor-pointer transition-shadow duration-300 hover:shadow-[0_15px_30px_rgba(0,0,0,0.05)]"
@@ -320,7 +352,11 @@ export default function Hero() {
 
           {/* Floating Card 3: Speed (Middle Left) */}
           <motion.div 
-            style={{ y: yCard3 }}
+            style={{ 
+              y: yCard3,
+              x: xCard3Scroll,
+              opacity: opCard3
+            }}
             className="absolute top-[38%] -left-3 lg:left-[1%] w-[90px] lg:w-[100px] bg-white border border-slate-100 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.025)] p-2.5 lg:p-3 z-20"
           >
             <span className="text-[7.5px] font-extrabold text-slate-400 uppercase tracking-widest block">LCP LOAD</span>
