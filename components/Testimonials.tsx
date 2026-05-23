@@ -36,6 +36,7 @@ const colorOptions = [
 ];
 
 export default function Testimonials() {
+  const [isMounted, setIsMounted] = useState(false);
   const [list, setList] = useState(defaultTestimonials);
   const [activeIdx, setActiveIdx] = useState(0);
   const [showForm, setShowForm] = useState(false);
@@ -48,6 +49,7 @@ export default function Testimonials() {
 
   // Load custom testimonials from LocalStorage on mount
   useEffect(() => {
+    setIsMounted(true);
     try {
       const stored = localStorage.getItem("nylex_user_reviews");
       if (stored) {
@@ -70,6 +72,38 @@ export default function Testimonials() {
     }, 6000);
     return () => clearInterval(timer);
   }, [list.length, showForm]);
+
+  if (!isMounted) {
+    return (
+      <div className="bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] animate-pulse">
+        <div>
+          <div className="flex items-center justify-between mb-8">
+            <div className="h-3 bg-slate-100 rounded-full w-24"></div>
+            <div className="h-6 bg-slate-100 rounded-lg w-8 opacity-40"></div>
+          </div>
+          <div className="space-y-3 mt-4">
+            <div className="h-4 bg-slate-100 rounded-full w-full"></div>
+            <div className="h-4 bg-slate-100 rounded-full w-5/6"></div>
+            <div className="h-4 bg-slate-100 rounded-full w-4/5"></div>
+          </div>
+        </div>
+        <div className="pt-6 border-t border-slate-50 flex items-center justify-between mt-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-slate-100"></div>
+            <div className="space-y-1.5">
+              <div className="h-3 bg-slate-100 rounded-full w-20"></div>
+              <div className="h-2 bg-slate-100 rounded-full w-16"></div>
+            </div>
+          </div>
+          <div className="flex gap-1">
+            <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+            <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+            <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Form Submit Handler
   const handlePublish = (e: React.FormEvent) => {

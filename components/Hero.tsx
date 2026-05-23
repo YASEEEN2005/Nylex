@@ -158,9 +158,9 @@ export default function Hero() {
   };
 
   return (
-    <div ref={scrollContainerRef} className="relative w-full h-[450vh] bg-transparent">
+    <div ref={scrollContainerRef} className="relative w-full lg:h-[450vh] bg-transparent">
       {/* Pinned sticky screen grid */}
-      <div className="sticky top-0 w-full h-screen flex flex-col justify-center overflow-hidden bg-transparent">
+      <div className="relative lg:sticky lg:top-0 w-full min-h-screen lg:h-screen flex flex-col justify-center overflow-visible lg:overflow-hidden bg-transparent py-10 lg:py-0">
         
         <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           

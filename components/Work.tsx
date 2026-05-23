@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import Image from "next/image";
 
 const projects = [
   {
@@ -28,10 +29,12 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-slate-950">
-          <img 
+          <Image 
             src="/images/full stack ecomerce.png" 
             alt="SwiftCart Screenshot" 
-            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
       </div>
@@ -62,10 +65,12 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-slate-950">
-          <img 
+          <Image 
             src="/images/personal dashboard.png" 
             alt="The Gallery Screenshot" 
-            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
       </div>
@@ -96,10 +101,12 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-[#e9e4d9]">
-          <img 
+          <Image 
             src="/images/vaniya resort.png" 
             alt="Vanyaa Retreat Screenshot" 
-            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
       </div>
@@ -130,10 +137,12 @@ const projects = [
         </div>
         {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-stone-950">
-          <img 
+          <Image 
             src="/images/Grilex.png" 
             alt="Grilax App Screenshot" 
-            className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
       </div>
