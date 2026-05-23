@@ -132,8 +132,12 @@ export default function Testimonials() {
           {!showForm ? (
             <button
               onClick={() => setShowForm(true)}
-              className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400 hover:text-blue-600 border border-slate-100 hover:border-blue-100/50 bg-slate-50/50 hover:bg-blue-50 px-2.5 py-1 rounded-lg transition-all duration-300 cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-[9px] font-extrabold uppercase tracking-widest text-blue-600 bg-blue-50/60 border border-blue-100/60 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-3 py-1.5 rounded-full transition-all duration-300 cursor-pointer shadow-[0_2px_10px_rgba(0,102,255,0.04)] hover:shadow-[0_4px_15px_rgba(0,102,255,0.15)] group"
             >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-600 group-hover:bg-white transition-colors duration-300"></span>
+              </span>
               + Write Review
             </button>
           ) : (
