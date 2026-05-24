@@ -195,10 +195,7 @@ export default function Hero() {
   }, [loading]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full bg-slate-50 overflow-visible h-[500vh]"
-    >
+    <div ref={containerRef} className="relative w-full bg-slate-50 overflow-visible h-[500vh] hidden md:block">
       {/* Premium custom glass skeleton loader */}
       <AnimatePresence>
         {loading && (
@@ -227,7 +224,7 @@ export default function Hero() {
       <div className="sticky top-0 w-full h-screen overflow-hidden bg-slate-50 flex items-center justify-center">
         {/* Fullscreen Background Canvas */}
         <div className="absolute inset-0 w-full h-full z-0 select-none pointer-events-none opacity-[0.93]">
-          <canvas ref={canvasRef} className="w-full h-full block" />
+          <canvas ref={canvasRef} className="w-full h-full hidden md:block" />
         </div>
 
         {/* Premium Luxury Background Ambient Glow Fields */}

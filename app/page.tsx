@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import MobileHero from "@/components/MobileHero";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import TechSandbox from "@/components/TechSandbox";
@@ -23,6 +24,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main Hero Visuals & Copy */}
+      <MobileHero />
       <Hero />
 
       {/* Services Section */}
