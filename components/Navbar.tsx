@@ -43,8 +43,8 @@ export default function Navbar() {
               <span>NYL</span>
               <span className="inline-flex flex-col justify-between h-3.5 w-4.5 mx-1.5 mt-[1px]">
                 <span className="h-[2px] w-full bg-blue-600 rounded-[1px]" />
-                <span className="h-[2.5px] w-full bg-blue-600 rounded-[1px]" />
-                <span className="h-[2.5px] w-full bg-blue-600 rounded-[1px]" />
+                <span className="h-[2px] w-full bg-blue-600 rounded-[1px]" />
+                <span className="h-[2px] w-full bg-blue-600 rounded-[1px]" />
               </span>
               <span className="tracking-normal">X</span>
             </div>
