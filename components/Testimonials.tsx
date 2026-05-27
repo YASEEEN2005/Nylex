@@ -75,7 +75,7 @@ export default function Testimonials() {
 
   if (!isMounted) {
     return (
-      <div className="bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] animate-pulse">
+      <div className="bg-white border py-6 border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] animate-pulse">
         <div>
           <div className="flex items-center justify-between mb-8">
             <div className="h-3 bg-slate-100 rounded-full w-24"></div>
@@ -154,7 +154,7 @@ export default function Testimonials() {
   };
 
   return (
-    <div className="bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] transition-all duration-300">
+    <div className="bg-white border border-slate-100 rounded-3xl pt-2 p-8 py-6 lg:p-10 shadow-[0_10px_35px_rgba(0,0,0,0.015)] h-full flex flex-col justify-between min-h-[420px] transition-all duration-300">
 
       <div>
         {/* Card Header Nav */}

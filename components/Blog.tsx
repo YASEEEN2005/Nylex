@@ -80,7 +80,7 @@ export default function Blog() {
       </div>
 
       {/* Articles Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         {posts.map((post, idx) => (
           <a
             key={idx}

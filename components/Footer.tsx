@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 border-t border-slate-100/80">
+    <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-10 border-t border-slate-100/80">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-16">
         
         {/* Left Side: Logo & Desc */}
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
 
         {/* Resources Links */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 col-2 space-y-4">
           <h4 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Resources</h4>
           <ul className="space-y-2.5">
             {["Insights", "Case Studies", "FAQs", "Blog"].map((link) => (

@@ -47,7 +47,7 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-t border-slate-100/80">
+    <section id="process" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20 border-t border-slate-100/80">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-20">
         {/* Left Headline */}
         <div className="lg:col-span-6 space-y-3">
@@ -74,7 +74,7 @@ export default function Process() {
         </div>
 
         {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
           {steps.map((step, idx) => (
             <div key={step.id} className="flex flex-col items-center text-center group">
               {/* Step Number Circle */}
