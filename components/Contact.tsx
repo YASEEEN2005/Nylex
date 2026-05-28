@@ -6,16 +6,34 @@ export default function Contact() {
   const [formState, setFormState] = useState({ name: "", email: "", phone: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
 
     setStatus("sending");
-    setTimeout(() => {
-      setStatus("success");
-      setFormState({ name: "", email: "", phone: "", message: "" });
-      setTimeout(() => setStatus("idle"), 5000);
-    }, 1500);
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formState),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setFormState({ name: "", email: "", phone: "", message: "" });
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        setStatus("idle");
+        alert("Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setStatus("idle");
+      alert("Failed to send message. Please try again later.");
+    }
   };
 
   return (
