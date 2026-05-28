@@ -7,20 +7,21 @@ export async function POST(req: Request) {
     await connectToDatabase();
     
     const body = await req.json();
-    const { name, email, rating, comment } = body;
+    const { quote, author, role, avatarColor, initials } = body;
 
-    if (!name || !rating || !comment) {
+    if (!quote || !author) {
       return NextResponse.json(
-        { error: 'Name, rating, and comment are required fields' },
+        { error: 'Quote and author are required fields' },
         { status: 400 }
       );
     }
 
     const review = await Review.create({
-      name,
-      email,
-      rating,
-      comment,
+      quote,
+      author,
+      role,
+      avatarColor,
+      initials,
     });
 
     return NextResponse.json({ success: true, data: review }, { status: 201 });

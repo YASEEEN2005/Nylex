@@ -1,34 +1,38 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IReview extends Document {
-  name: string;
-  email?: string;
-  rating: number;
-  comment: string;
+  quote: string;
+  author: string;
+  role?: string;
+  avatarColor: string;
+  initials: string;
   createdAt: Date;
 }
 
 const ReviewSchema: Schema = new Schema({
-  name: {
+  quote: {
     type: String,
-    required: [true, 'Please provide a name for this review.'],
+    required: [true, 'Please provide a quote'],
+    trim: true,
+  },
+  author: {
+    type: String,
+    required: [true, 'Please provide an author name'],
     trim: true,
     maxlength: [60, 'Name cannot be more than 60 characters'],
   },
-  email: {
+  role: {
     type: String,
     trim: true,
   },
-  rating: {
-    type: Number,
-    required: [true, 'Please provide a rating'],
-    min: 1,
-    max: 5,
-  },
-  comment: {
+  avatarColor: {
     type: String,
-    required: [true, 'Please provide a comment'],
-    trim: true,
+    required: true,
+    default: 'bg-blue-600',
+  },
+  initials: {
+    type: String,
+    required: true,
   },
   createdAt: {
     type: Date,

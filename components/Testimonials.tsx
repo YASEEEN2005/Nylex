@@ -47,20 +47,25 @@ export default function Testimonials() {
   const [quote, setQuote] = useState("");
   const [chosenColor, setChosenColor] = useState("bg-blue-600");
 
-  // Load custom testimonials from LocalStorage on mount
+  // Load custom testimonials from Database on mount
   useEffect(() => {
     setIsMounted(true);
-    try {
-      const stored = localStorage.getItem("nylex_user_reviews");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setList([...defaultTestimonials, ...parsed]);
+    
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch('/api/reviews');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.data && data.data.length > 0) {
+            setList([...defaultTestimonials, ...data.data]);
+          }
         }
+      } catch (err) {
+        console.error('Failed to fetch reviews:', err);
       }
-    } catch (e) {
-      console.error("Local storage error:", e);
-    }
+    };
+    
+    fetchReviews();
   }, []);
 
   // Auto-rotating timer
@@ -106,7 +111,7 @@ export default function Testimonials() {
   }
 
   // Form Submit Handler
-  const handlePublish = (e: React.FormEvent) => {
+  const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !quote.trim()) return;
 
@@ -127,23 +132,34 @@ export default function Testimonials() {
       initials: initials || "UX",
     };
 
-    const updatedList = [...list, newReview];
-    setList(updatedList);
-
-    // Save client reviews only to LocalStorage
+    // Save client reviews to Database
     try {
-      const stored = localStorage.getItem("nylex_user_reviews");
-      const currentStored = stored ? JSON.parse(stored) : [];
-      localStorage.setItem(
-        "nylex_user_reviews",
-        JSON.stringify([...currentStored, newReview])
-      );
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReview),
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          const updatedList = [...list, data.data];
+          setList(updatedList);
+          setActiveIdx(updatedList.length - 1);
+        }
+      } else {
+        // Fallback local update if API fails but no exception thrown
+        const updatedList = [...list, newReview];
+        setList(updatedList);
+        setActiveIdx(updatedList.length - 1);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Failed to save review:', err);
+      // Fallback
+      const updatedList = [...list, newReview];
+      setList(updatedList);
+      setActiveIdx(updatedList.length - 1);
     }
-
-    // Set view to newly published review
-    setActiveIdx(updatedList.length - 1);
 
     // Clear and hide form
     setName("");
