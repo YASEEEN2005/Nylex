@@ -7,7 +7,6 @@ import TechSandbox from "@/components/TechSandbox";
 import Process from "@/components/Process";
 import Work from "@/components/Work";
 import Testimonials from "@/components/Testimonials";
-import CTA from "@/components/CTA";
 import FAQ from "@/components/FAQ";
 import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
@@ -39,20 +38,11 @@ export default function Home() {
       {/* Work Section */}
       <Work />
 
-      {/* Testimonials & CTA Combined Grid */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-t border-slate-100/80">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          <div className="lg:col-span-5">
-            <Testimonials />
-          </div>
-          <div className="lg:col-span-7">
-            <CTA />
-          </div>
-        </div>
-      </section>
+      {/* Testimonials */}
+      <Testimonials />
 
       {/* FAQ & Blog Combined Grid */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-t border-slate-100/80">
+      <section className="w-full max-w-[1440px] mx-auto px-4 lg:px-4 py-20 lg:py-28 border-t border-slate-100/80">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-5">
             <FAQ />

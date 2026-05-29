@@ -91,7 +91,7 @@ export default function TechSandbox() {
   };
 
   return (
-    <section id="insights" className="hidden md:block w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-20 border-t border-slate-100/80">
+    <section id="insights" className="hidden md:block w-full max-w-[1440px] mx-auto px-4 lg:px-4 py-20 lg:py-20 border-t border-slate-100/80">
 
       {/* Header Info */}
       <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">

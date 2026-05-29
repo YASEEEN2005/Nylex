@@ -6,6 +6,7 @@ export interface IReview extends Document {
   role?: string;
   avatarColor: string;
   initials: string;
+  rating?: number;
   createdAt: Date;
 }
 
@@ -33,6 +34,12 @@ const ReviewSchema: Schema = new Schema({
   initials: {
     type: String,
     required: true,
+  },
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    default: 5,
   },
   createdAt: {
     type: Date,

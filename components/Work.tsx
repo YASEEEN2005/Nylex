@@ -1,23 +1,24 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
 const projects = [
   {
     title: "SwiftCart",
-    category: "AI E-Commerce (MERN Stack)",
+    category: "AI E-COMMERCE",
+    categoryClass: "bg-purple-50 text-purple-600",
+    description: "AI-powered eCommerce platform with personalization, secure payments, and multi-role dashboards.",
+    shortHighlights: [
+      "AI Personalization",
+      "Multi-Role Dashboards",
+      "Secure Payments",
+      "OAuth & Integrations"
+    ],
     github: "https://github.com/YASEEEN2005/AI-Powered-E-Commerce-Website.git",
     demo: "https://ai-powered-e-commerce-website-sable.vercel.app/",
-    highlights: [
-      "🤖 AI Personalization: Google Gemini API analyzes cart behavior for tailored product recommendations",
-      "🔐 Secure Authentication: Firebase Phone Number OTP and Google OAuth sign-in integration",
-      "💳 Payment Gateway: Razorpay integration secured with cryptographic HMAC SHA256 verification",
-      "👥 Multi-Role portals: Specialized Client, Seller and Admin dashboards built on React 19 + Express"
-    ],
     mockup: (
       <div className="w-full h-full bg-[#0a0d14] rounded-t-2xl flex flex-col relative overflow-hidden text-white">
-        {/* Browser Top Bar */}
         <div className="flex justify-between items-center px-4 py-2 border-b border-slate-900 bg-[#0b0e14]">
           <div className="flex gap-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500"></span>
@@ -27,13 +28,12 @@ const projects = [
           <span className="text-[7.5px] text-slate-500 font-mono">swiftcart.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-slate-950">
           <Image
             src="/images/full stack ecomerce.png"
             alt="SwiftCart Screenshot"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
@@ -42,18 +42,19 @@ const projects = [
   },
   {
     title: "The Gallery",
-    category: "Productivity Command Center",
+    category: "PRODUCTIVITY DASHBOARD",
+    categoryClass: "bg-blue-50 text-blue-600",
+    description: "Bento-grid dashboard for habits, focus tracking, weather insights & productivity analytics.",
+    shortHighlights: [
+      "Bento-Grid Dashboard",
+      "Weather & Habits",
+      "Deep Work Integrations",
+      "Cmd Palette & Settings"
+    ],
     github: "https://github.com/YASEEEN2005/Personal-Dashboard.git",
     demo: "https://personal-dashboard-ten-gules.vercel.app/",
-    highlights: [
-      "🎛️ Bento-Grid Dashboard: Dynamic, responsive dashboard with Weather, Habits, and Focus trackers",
-      "⏱️ Deep Work Integration: Daily pinnacle focus integrated directly with a robust Pomodoro timer",
-      "💬 Gallery AI Assistant: Chat interface querying Wikipedia knowledge bases on-the-fly",
-      "⚙️ Cmd Palette & Settings: Keyboard macOS-style command palette and centralized preferences engine"
-    ],
     mockup: (
       <div className="w-full h-full bg-[#050608] rounded-t-2xl flex flex-col relative overflow-hidden text-white">
-        {/* Browser Top Bar */}
         <div className="flex justify-between items-center px-4 py-2 border-b border-slate-900 bg-[#0a0b0d]">
           <div className="flex gap-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500"></span>
@@ -63,13 +64,12 @@ const projects = [
           <span className="text-[7.5px] text-slate-500 font-mono">the-gallery.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-slate-950">
           <Image
             src="/images/personal dashboard.png"
             alt="The Gallery Screenshot"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
@@ -78,18 +78,19 @@ const projects = [
   },
   {
     title: "Vanyaa Retreat",
-    category: "Luxury Resort Platform",
+    category: "3D & WEBGL",
+    categoryClass: "bg-emerald-50 text-emerald-600",
+    description: "Immersive resort website with 3D experiences, dynamic themes & seamless booking.",
+    shortHighlights: [
+      "3D Resort Map (Three.js)",
+      "Interactive Gallery",
+      "Dynamic Themes",
+      "Booking Widgets"
+    ],
     github: "https://github.com/YASEEEN2005/Resort.git",
     demo: "https://resort-ashy.vercel.app/",
-    highlights: [
-      "🌳 Scrollytelling Architecture: Lens-smooth scrolling coupled with high-fidelity Framer Motion parallax",
-      "🗺️ 3D Resort Property Map: Interactive WebGL layout using React Three Fiber & Three.js",
-      "🌐 Localization & Themes: Dynamic i18n custom context support and precise dark/light systems",
-      "📅 Localized Booking widgets: Interactive weather gauges and optimized modular accommodation checkout"
-    ],
     mockup: (
       <div className="w-full h-full bg-[#f8f6f2] rounded-t-2xl flex flex-col relative overflow-hidden">
-        {/* Browser Top Bar */}
         <div className="flex justify-between items-center px-4 py-2 border-b border-[#e9e4d9] bg-[#f0ede6]">
           <div className="flex gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#c0b8a6]"></span>
@@ -99,13 +100,12 @@ const projects = [
           <span className="text-[7.5px] text-[#8e8470] font-mono">vanyaa-retreat.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-[#e9e4d9]">
           <Image
             src="/images/vaniya resort.png"
             alt="Vanyaa Retreat Screenshot"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
@@ -114,18 +114,19 @@ const projects = [
   },
   {
     title: "Grilax App",
-    category: "Kerala Dining & Reservations",
+    category: "DINING PLATFORM",
+    categoryClass: "bg-amber-50 text-amber-600",
+    description: "Kerala Dining & Reservations app with real-time location and WhatsApp API integration.",
+    shortHighlights: [
+      "Geolocation Checks",
+      "WhatsApp Reservations",
+      "Categorized Menus",
+      "Reveal-On-Scroll"
+    ],
     github: "https://github.com/YASEEEN2005/grilex.git",
     demo: "https://grilex-vq7a.vercel.app/",
-    highlights: [
-      "📍 Geolocation coordinate checks: Automatically tells users exact distance to Kerala outlets",
-      "💬 WhatsApp Reservation triggers: Decouples details formatting directly to business WhatsApp API",
-      "🍔 Categorized Tabbed Menus: Interactive menu modules with special filters like bestseller/spicy",
-      "✨ Reveal-On-Scroll transitions: Custom viewport tracking triggers content motion states"
-    ],
     mockup: (
       <div className="w-full h-full bg-[#0a0705] rounded-t-2xl flex flex-col relative overflow-hidden text-white">
-        {/* Browser Top Bar */}
         <div className="flex justify-between items-center px-4 py-2 border-b border-stone-900 bg-[#140e0a]">
           <div className="flex gap-1.5">
             <span className="w-2 h-2 rounded-full bg-stone-800"></span>
@@ -135,13 +136,12 @@ const projects = [
           <span className="text-[7.5px] text-stone-600 font-mono">grilax-dining.vercel.app</span>
           <span className="w-4"></span>
         </div>
-        {/* Image Content */}
         <div className="flex-1 relative overflow-hidden bg-stone-950">
           <Image
             src="/images/Grilex.png"
             alt="Grilax App Screenshot"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
           />
         </div>
@@ -152,6 +152,25 @@ const projects = [
 
 export default function Work() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Handle scroll snap to update active index
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const scrollLeft = scrollContainerRef.current.scrollLeft;
+    const cardWidth = scrollContainerRef.current.firstElementChild?.clientWidth || 0;
+    const gap = 24; // gap-6
+    const index = Math.round(scrollLeft / (cardWidth + gap));
+    setActiveIndex(index);
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   const handleNext = () => {
     if (scrollContainerRef.current) {
@@ -176,132 +195,172 @@ export default function Work() {
   };
 
   return (
-    <section id="work" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-28 border-t border-slate-100/80">
-      {/* Work Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-        <div className="space-y-3">
-          <span className="text-xs tracking-[0.2em] font-extrabold uppercase text-blue-600">Featured Portfolio</span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight uppercase">
-            Bespoke software <br />
-            <span className="text-blue-600">built for impact.</span>
-          </h2>
-        </div>
-
-        {/* Right side description and navigation */}
-        <div className="flex flex-col gap-6 max-w-md">
-          <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-medium">
-            Explore a curated selection of full-stack MERN products, real-world utility platforms, WebGL integrations, and productivity dashboards.
-          </p>
-
-          <div className="flex items-center justify-between">
-            {/* View All Work / Contact trigger */}
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-1.5 group text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors"
-            >
-              Start a Project
-              <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
+    <section id="work" className="w-full relative bg-[#fcfdff] pt-24 pb-32 font-sans overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-4 lg:px-4">
+        
+        {/* Header Section */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 gap-10">
+          {/* Left Text */}
+          <div className="max-w-2xl relative z-10">
+            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
+              </svg>
+              Featured Portfolio
+            </div>
+            
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1] mb-6">
+              Bespoke Software,<br />
+              <span className="text-blue-600">Built for Impact.</span>
+            </h2>
+            
+            <p className="text-slate-500 text-base md:text-lg leading-relaxed mb-8 max-w-xl">
+              Explore a curated selection of full-stack MERN products, real-world platforms, WebGL integrations, and productivity dashboards.
+            </p>
+            
+            <a href="#contact" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20">
+              Start a Project 
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </a>
+          </div>
 
-            {/* Slider arrows */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handlePrev}
-                aria-label="Previous Project"
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:scale-95 transition-all cursor-pointer"
-              >
-                <span className="text-lg">←</span>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next Project"
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:scale-95 transition-all cursor-pointer"
-              >
-                <span className="text-lg">→</span>
-              </button>
+          {/* Right Decor Area (CSS Pattern) */}
+          <div className="hidden lg:block relative w-full max-w-lg h-64 pointer-events-none opacity-60">
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-100/50 via-blue-50/20 to-transparent rounded-3xl blur-xl"></div>
+            <div className="absolute inset-0 border border-white/50 shadow-sm bg-white/40 backdrop-blur-3xl rounded-3xl grid grid-cols-6 grid-rows-4 gap-2 p-6">
+              {[...Array(24)].map((_, i) => (
+                <div key={i} className="bg-blue-50/50 rounded-lg"></div>
+              ))}
+            </div>
+            {/* Floating glass elements */}
+            <div className="absolute -top-10 -left-10 w-32 h-20 bg-white/60 backdrop-blur-md rounded-2xl border border-white shadow-lg flex items-center justify-center text-blue-600">
+               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+            </div>
+            <div className="absolute -bottom-5 right-10 w-24 h-24 bg-white/60 backdrop-blur-md rounded-2xl border border-white shadow-lg grid grid-cols-2 gap-2 p-3">
+               <div className="bg-blue-100 rounded-md"></div>
+               <div className="bg-blue-400 rounded-md"></div>
+               <div className="bg-blue-100 rounded-md"></div>
+               <div className="bg-blue-100 rounded-md"></div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Cards Container snap-scroll list */}
-      <div
-        ref={scrollContainerRef}
-        className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
-        style={{
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'none'
-        }}
-      >
-        {projects.map((proj, idx) => (
+        {/* Carousel Section */}
+        <div className="relative w-full group/carousel">
+          
+          {/* Navigation Arrows (Absolute on sides) */}
+          <div className="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-12 z-20 hidden md:block">
+            <button
+              onClick={handlePrev}
+              className="w-12 h-12 rounded-full bg-white border border-slate-100 shadow-lg flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-200 transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+          </div>
+          
+          <div className="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-12 z-20 hidden md:block">
+            <button
+              onClick={handleNext}
+              className="w-12 h-12 rounded-full bg-white border border-slate-100 shadow-lg flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-200 transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+
+          {/* Cards Container */}
           <div
-            key={idx}
-            className="w-[90vw] sm:w-[480px] shrink-0 snap-start flex flex-col bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_10px_35px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.03)] hover:border-blue-200/40 hover:-translate-y-1 transition-all duration-300 group"
+            ref={scrollContainerRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-8 pt-4 px-2"
+            style={{
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none'
+            }}
           >
-            {/* Mockup Display Box */}
-            <div className="h-[210px] w-full border border-slate-100 rounded-2xl pt-4 px-4 flex flex-col justify-end bg-slate-50 overflow-hidden relative shadow-[0_5px_15px_rgba(0,0,0,0.005)]">
-              {proj.mockup}
-            </div>
-
-            {/* Text Info */}
-            <div className="mt-5 flex-1 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">
-                    {proj.title}
-                  </h3>
-                  <span className="text-[10px] font-extrabold text-blue-600 bg-blue-50/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                    {proj.category}
-                  </span>
+            {projects.map((proj, idx) => (
+              <div
+                key={idx}
+                className="w-[90vw] sm:w-[400px] shrink-0 snap-start flex flex-col bg-white border border-slate-100 rounded-[28px] p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-300 group"
+              >
+                {/* Mockup */}
+                <div className="h-[200px] w-full border border-slate-100 rounded-2xl pt-4 px-4 flex flex-col justify-end bg-slate-50 overflow-hidden relative shadow-inner mb-6">
+                  {proj.mockup}
                 </div>
 
-                {/* Highlights List */}
-                <ul className="mt-4 space-y-2 text-xs font-medium text-slate-500">
-                  {proj.highlights.map((highlight, hIdx) => (
-                    <li key={hIdx} className="leading-relaxed flex items-start gap-1.5">
-                      <span className="text-[10px] mt-0.5 shrink-0">▪</span>
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {/* Content */}
+                <div className="flex-1 flex flex-col">
+                  {/* Title & Category */}
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-[22px] font-black text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight">
+                      {proj.title}
+                    </h3>
+                    <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider ${proj.categoryClass}`}>
+                      {proj.category}
+                    </span>
+                  </div>
 
-              {/* Action Buttons: GitHub & Live Demo */}
-              <div className="mt-6 pt-4 border-t border-slate-50 flex items-center gap-3">
-                <a
-                  href={proj.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 bg-slate-50 hover:bg-slate-100 border border-slate-100 hover:border-slate-200 text-slate-800 text-center font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
-                >
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.577.688.479C19.138 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-                  </svg>
-                  GitHub
-                </a>
-                <a
-                  href={proj.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-[0_4px_12px_rgba(0,102,255,0.15)] hover:shadow-[0_4px_20px_rgba(0,102,255,0.25)]"
-                >
-                  Live Demo
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>
-                </a>
+                  {/* Description */}
+                  <p className="text-sm font-medium text-slate-500 mb-6 leading-relaxed">
+                    {proj.description}
+                  </p>
+
+                  {/* Short Highlights Grid */}
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-2 mb-8">
+                    {proj.shortHighlights.map((highlight, hIdx) => (
+                      <div key={hIdx} className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+                          <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-700 leading-tight">
+                          {highlight}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="mt-auto pt-4">
+                    <a
+                      href={proj.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 text-center font-bold text-sm py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                    >
+                      Live Demo
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Carousel Dots */}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          {projects.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                if (scrollContainerRef.current) {
+                  const cardWidth = scrollContainerRef.current.firstElementChild?.clientWidth || 320;
+                  scrollContainerRef.current.scrollTo({
+                    left: idx * (cardWidth + 24),
+                    behavior: "smooth"
+                  });
+                }
+              }}
+              className={`h-2.5 rounded-full transition-all duration-300 ${idx === activeIndex ? "w-8 bg-blue-600" : "w-2.5 bg-slate-200 hover:bg-slate-300"}`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );

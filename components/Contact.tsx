@@ -37,7 +37,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="w-full max-w-7xl pt-2 mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-t border-slate-100/80">
+    <section id="contact" className="w-full max-w-[1440px] pt-2 mx-auto px-4 lg:px-4 py-20 lg:py-28 border-t border-slate-100/80">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Side: Header and Contact Info */}
         <div className="lg:col-span-5 space-y-8">

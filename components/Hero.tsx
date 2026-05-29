@@ -234,7 +234,7 @@ export default function Hero() {
         </div>
 
         {/* Main responsive hero layout container */}
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center z-10">
+        <div className="relative w-full max-w-[1440px] mx-auto px-4 lg:px-4 h-full flex items-center z-10">
           <div className="w-full lg:w-[52%] xl:w-[48%] relative h-[70vh] flex flex-col justify-center">
             
             {/* Slide 1: Core Brand Identity */}

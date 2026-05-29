@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     await connectToDatabase();
     
     const body = await req.json();
-    const { quote, author, role, avatarColor, initials } = body;
+    const { quote, author, role, avatarColor, initials, rating } = body;
 
     if (!quote || !author) {
       return NextResponse.json(
@@ -22,6 +22,7 @@ export async function POST(req: Request) {
       role,
       avatarColor,
       initials,
+      rating: rating || 5,
     });
 
     return NextResponse.json({ success: true, data: review }, { status: 201 });

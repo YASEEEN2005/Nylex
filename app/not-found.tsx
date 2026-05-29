@@ -13,7 +13,7 @@ export default function NotFound() {
       <Navbar />
 
       {/* Main 404 Chassis */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center py-20 text-center relative overflow-hidden">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 lg:px-4 flex flex-col items-center justify-center py-20 text-center relative overflow-hidden">
         
         {/* Subtle glowing absolute orb background */}
         <div className="absolute top-[30%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[320px] h-[320px] rounded-full bg-blue-400/5 blur-[90px] pointer-events-none z-0"></div>

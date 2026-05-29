@@ -13,7 +13,7 @@ export default function PrivacyPolicy() {
       <Navbar />
 
       {/* Main Privacy Policy Layout */}
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 lg:px-4 py-20">
         
         {/* Header Block */}
         <div className="space-y-4 mb-16 text-left border-b border-slate-100 pb-10">
