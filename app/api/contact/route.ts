@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     // Auto-responder email to the user
     const userMailOptions = {
-      from: `"Nylex Team" <${process.env.SMTP_USER || 'no-reply@nylex.com'}>`, // sender address
+      from: `"Nylex Team" <${process.env.SMTP_USER || 'no-reply@nylex.online'}>`, // sender address
       to: email, // list of receivers
       subject: 'Thank you for contacting Nylex!', // Subject line
       text: `Hi ${name},\n\nThank you for reaching out to us. We have received your message and our team will get back to you shortly.\n\nHere is a copy of your message:\n${message}\n\nBest regards,\nNylex Team`, // plain text body
@@ -59,8 +59,8 @@ export async function POST(req: Request) {
 
     // Notification email to the site owner
     const adminMailOptions = {
-      from: `"Nylex Website" <${process.env.SMTP_USER || 'no-reply@nylex.com'}>`,
-      to: process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'admin@nylex.com', // admin email
+      from: `"Nylex Website" <${process.env.SMTP_USER || 'no-reply@nylex.online'}>`,
+      to: process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'admin@nylex.online', // admin email
       subject: `New Contact Form Submission from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || 'N/A'}\nMessage: ${message}`,
       html: `<h3>New Contact Form Submission</h3>
