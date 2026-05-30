@@ -129,7 +129,7 @@ export default function Testimonials() {
   if (!isMounted) return null;
 
   return (
-    <section className="py-16 md:py-20 bg-[#fafcff] relative overflow-hidden font-sans">
+    <section id="review" className="py-16 md:py-20 bg-[#fafcff] relative overflow-hidden font-sans">
       
       {/* Decorative Dots Pattern */}
       <div className="absolute left-10 md:left-32 top-32 opacity-20 pointer-events-none hidden md:block">

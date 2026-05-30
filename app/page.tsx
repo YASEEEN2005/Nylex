@@ -15,7 +15,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#fafbfc] bg-grid-subtle text-slate-900 selection:bg-blue-100 selection:text-blue-800">
+    <main className="min-h-screen bg-[#fafbfc] bg-grid-subtle text-slate-900 selection:bg-blue-100 selection:text-blue-800">
       {/* Smooth Scroll Lenis Controller */}
       <SmoothScroll />
 
@@ -58,6 +58,6 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
-    </div>
+    </main>
   );
 }

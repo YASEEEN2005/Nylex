@@ -8,9 +8,9 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Work", href: "/#work" },
     { label: "Services", href: "/#services" },
-    { label: "About", href: "/#about" },
     { label: "Process", href: "/#process" },
-    { label: "Insights", href: "/#insights" },
+    { label: "Review", href: "/#review" },
+    { label: "Contact Us", href: "/#contact" },
   ];
 
   const [menuOpen, setMenuOpen] = useState(false);
