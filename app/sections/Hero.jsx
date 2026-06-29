@@ -66,7 +66,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-[#7A7A7A] text-xs sm:text-sm leading-relaxed max-w-sm font-medium"
+            className="text-[#4A4A4A] text-sm sm:text-base md:text-lg leading-relaxed max-w-md font-medium"
           >
             Nylex is a creative digital studio crafting modern websites, brands, and digital products that help businesses grow.
           </motion.p>
