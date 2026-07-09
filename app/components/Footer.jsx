@@ -109,9 +109,11 @@ export default function Footer() {
               onClick={(e) => handleScrollTo(e, "#top")}
               className="flex items-center gap-2.5 group text-white text-xl font-extrabold tracking-widest"
             >
-              <svg className="w-5.5 h-5.5 text-[#8B5E3C]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 4v16M19 4v16M5 4l14 16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img
+                src="/new n logo.png"
+                alt="Nylex Logo"
+                className="w-6 h-6 object-contain group-hover:scale-105 transition-transform duration-300"
+              />
               <div className="flex flex-col items-start leading-none gap-0.5">
                 <span className="text-xs font-extrabold tracking-widest text-white uppercase font-sans">NYLEX</span>
                 <span className="text-[5px] font-bold tracking-[0.25em] text-[#8B5E3C] uppercase font-sans">DIGITAL STUDIO</span>
