@@ -1,7 +1,7 @@
 "use client";
 
 import * as THREE from "three";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState, useMemo } from "react";
 import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, useGLTF } from "@react-three/drei";
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from "@react-three/rapier";
@@ -156,81 +156,84 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
     sTex.wrapS = THREE.RepeatWrapping;
     sTex.wrapT = THREE.RepeatWrapping;
     sTex.repeat.set(-4, 1);
+    sTex.flipY = false; // Prevent upside down lanyard textures
     setStrapTexture(sTex);
 
     // 2. Generate Card Face Texture
+    // Using 1280x1500 matching prince.png dimensions exactly
     const faceCanvas = document.createElement("canvas");
-    faceCanvas.width = 512;
-    faceCanvas.height = 512;
+    faceCanvas.width = 1280;
+    faceCanvas.height = 1500;
     const fCtx = faceCanvas.getContext("2d");
 
     // Dark base
     fCtx.fillStyle = "#09090b";
-    fCtx.fillRect(0, 0, 512, 512);
+    fCtx.fillRect(0, 0, 1280, 1500);
 
-    // Carbon-like lines
-    fCtx.strokeStyle = "rgba(255, 255, 255, 0.03)";
-    fCtx.lineWidth = 1.5;
-    for (let i = 0; i < 512; i += 20) {
+    // Carbon-like background grid lines
+    fCtx.strokeStyle = "rgba(255, 255, 255, 0.02)";
+    fCtx.lineWidth = 2;
+    for (let i = 0; i < 1500; i += 40) {
       fCtx.beginPath();
       fCtx.moveTo(i, 0);
-      fCtx.lineTo(i, 512);
+      fCtx.lineTo(i, 1500);
       fCtx.stroke();
       fCtx.beginPath();
       fCtx.moveTo(0, i);
-      fCtx.lineTo(512, i);
+      fCtx.lineTo(1500, i);
       fCtx.stroke();
     }
 
     // Gold Top Banner
-    const grad = fCtx.createLinearGradient(0, 0, 0, 90);
+    const grad = fCtx.createLinearGradient(0, 0, 0, 240);
     grad.addColorStop(0, "#8b5e3c");
     grad.addColorStop(1, "#09090b");
     fCtx.fillStyle = grad;
-    fCtx.fillRect(0, 0, 512, 90);
+    fCtx.fillRect(0, 0, 1280, 240);
 
     // Top Header Text
     fCtx.fillStyle = "#ffffff";
-    fCtx.font = "bold 22px sans-serif";
+    fCtx.font = "bold 64px sans-serif";
     fCtx.textAlign = "center";
-    fCtx.fillText("NYLEX DIGITAL STUDIO", 256, 50);
+    fCtx.fillText("NYLEX DIGITAL STUDIO", 640, 120);
 
     // Visitor Tag
-    fCtx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    fCtx.font = "bold 14px sans-serif";
-    fCtx.fillText("VISITOR PASS", 256, 125);
+    fCtx.fillStyle = "rgba(255, 255, 255, 0.55)";
+    fCtx.font = "bold 36px sans-serif";
+    fCtx.fillText("VISITOR PASS", 640, 200);
 
     // Large NY Logo Ring
     fCtx.strokeStyle = "rgba(139, 94, 60, 0.4)";
-    fCtx.lineWidth = 4;
+    fCtx.lineWidth = 10;
     fCtx.beginPath();
-    fCtx.arc(256, 240, 75, 0, Math.PI * 2);
+    fCtx.arc(640, 680, 200, 0, Math.PI * 2);
     fCtx.stroke();
 
-    // Large NY Logo text
+    // Large NY Logo text (Impact font to match high-end typography)
     fCtx.fillStyle = "#ffffff";
-    fCtx.font = "black 90px sans-serif";
-    fCtx.fillText("NY", 256, 270);
+    fCtx.font = "black 220px Impact, sans-serif";
+    fCtx.fillText("NY", 640, 755);
 
     // Details text
     fCtx.fillStyle = "#ffffff";
-    fCtx.font = "bold 18px sans-serif";
-    fCtx.fillText("CREATIVE PARTNER", 256, 365);
+    fCtx.font = "bold 46px sans-serif";
+    fCtx.fillText("CREATIVE PARTNER", 640, 1020);
 
-    fCtx.fillStyle = "rgba(255, 255, 255, 0.4)";
-    fCtx.font = "14px monospace";
-    fCtx.fillText("ID: #NY-2026", 256, 400);
+    fCtx.fillStyle = "rgba(255, 255, 255, 0.45)";
+    fCtx.font = "36px monospace";
+    fCtx.fillText("ID: #NY-2026", 640, 1100);
 
     // Barcode lines
     fCtx.fillStyle = "#ffffff";
-    const barcode = [12, 6, 18, 8, 22, 6, 14, 20, 6, 12, 16, 6, 24, 12];
-    let startX = 140;
+    const barcode = [28, 12, 40, 16, 48, 12, 32, 44, 12, 28, 36, 12, 52, 28];
+    let startX = 350;
     barcode.forEach((w) => {
-      fCtx.fillRect(startX, 435, w, 32);
-      startX += w + 4;
+      fCtx.fillRect(startX, 1220, w, 90);
+      startX += w + 8;
     });
 
     const fTex = new THREE.CanvasTexture(faceCanvas);
+    fTex.flipY = false; // CRITICAL: stops card texture from rendering upside down on the GLTF mesh
     setCardFaceTexture(fTex);
   }, []);
 
@@ -251,10 +254,16 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
 
   const canDrag = true;
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
-  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]]);
+  // Memoize joint coordinates to ensure consistent references between renders
+  const ropeJointArgs1 = useMemo(() => [[0, 0, 0], [0, 0, 0], 1], []);
+  const ropeJointArgs2 = useMemo(() => [[0, 0, 0], [0, 0, 0], 1], []);
+  const ropeJointArgs3 = useMemo(() => [[0, 0, 0], [0, 0, 0], 1], []);
+  const sphericalJointArgs = useMemo(() => [[0, 0, 0], [0, 1.45, 0]], []);
+
+  useRopeJoint(fixed, j1, ropeJointArgs1);
+  useRopeJoint(j1, j2, ropeJointArgs2);
+  useRopeJoint(j2, j3, ropeJointArgs3);
+  useSphericalJoint(j3, card, sphericalJointArgs);
 
   useEffect(() => {
     if (hovered && canDrag) {
@@ -332,25 +341,29 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
 
   curve.curveType = "chordal";
 
+  // Coordinates specified in world coordinates to prevent React Three Rapier parent double-offset bug
+  const baseX = isMobile ? -0.5 : -1.0;
+  const baseY = isMobile ? 3.5 : 4.0;
+
   return (
     <>
-      <group position={isMobile ? [1.2, 3, 0] : [3, 4, 0]}>
-        <RigidBody ref={fixed} {...segmentProps} type="fixed" />
+      <group position={[0, 0, 0]}>
+        <RigidBody ref={fixed} position={[baseX, baseY, 0]} {...segmentProps} type="fixed" />
 
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
+        <RigidBody position={[baseX + 0.5, baseY, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
 
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
+        <RigidBody position={[baseX + 1.0, baseY, 0]} ref={j2} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
 
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
+        <RigidBody position={[baseX + 1.5, baseY, 0]} ref={j3} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
 
         <RigidBody
-          position={[2, 0, 0]}
+          position={[baseX + 2.0, baseY, 0]}
           ref={card}
           {...segmentProps}
           type={dragged ? "kinematicPosition" : "dynamic"}

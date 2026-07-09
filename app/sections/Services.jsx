@@ -144,7 +144,7 @@ export default function Services() {
 
         {/* Right Column: Swinging 3D ID Card Container */}
         <div
-          className="col-span-1 lg:col-span-5 h-[480px] w-full flex items-center justify-center relative rounded-3xl overflow-hidden border border-white/5 bg-zinc-950/20"
+          className="col-span-1 lg:col-span-5 h-[480px] w-full flex items-center justify-center relative"
         >
           <AnimatePresence>
             {showCard && mounted && (
