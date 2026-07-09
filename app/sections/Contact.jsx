@@ -72,7 +72,7 @@ ${form.name}`;
   };
 
   return (
-    <section id="contact" className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10">
+    <section id="contact" className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10 font-sans">
       {/* Background gradients */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
@@ -82,19 +82,31 @@ ${form.name}`;
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
         
         {/* Section Title */}
-        <div className="flex flex-col items-start gap-4 mb-20 font-sans">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B5E3C] font-sans">
-            GET IN TOUCH
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Start Your Digital Journey
-          </h2>
-          <p className="text-white/60 text-sm sm:text-base max-w-md font-medium">
+        <div className="flex flex-col gap-6 items-start mb-16">
+          {/* Subtitle tag */}
+          <div className="flex items-center gap-3 text-[#8B5E3C]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+              GET IN TOUCH
+            </span>
+            <span className="w-8 h-[1px] bg-[#8B5E3C]" />
+          </div>
+
+          {/* Heading in display clamp style */}
+          <div className="flex flex-col">
+            <h2 className="font-extrabold leading-[1.05] tracking-tight text-white text-[clamp(48px,7vw,90px)]">
+              Start Your
+            </h2>
+            <h2 className="font-extrabold leading-[1.05] tracking-tight text-white/70 text-[clamp(48px,7vw,90px)]">
+              Journey
+            </h2>
+          </div>
+          
+          <p className="text-white/60 text-sm sm:text-base leading-relaxed max-w-xl font-medium">
             Have a project in mind? Fill out the details below, and our engineering team will get back to you within 24 hours.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start font-sans">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Column: Form */}
           <div className="col-span-1 lg:col-span-7">
@@ -102,7 +114,7 @@ ${form.name}`;
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="p-8 rounded-[32px] bg-zinc-950/60 border border-white/10 shadow-sm"
+              className="p-8 rounded-[32px] bg-zinc-950/60 border border-white/5 shadow-sm"
             >
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 
@@ -211,7 +223,7 @@ ${form.name}`;
                   type="submit"
                   disabled={loading}
                   data-cursor="pointer"
-                  className="w-full py-4 rounded-xl bg-white text-black hover:bg-[#8B5E3C] hover:text-white font-bold tracking-wider text-xs shadow-sm transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-full bg-white text-black hover:bg-[#8B5E3C] hover:text-white font-semibold uppercase tracking-[0.25em] text-xs transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {loading ? (
                     <span>transmitting...</span>
@@ -258,15 +270,15 @@ ${form.name}`;
                     <p className="text-[9px] text-white/40 font-bold uppercase tracking-wider mt-0.5">Fast Response</p>
                   </div>
                 </div>
-                <span className="text-sm font-extrabold group-hover:translate-x-0.5 transition-transform">→</span>
+                <span className="text-sm font-extrabold group-hover:translate-x-1 transition-transform">→</span>
               </a>
 
               {/* Contact info card block */}
-              <div className="p-6 rounded-2xl bg-zinc-950/60 border border-white/10 flex flex-col gap-5 shadow-xs">
+              <div className="p-6 rounded-[32px] bg-zinc-950/60 border border-white/5 flex flex-col gap-6 shadow-sm group/info">
                 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white/80 shrink-0">
-                    <Mail className="w-4.5 h-4.5" />
+                  <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/80 group-hover/info:bg-[#8B5E3C] group-hover/info:text-black transition-colors duration-300 shrink-0">
+                    <Mail className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-white/40 text-[9px] font-extrabold uppercase tracking-wider">Direct Email</h4>
@@ -275,8 +287,8 @@ ${form.name}`;
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white/80 shrink-0">
-                    <Phone className="w-4.5 h-4.5" />
+                  <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/80 group-hover/info:bg-[#8B5E3C] group-hover/info:text-black transition-colors duration-300 shrink-0">
+                    <Phone className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-white/40 text-[9px] font-extrabold uppercase tracking-wider">Direct Hotline</h4>
@@ -285,8 +297,8 @@ ${form.name}`;
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white/80 shrink-0">
-                    <MapPin className="w-4.5 h-4.5" />
+                  <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/80 group-hover/info:bg-[#8B5E3C] group-hover/info:text-black transition-colors duration-300 shrink-0">
+                    <MapPin className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-white/40 text-[9px] font-extrabold uppercase tracking-wider">Location</h4>
