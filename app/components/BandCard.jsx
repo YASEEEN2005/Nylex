@@ -133,108 +133,156 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
   const [cardFaceTexture, setCardFaceTexture] = useState(null);
 
   useEffect(() => {
-    // 1. Generate Lanyard Strap Texture (repeating text)
-    const strapCanvas = document.createElement("canvas");
-    strapCanvas.width = 1024;
-    strapCanvas.height = 64;
-    const sCtx = strapCanvas.getContext("2d");
+    // Load custom logo image asynchronously first
+    const logoImg = new Image();
+    logoImg.src = "/N logo.png";
 
-    sCtx.fillStyle = "#09090b"; // zinc-950
-    sCtx.fillRect(0, 0, 1024, 64);
+    logoImg.onload = () => {
+      drawCanvas(logoImg);
+    };
 
-    sCtx.font = "bold 20px sans-serif";
-    sCtx.textBaseline = "middle";
+    logoImg.onerror = () => {
+      console.warn("Logo image failed to load, fallback to text logo");
+      drawCanvas(null);
+    };
 
-    for (let offset = 0; offset < 1024; offset += 340) {
-      sCtx.fillStyle = "#8b5e3c"; // gold
-      sCtx.fillText("✦  NYLEX STUDIO  ", offset, 32);
-      sCtx.fillStyle = "#ffffff";
-      sCtx.fillText("✦  CREATIVE AGENCY", offset + 170, 32);
+    function drawCanvas(img) {
+      // 1. Generate Lanyard Strap Texture (repeating text)
+      const strapCanvas = document.createElement("canvas");
+      strapCanvas.width = 1024;
+      strapCanvas.height = 64;
+      const sCtx = strapCanvas.getContext("2d");
+
+      sCtx.fillStyle = "#09090b"; // zinc-950
+      sCtx.fillRect(0, 0, 1024, 64);
+
+      sCtx.font = "bold 20px sans-serif";
+      sCtx.textBaseline = "middle";
+
+      for (let offset = 0; offset < 1024; offset += 340) {
+        sCtx.fillStyle = "#8b5e3c"; // gold
+        sCtx.fillText("✦  NYLEX STUDIO  ", offset, 32);
+        sCtx.fillStyle = "#ffffff";
+        sCtx.fillText("✦  CREATIVE AGENCY", offset + 170, 32);
+      }
+
+      const sTex = new THREE.CanvasTexture(strapCanvas);
+      sTex.wrapS = THREE.RepeatWrapping;
+      sTex.wrapT = THREE.RepeatWrapping;
+      sTex.repeat.set(-4, 1);
+      sTex.flipY = false; // Prevent upside down lanyard textures
+      setStrapTexture(sTex);
+
+      // 2. Generate Card Face Texture
+      // Using 1280x1500 matching prince.png dimensions exactly
+      const faceCanvas = document.createElement("canvas");
+      faceCanvas.width = 1280;
+      faceCanvas.height = 1500;
+      const fCtx = faceCanvas.getContext("2d");
+
+      // Dark base
+      fCtx.fillStyle = "#09090b";
+      fCtx.fillRect(0, 0, 1280, 1500);
+
+      // Carbon-like background grid lines
+      fCtx.strokeStyle = "rgba(255, 255, 255, 0.02)";
+      fCtx.lineWidth = 2;
+      for (let i = 0; i < 1500; i += 40) {
+        fCtx.beginPath();
+        fCtx.moveTo(i, 0);
+        fCtx.lineTo(i, 1500);
+        fCtx.stroke();
+        fCtx.beginPath();
+        fCtx.moveTo(0, i);
+        fCtx.lineTo(1500, i);
+        fCtx.stroke();
+      }
+
+      // Draw Front side content centered at x = 320
+      drawCardSide(fCtx, img, 320);
+
+      // Draw Back side content centered at x = 960 (for clean card rotation visual)
+      drawCardSide(fCtx, img, 960);
+
+      const fTex = new THREE.CanvasTexture(faceCanvas);
+      fTex.flipY = false; // CRITICAL: stops card texture from rendering upside down on the GLTF mesh
+      setCardFaceTexture(fTex);
     }
 
-    const sTex = new THREE.CanvasTexture(strapCanvas);
-    sTex.wrapS = THREE.RepeatWrapping;
-    sTex.wrapT = THREE.RepeatWrapping;
-    sTex.repeat.set(-4, 1);
-    sTex.flipY = false; // Prevent upside down lanyard textures
-    setStrapTexture(sTex);
+    function drawCardSide(fCtx, img, cx) {
+      const leftBound = cx - 320;
 
-    // 2. Generate Card Face Texture
-    // Using 1280x1500 matching prince.png dimensions exactly
-    const faceCanvas = document.createElement("canvas");
-    faceCanvas.width = 1280;
-    faceCanvas.height = 1500;
-    const fCtx = faceCanvas.getContext("2d");
+      // Gold Top Banner
+      const grad = fCtx.createLinearGradient(leftBound, 0, leftBound, 240);
+      grad.addColorStop(0, "#8b5e3c");
+      grad.addColorStop(1, "#09090b");
+      fCtx.fillStyle = grad;
+      fCtx.fillRect(leftBound, 0, 640, 240);
 
-    // Dark base
-    fCtx.fillStyle = "#09090b";
-    fCtx.fillRect(0, 0, 1280, 1500);
+      // Top Header Text
+      fCtx.fillStyle = "#ffffff";
+      fCtx.font = "bold 32px sans-serif";
+      fCtx.textAlign = "center";
+      fCtx.fillText("NYLEX DIGITAL STUDIO", cx, 120);
 
-    // Carbon-like background grid lines
-    fCtx.strokeStyle = "rgba(255, 255, 255, 0.02)";
-    fCtx.lineWidth = 2;
-    for (let i = 0; i < 1500; i += 40) {
-      fCtx.beginPath();
-      fCtx.moveTo(i, 0);
-      fCtx.lineTo(i, 1500);
-      fCtx.stroke();
-      fCtx.beginPath();
-      fCtx.moveTo(0, i);
-      fCtx.lineTo(1500, i);
-      fCtx.stroke();
+      // Visitor Tag
+      fCtx.fillStyle = "rgba(255, 255, 255, 0.55)";
+      fCtx.font = "bold 18px sans-serif";
+      fCtx.fillText("VISITOR PASS", cx, 190);
+
+      // Draw Logo Image (or monogram fallback)
+      if (img) {
+        // Gold Metallic outer circle
+        fCtx.strokeStyle = "rgba(139, 94, 60, 0.4)";
+        fCtx.lineWidth = 5;
+        fCtx.beginPath();
+        fCtx.arc(cx, 540, 100, 0, Math.PI * 2);
+        fCtx.stroke();
+
+        // Draw N logo image inside the circle
+        const imgSize = 130;
+        const logoX = cx - imgSize / 2;
+        const logoY = 540 - imgSize / 2;
+        fCtx.drawImage(img, logoX, logoY, imgSize, imgSize);
+      } else {
+        // Monogram fallback
+        fCtx.strokeStyle = "rgba(139, 94, 60, 0.4)";
+        fCtx.lineWidth = 5;
+        fCtx.beginPath();
+        fCtx.arc(cx, 540, 110, 0, Math.PI * 2);
+        fCtx.stroke();
+
+        fCtx.fillStyle = "#ffffff";
+        fCtx.font = "black 100px Impact, sans-serif";
+        fCtx.fillText("NY", cx, 610);
+      }
+
+      // Draw "NYLEX" name bold
+      fCtx.fillStyle = "#ffffff";
+      fCtx.font = "bold 40px sans-serif";
+      fCtx.textAlign = "center";
+      fCtx.fillText("NYLEX", cx, 800);
+
+      // Creative partner details
+      fCtx.fillStyle = "#ffffff";
+      fCtx.font = "bold 24px sans-serif";
+      fCtx.textAlign = "center";
+      fCtx.fillText("CREATIVE PARTNER", cx, 960);
+
+      fCtx.fillStyle = "rgba(255, 255, 255, 0.45)";
+      fCtx.font = "18px monospace";
+      fCtx.textAlign = "center";
+      fCtx.fillText("ID: #NY-2026", cx, 1040);
+
+      // Barcode lines
+      fCtx.fillStyle = "#ffffff";
+      const barcode = [14, 6, 20, 8, 24, 6, 16, 22, 6, 14, 18, 6, 26, 14];
+      let startX = cx - 131; // center it horizontally
+      barcode.forEach((w) => {
+        fCtx.fillRect(startX, 1180, w, 50);
+        startX += w + 4;
+      });
     }
-
-    // Gold Top Banner
-    const grad = fCtx.createLinearGradient(0, 0, 0, 240);
-    grad.addColorStop(0, "#8b5e3c");
-    grad.addColorStop(1, "#09090b");
-    fCtx.fillStyle = grad;
-    fCtx.fillRect(0, 0, 1280, 240);
-
-    // Top Header Text
-    fCtx.fillStyle = "#ffffff";
-    fCtx.font = "bold 64px sans-serif";
-    fCtx.textAlign = "center";
-    fCtx.fillText("NYLEX DIGITAL STUDIO", 640, 120);
-
-    // Visitor Tag
-    fCtx.fillStyle = "rgba(255, 255, 255, 0.55)";
-    fCtx.font = "bold 36px sans-serif";
-    fCtx.fillText("VISITOR PASS", 640, 200);
-
-    // Large NY Logo Ring
-    fCtx.strokeStyle = "rgba(139, 94, 60, 0.4)";
-    fCtx.lineWidth = 10;
-    fCtx.beginPath();
-    fCtx.arc(640, 680, 200, 0, Math.PI * 2);
-    fCtx.stroke();
-
-    // Large NY Logo text (Impact font to match high-end typography)
-    fCtx.fillStyle = "#ffffff";
-    fCtx.font = "black 220px Impact, sans-serif";
-    fCtx.fillText("NY", 640, 755);
-
-    // Details text
-    fCtx.fillStyle = "#ffffff";
-    fCtx.font = "bold 46px sans-serif";
-    fCtx.fillText("CREATIVE PARTNER", 640, 1020);
-
-    fCtx.fillStyle = "rgba(255, 255, 255, 0.45)";
-    fCtx.font = "36px monospace";
-    fCtx.fillText("ID: #NY-2026", 640, 1100);
-
-    // Barcode lines
-    fCtx.fillStyle = "#ffffff";
-    const barcode = [28, 12, 40, 16, 48, 12, 32, 44, 12, 28, 36, 12, 52, 28];
-    let startX = 350;
-    barcode.forEach((w) => {
-      fCtx.fillRect(startX, 1220, w, 90);
-      startX += w + 8;
-    });
-
-    const fTex = new THREE.CanvasTexture(faceCanvas);
-    fTex.flipY = false; // CRITICAL: stops card texture from rendering upside down on the GLTF mesh
-    setCardFaceTexture(fTex);
   }, []);
 
   const { width, height } = useThree((state) => state.size);
