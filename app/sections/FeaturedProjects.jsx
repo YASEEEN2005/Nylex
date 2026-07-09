@@ -72,9 +72,14 @@ export default function FeaturedProjects() {
                 <span className="w-8 h-[1px] bg-[#8B5E3C]" />
               </div>
               
-              <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight">
-                Projects That Speak for Us
-              </h2>
+              <div className="flex flex-col">
+                <h2 className="font-extrabold leading-[1.05] tracking-tight text-white text-[clamp(48px,7vw,90px)]">
+                  Projects That
+                </h2>
+                <h2 className="font-extrabold leading-[1.05] tracking-tight text-white/70 text-[clamp(48px,7vw,90px)]">
+                  Speak for Us
+                </h2>
+              </div>
               <p className="text-white/60 text-sm leading-relaxed max-w-sm font-medium">
                 We build digital experiences that are not only beautiful but functional, scalable, and impactful.
               </p>

@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Compass, HeartHandshake, Zap, CalendarCheck } from "lucide-react";
 
 export default function About() {
@@ -48,10 +47,15 @@ export default function About() {
             <span className="w-8 h-[1px] bg-[#8B5E3C]" />
           </div>
 
-          {/* Heading in display Serif font */}
-          <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight">
-            {"We're More Than Just a Digital Studio"}
-          </h2>
+          {/* Heading in display clamp style */}
+          <div className="flex flex-col">
+            <h2 className="font-extrabold leading-[1.05] tracking-tight text-white text-[clamp(48px,7vw,90px)]">
+              We're More
+            </h2>
+            <h2 className="font-extrabold leading-[1.05] tracking-tight text-white/70 text-[clamp(48px,7vw,90px)]">
+              Than a Studio
+            </h2>
+          </div>
 
           <p className="text-white/60 text-sm sm:text-base leading-relaxed font-medium">
             Nylex is a team of passionate designers, developers, and problem solvers. We combine creativity with technology to build digital solutions that drive real results. We believe in visual perfection, robust engineering, and close collaboration.
@@ -60,7 +64,7 @@ export default function About() {
           <a
             href="#contact"
             data-cursor="pointer"
-            className="px-7 py-3 rounded-full bg-white text-black hover:bg-[#8B5E3C] hover:text-white text-xs font-bold tracking-wider transition-all duration-300 shadow-sm"
+            className="inline-flex items-center gap-2 border border-white/20 text-white px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-white hover:text-black transition-all duration-300 rounded-full cursor-pointer mt-2"
           >
             More About Us
           </a>
@@ -71,18 +75,18 @@ export default function About() {
           {values.map((val) => (
             <div
               key={val.title}
-              className="flex flex-col items-start gap-4 p-6 rounded-2xl bg-zinc-950/60 border border-white/5 hover:border-white/10 transition-all duration-300 group"
+              className="group p-5 rounded-2xl bg-zinc-950/60 border border-white/5 hover:border-white/15 hover:bg-zinc-900/40 transition-all duration-300 flex flex-col gap-3 relative overflow-hidden"
             >
               {/* Rounded icon container */}
-              <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/80 group-hover:bg-[#8B5E3C] group-hover:border-[#8B5E3C] group-hover:text-black transition-colors duration-300">
+              <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/80 group-hover:bg-[#8B5E3C] group-hover:text-black transition-colors duration-300">
                 {val.icon}
               </div>
 
               <div className="flex flex-col gap-2 font-sans">
-                <h3 className="text-white text-[16px] font-extrabold group-hover:text-[#8B5E3C] transition-colors">
+                <h3 className="text-white text-sm font-extrabold group-hover:text-[#8B5E3C] transition-colors">
                   {val.title}
                 </h3>
-                <p className="text-white/60 text-xs leading-relaxed font-medium">
+                <p className="text-white/50 text-[11px] leading-relaxed font-medium">
                   {val.desc}
                 </p>
               </div>
