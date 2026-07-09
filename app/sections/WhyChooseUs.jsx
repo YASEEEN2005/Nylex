@@ -66,12 +66,9 @@ export default function WhyChooseUs() {
           </div>
 
           {/* Heading in display clamp style */}
-          <div className="flex flex-col">
-            <h2 className="font-extrabold leading-[1.05] tracking-tight text-white text-[clamp(48px,7vw,90px)]">
-              Why Partner
-            </h2>
-            <h2 className="font-extrabold leading-[1.05] tracking-tight text-white/70 text-[clamp(48px,7vw,90px)]">
-              With Us?
+          <div>
+            <h2 className="font-extrabold leading-[1.1] tracking-tight text-white text-[clamp(36px,5.5vw,72px)]">
+              Why Partner <span className="text-white/70">With Us?</span>
             </h2>
           </div>
           
