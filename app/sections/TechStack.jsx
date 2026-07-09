@@ -173,8 +173,8 @@ export default function TechStack() {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B5E3C] font-sans">
             ENGINEERING STACK
           </span>
-          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Our Core Technologies
+          <h2 className="font-extrabold leading-[1.1] tracking-tight text-white text-[clamp(36px,5.5vw,72px)]">
+            Our Core <span className="text-white/70">Technologies</span>
           </h2>
           <p className="text-white/60 text-sm sm:text-base max-w-md font-medium">
             We employ modern, production-grade tools designed for web application security, loading speeds, and robust functionality.
