@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [time, setTime] = useState("");
+  const [scrolled, setScrolled] = useState(false);
 
   const navLinks = [
     { name: "Home", href: "#top", id: "top" },
@@ -33,6 +34,18 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     if (mobileMenu) {
       document.body.style.overflow = "hidden";
     } else {
@@ -57,7 +70,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-xl bg-black/20 border-b border-white/10 select-none">
+      <nav
+        className={
+          scrolled
+            ? "fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 flex items-center justify-between px-6 md:px-10 py-3.5 backdrop-blur-xl bg-black/60 border border-white/10 rounded-full select-none shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-500"
+            : "fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-xl bg-black/20 border-b border-white/10 select-none transition-all duration-500"
+        }
+      >
         
         {/* Left branding logo matching reference design */}
         <a
@@ -92,7 +111,7 @@ export default function Navbar() {
         </a>
 
         {/* Desktop navigation matching exact structure */}
-        <ul className="hidden md:flex items-center gap-10 text-xs tracking-widest text-white/70 uppercase">
+        <ul className="hidden md:flex items-center gap-8 lg:gap-10 text-xs tracking-widest text-white/70 uppercase">
           {navLinks.map((link) => (
             <li
               key={link.name}

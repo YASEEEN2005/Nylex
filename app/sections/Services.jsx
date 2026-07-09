@@ -11,7 +11,6 @@ const BandCard = dynamic(() => import("../components/BandCard"), {
 });
 
 export default function Services() {
-  const [showCard, setShowCard] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   const services = [
@@ -121,17 +120,11 @@ export default function Services() {
             ))}
           </div>
 
-          {/* Toggle button layout */}
-          <div className="mt-4 flex flex-wrap gap-4">
-            <button
-              onClick={() => setShowCard((s) => !s)}
-              className="inline-flex items-center gap-2 border border-white/20 text-white px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-white hover:text-black transition-all duration-300 rounded-full cursor-pointer"
-            >
-              {showCard ? "Hide ID Card" : "Show ID Card"}
-            </button>
+          {/* Action button layout */}
+          <div className="mt-4">
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 border border-white/10 bg-white/5 text-white/80 px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:border-white/30 hover:text-white transition-all duration-300 rounded-full cursor-pointer"
+              className="inline-flex items-center gap-2 border border-white/20 hover:bg-white hover:text-black text-white px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold transition-all duration-300 rounded-full cursor-pointer"
             >
               Get Started
             </a>
@@ -144,7 +137,7 @@ export default function Services() {
           className="col-span-1 lg:col-span-5 h-[480px] w-full flex items-center justify-center relative"
         >
           <AnimatePresence>
-            {showCard && mounted && (
+            {mounted && (
               <motion.div
                 initial={{ y: "-100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
