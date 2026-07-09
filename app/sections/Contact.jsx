@@ -72,10 +72,12 @@ ${form.name}`;
   };
 
   return (
-    <section id="contact" className="relative py-24 bg-[#F7F4F0] overflow-hidden z-10 border-t border-[#EDE5DB]">
+    <section id="contact" className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10">
       {/* Background gradients */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
         
@@ -84,10 +86,10 @@ ${form.name}`;
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B5E3C] font-sans">
             GET IN TOUCH
           </span>
-          <h2 className="text-4xl sm:text-5xl font-normal text-[#1A1A1A] font-serif tracking-tight leading-tight">
+          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             Start Your Digital Journey
           </h2>
-          <p className="text-[#7A7A7A] text-sm sm:text-base max-w-md font-sans font-medium">
+          <p className="text-white/60 text-sm sm:text-base max-w-md font-medium">
             Have a project in mind? Fill out the details below, and our engineering team will get back to you within 24 hours.
           </p>
         </div>
@@ -100,14 +102,14 @@ ${form.name}`;
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="p-8 rounded-3xl bg-white border border-[#EDE5DB] shadow-sm"
+              className="p-8 rounded-[32px] bg-zinc-950/60 border border-white/10 shadow-sm"
             >
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 
                 {/* Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                    <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
                       Full Name
                     </label>
                     <input
@@ -116,12 +118,11 @@ ${form.name}`;
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       placeholder="Jane Doe"
-                      suppressHydrationWarning
-                      className="px-5 py-3.5 rounded-lg bg-[#F7F4F0] border border-[#EDE5DB] text-[#1A1A1A] text-xs focus:border-[#8B5E3C] focus:bg-white focus:outline-none transition-all duration-300 placeholder:text-gray-400 font-medium"
+                      className="px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:border-[#8B5E3C] focus:bg-white/5 focus:outline-none transition-all duration-300 placeholder:text-white/30 font-medium"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                    <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
                       Email Address
                     </label>
                     <input
@@ -130,8 +131,7 @@ ${form.name}`;
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder="jane@company.com"
-                      suppressHydrationWarning
-                      className="px-5 py-3.5 rounded-lg bg-[#F7F4F0] border border-[#EDE5DB] text-[#1A1A1A] text-xs focus:border-[#8B5E3C] focus:bg-white focus:outline-none transition-all duration-300 placeholder:text-gray-400 font-medium"
+                      className="px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:border-[#8B5E3C] focus:bg-white/5 focus:outline-none transition-all duration-300 placeholder:text-white/30 font-medium"
                     />
                   </div>
                 </div>
@@ -139,7 +139,7 @@ ${form.name}`;
                 {/* Phone & Service */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                    <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
                       Phone Number
                     </label>
                     <input
@@ -147,22 +147,20 @@ ${form.name}`;
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       placeholder="+91 98765 43210"
-                      suppressHydrationWarning
-                      className="px-5 py-3.5 rounded-lg bg-[#F7F4F0] border border-[#EDE5DB] text-[#1A1A1A] text-xs focus:border-[#8B5E3C] focus:bg-white focus:outline-none transition-all duration-300 placeholder:text-gray-400 font-medium"
+                      className="px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:border-[#8B5E3C] focus:bg-white/5 focus:outline-none transition-all duration-300 placeholder:text-white/30 font-medium"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                    <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
                       Required Service
                     </label>
                     <select
                       value={form.service}
                       onChange={(e) => setForm({ ...form, service: e.target.value })}
-                      suppressHydrationWarning
-                      className="px-5 py-3.5 rounded-lg bg-[#F7F4F0] border border-[#EDE5DB] text-[#1A1A1A] text-xs focus:border-[#8B5E3C] focus:bg-white focus:outline-none transition-all duration-300 select-custom font-medium"
+                      className="px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:border-[#8B5E3C] focus:bg-zinc-900 focus:outline-none transition-all duration-300 select-custom font-medium"
                     >
                       {services.map((s) => (
-                        <option key={s.id} value={s.id} className="bg-white text-[#1A1A1A]">
+                        <option key={s.id} value={s.id} className="bg-zinc-900 text-white">
                           {s.name}
                         </option>
                       ))}
@@ -172,7 +170,7 @@ ${form.name}`;
 
                 {/* Budget Range */}
                 <div className="flex flex-col gap-3">
-                  <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                  <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
                     Project Budget Range
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -181,11 +179,10 @@ ${form.name}`;
                         key={b}
                         type="button"
                         onClick={() => setForm({ ...form, budget: b })}
-                        suppressHydrationWarning
-                        className={`py-3 rounded-lg text-[10px] font-bold tracking-wider transition-all duration-300 border ${
+                        className={`py-3 rounded-xl text-[10px] font-bold tracking-wider transition-all duration-300 border ${
                           form.budget === b
                             ? "bg-[#8B5E3C] border-[#8B5E3C] text-white shadow-sm"
-                            : "bg-[#F7F4F0] border-[#EDE5DB] text-gray-500 hover:text-[#1A1A1A] hover:border-[#8B5E3C]"
+                            : "bg-white/5 border-white/10 text-white/50 hover:text-white hover:border-[#8B5E3C]"
                         }`}
                       >
                         {b}
@@ -196,7 +193,7 @@ ${form.name}`;
 
                 {/* Project Details */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                  <label className="text-[10px] text-white/50 font-bold uppercase tracking-wider">
                     Project Details
                   </label>
                   <textarea
@@ -205,8 +202,7 @@ ${form.name}`;
                     value={form.details}
                     onChange={(e) => setForm({ ...form, details: e.target.value })}
                     placeholder="Describe your goals, requirements, sitemaps, or vision..."
-                    suppressHydrationWarning
-                    className="px-5 py-3.5 rounded-lg bg-[#F7F4F0] border border-[#EDE5DB] text-[#1A1A1A] text-xs focus:border-[#8B5E3C] focus:bg-white focus:outline-none transition-all duration-300 placeholder:text-gray-400 resize-none font-medium"
+                    className="px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:border-[#8B5E3C] focus:bg-white/5 focus:outline-none transition-all duration-300 placeholder:text-white/30 resize-none font-medium"
                   />
                 </div>
 
@@ -215,8 +211,7 @@ ${form.name}`;
                   type="submit"
                   disabled={loading}
                   data-cursor="pointer"
-                  suppressHydrationWarning
-                  className="w-full py-4 rounded-lg bg-[#8B5E3C] hover:bg-[#A06F4C] text-white font-bold tracking-wider text-xs shadow-sm transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-4 rounded-xl bg-white text-black hover:bg-[#8B5E3C] hover:text-white font-bold tracking-wider text-xs shadow-sm transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span>transmitting...</span>
@@ -233,7 +228,7 @@ ${form.name}`;
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 text-xs font-bold text-center"
+                    className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold text-center"
                   >
                     Request transmitted successfully. We will reach out shortly!
                   </motion.div>
@@ -252,50 +247,50 @@ ${form.name}`;
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="pointer"
-                className="p-6 rounded-2xl bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 flex items-center justify-between transition-all duration-300 group"
+                className="p-6 rounded-2xl bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/15 text-emerald-400 flex items-center justify-between transition-all duration-300 group"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5 fill-current text-emerald-600" />
+                    <MessageCircle className="w-5 h-5 fill-current text-emerald-400" />
                   </div>
                   <div className="text-left font-sans">
-                    <h4 className="text-[#1A1A1A] text-sm font-bold">Chat on WhatsApp</h4>
-                    <p className="text-[9px] text-gray-500 font-bold uppercase tracking-wider mt-0.5">Fast Response</p>
+                    <h4 className="text-white text-sm font-bold">Chat on WhatsApp</h4>
+                    <p className="text-[9px] text-white/40 font-bold uppercase tracking-wider mt-0.5">Fast Response</p>
                   </div>
                 </div>
                 <span className="text-sm font-extrabold group-hover:translate-x-0.5 transition-transform">→</span>
               </a>
 
               {/* Contact info card block */}
-              <div className="p-6 rounded-2xl bg-white border border-[#EDE5DB] flex flex-col gap-5 shadow-xs">
+              <div className="p-6 rounded-2xl bg-zinc-950/60 border border-white/10 flex flex-col gap-5 shadow-xs">
                 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#EDE5DB]/70 flex items-center justify-center border border-[#EDE5DB] text-[#8B5E3C] shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white/80 shrink-0">
                     <Mail className="w-4.5 h-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-gray-400 text-[9px] font-extrabold uppercase tracking-wider">Direct Email</h4>
-                    <p className="text-[#1A1A1A] text-xs font-extrabold mt-0.5">buildwithnylex@gmail.com</p>
+                    <h4 className="text-white/40 text-[9px] font-extrabold uppercase tracking-wider">Direct Email</h4>
+                    <p className="text-white text-xs font-extrabold mt-0.5">buildwithnylex@gmail.com</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#EDE5DB]/70 flex items-center justify-center border border-[#EDE5DB] text-[#8B5E3C] shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white/80 shrink-0">
                     <Phone className="w-4.5 h-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-gray-400 text-[9px] font-extrabold uppercase tracking-wider">Direct Hotline</h4>
-                    <p className="text-[#1A1A1A] text-xs font-extrabold mt-0.5">+91 89214 42748</p>
+                    <h4 className="text-white/40 text-[9px] font-extrabold uppercase tracking-wider">Direct Hotline</h4>
+                    <p className="text-white text-xs font-extrabold mt-0.5">+91 89214 42748</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#EDE5DB]/70 flex items-center justify-center border border-[#EDE5DB] text-[#8B5E3C] shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white/80 shrink-0">
                     <MapPin className="w-4.5 h-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-gray-400 text-[9px] font-extrabold uppercase tracking-wider">Location</h4>
-                    <p className="text-[#1A1A1A] text-xs font-extrabold mt-0.5">Kozhikode, Kerala, India</p>
+                    <h4 className="text-white/40 text-[9px] font-extrabold uppercase tracking-wider">Location</h4>
+                    <p className="text-white text-xs font-extrabold mt-0.5">Kozhikode, Kerala, India</p>
                   </div>
                 </div>
 

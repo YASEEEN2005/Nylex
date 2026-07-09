@@ -95,10 +95,10 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative pt-20 pb-10 bg-[#1C1510] border-t border-white/5 overflow-hidden z-10 text-white/70">
+    <footer className="relative pt-20 pb-10 bg-black border-t border-white/10 overflow-hidden z-10 text-white/60">
       {/* Ambient glow lights */}
-      <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-48 -right-48 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-white/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-48 -right-48 w-96 h-96 bg-white/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-14 border-b border-white/10">
@@ -110,15 +110,15 @@ export default function Footer() {
               onClick={(e) => handleScrollTo(e, "#top")}
               className="flex items-center gap-2.5 group text-white text-2xl font-extrabold tracking-widest"
             >
-              <svg className="w-6.5 h-6.5 text-[#EDE5DB]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-6.5 h-6.5 text-[#8B5E3C]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 4v16M19 4v16M5 4l14 16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               <div className="flex flex-col items-start leading-none gap-0.5">
                 <span className="text-sm font-extrabold tracking-widest text-white uppercase font-sans">NYLEX</span>
-                <span className="text-[6px] font-bold tracking-[0.25em] text-[#EDE5DB] uppercase font-sans">DIGITAL STUDIO</span>
+                <span className="text-[6px] font-bold tracking-[0.25em] text-[#8B5E3C] uppercase font-sans">DIGITAL STUDIO</span>
               </div>
             </a>
-            <p className="text-gray-400 text-xs leading-relaxed max-w-xs font-sans">
+            <p className="text-white/60 text-xs leading-relaxed max-w-xs font-sans">
               Building digital experiences that inspire and perform. We deliver premium UI/UX, full-stack websites, and custom web applications.
             </p>
           </div>
@@ -126,40 +126,40 @@ export default function Footer() {
           {/* Quick Links Column */}
           <div className="col-span-1 sm:col-span-3 md:col-span-2 flex flex-col gap-4 font-sans">
             <h4 className="text-white text-[10px] font-extrabold uppercase tracking-widest">Quick Links</h4>
-            <div className="flex flex-col gap-2.5 text-xs text-gray-300">
-              <a href="#" onClick={(e) => handleScrollTo(e, "#top")} className="hover:text-[#EDE5DB] transition-colors duration-200">Home</a>
-              <a href="#about" onClick={(e) => handleScrollTo(e, "#about")} className="hover:text-[#EDE5DB] transition-colors duration-200">About</a>
-              <a href="#services" onClick={(e) => handleScrollTo(e, "#services")} className="hover:text-[#EDE5DB] transition-colors duration-200">Services</a>
-              <a href="#work" onClick={(e) => handleScrollTo(e, "#work")} className="hover:text-[#EDE5DB] transition-colors duration-200">Projects</a>
-              <a href="#contact" onClick={(e) => handleScrollTo(e, "#contact")} className="hover:text-[#EDE5DB] transition-colors duration-200">Contact</a>
+            <div className="flex flex-col gap-2.5 text-xs text-white/70">
+              <a href="#" onClick={(e) => handleScrollTo(e, "#top")} className="hover:text-white transition-colors duration-200">Home</a>
+              <a href="#about" onClick={(e) => handleScrollTo(e, "#about")} className="hover:text-white transition-colors duration-200">About</a>
+              <a href="#services" onClick={(e) => handleScrollTo(e, "#services")} className="hover:text-white transition-colors duration-200">Services</a>
+              <a href="#work" onClick={(e) => handleScrollTo(e, "#work")} className="hover:text-white transition-colors duration-200">Projects</a>
+              <a href="#contact" onClick={(e) => handleScrollTo(e, "#contact")} className="hover:text-white transition-colors duration-200">Contact</a>
             </div>
           </div>
 
           {/* Services Column */}
           <div className="col-span-1 sm:col-span-3 md:col-span-2 flex flex-col gap-4 font-sans">
             <h4 className="text-white text-[10px] font-extrabold uppercase tracking-widest">Services</h4>
-            <div className="flex flex-col gap-2.5 text-xs text-gray-300">
-              <span className="hover:text-[#EDE5DB] transition-colors duration-200 cursor-default">Web Development</span>
-              <span className="hover:text-[#EDE5DB] transition-colors duration-200 cursor-default">UI/UX Design</span>
-              <span className="hover:text-[#EDE5DB] transition-colors duration-200 cursor-default">Mobile Development</span>
-              <span className="hover:text-[#EDE5DB] transition-colors duration-200 cursor-default">Branding</span>
+            <div className="flex flex-col gap-2.5 text-xs text-white/70">
+              <span className="hover:text-white transition-colors duration-200 cursor-default">Web Development</span>
+              <span className="hover:text-white transition-colors duration-200 cursor-default">UI/UX Design</span>
+              <span className="hover:text-white transition-colors duration-200 cursor-default">Mobile Development</span>
+              <span className="hover:text-white transition-colors duration-200 cursor-default">Branding</span>
             </div>
           </div>
 
           {/* Contact Us Column */}
           <div className="col-span-1 sm:col-span-3 md:col-span-2.5 flex flex-col gap-4 font-sans">
             <h4 className="text-white text-[10px] font-extrabold uppercase tracking-widest">Contact Us</h4>
-            <div className="flex flex-col gap-3 text-xs text-gray-300">
-              <a href="tel:+918921442748" className="flex items-center gap-2.5 hover:text-[#EDE5DB] transition-colors">
-                <Phone className="w-3.5 h-3.5 text-[#EDE5DB]" />
+            <div className="flex flex-col gap-3 text-xs text-white/70">
+              <a href="tel:+918921442748" className="flex items-center gap-2.5 hover:text-white transition-colors">
+                <Phone className="w-3.5 h-3.5 text-[#8B5E3C]" />
                 +91 89214 42748
               </a>
-              <a href="mailto:buildwithnylex@gmail.com" className="flex items-center gap-2.5 hover:text-[#EDE5DB] transition-colors">
-                <Mail className="w-3.5 h-3.5 text-[#EDE5DB]" />
+              <a href="mailto:buildwithnylex@gmail.com" className="flex items-center gap-2.5 hover:text-white transition-colors">
+                <Mail className="w-3.5 h-3.5 text-[#8B5E3C]" />
                 buildwithnylex@gmail.com
               </a>
               <div className="flex items-start gap-2.5">
-                <MapPin className="w-3.5 h-3.5 text-[#EDE5DB] mt-0.5 shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-[#8B5E3C] mt-0.5 shrink-0" />
                 <span>Kozhikode, Kerala, India</span>
               </div>
             </div>
@@ -188,7 +188,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Copyright line */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-gray-400 font-sans">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-white/40 font-sans">
           <div>
             © {currentYear} NYLEX Agency. All rights reserved.
           </div>

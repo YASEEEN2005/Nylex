@@ -55,10 +55,12 @@ export default function Process() {
     <section
       id="process"
       ref={containerRef}
-      className="relative py-24 bg-[#F7F4F0] overflow-hidden z-10 border-t border-[#EDE5DB]"
+      className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10"
     >
       {/* Background gradients */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative flex flex-col items-center">
         
@@ -67,10 +69,10 @@ export default function Process() {
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B5E3C] font-sans">
             OUR WORKFLOW
           </span>
-          <h2 className="text-4xl sm:text-5xl font-normal text-[#1A1A1A] font-serif tracking-tight leading-tight">
+          <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             How We Execute
           </h2>
-          <p className="text-[#7A7A7A] text-sm sm:text-base max-w-md font-sans font-medium">
+          <p className="text-white/60 text-sm sm:text-base max-w-md font-medium">
             A meticulous, systematic execution pipeline engineered to deliver world-class digital assets on schedule.
           </p>
         </div>
@@ -79,11 +81,11 @@ export default function Process() {
         <div className="relative w-full max-w-4xl flex flex-col gap-12 md:gap-20">
           
           {/* Vertical Progress Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-[#EDE5DB] -translate-x-1/2 hidden sm:block">
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-white/10 -translate-x-1/2 hidden sm:block">
             {/* Active filled line */}
             <motion.div
               style={{ height: lineHeight }}
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#8B5E3C] via-[#1C1510] to-[#8B5E3C] origin-top shadow-[0_0_8px_rgba(139,94,60,0.3)]"
+              className="absolute top-0 left-0 w-full bg-gradient-to-b from-white via-white/30 to-white origin-top shadow-[0_0_8px_rgba(255,255,255,0.3)]"
             />
           </div>
 
@@ -99,7 +101,7 @@ export default function Process() {
                 }`}
               >
                 {/* Connecting node dot */}
-                <div className="absolute left-4 md:left-1/2 top-1.5 md:top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#F7F4F0] border-2 border-[#8B5E3C] shadow-[0_0_8px_rgba(139,94,60,0.15)] -translate-x-1/2 hidden sm:block z-10" />
+                <div className="absolute left-4 md:left-1/2 top-1.5 md:top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-black border-2 border-[#8B5E3C] shadow-[0_0_8px_rgba(139,94,60,0.15)] -translate-x-1/2 hidden sm:block z-10" />
 
                 {/* Left/Right Card Panel */}
                 <motion.div
@@ -111,16 +113,16 @@ export default function Process() {
                   className="w-full sm:w-[45%] pl-10 sm:pl-0 flex flex-col gap-3 relative"
                 >
                   {/* Step Card */}
-                  <div className="p-6 rounded-2xl bg-white border border-[#EDE5DB] hover:border-[#8B5E3C]/50 hover:bg-[#F7F4F0]/40 transition-all duration-300 relative group overflow-hidden shadow-xs">
-                    <span className="absolute top-2 right-4 text-3xl font-extrabold font-serif bg-gradient-to-b from-[#8B5E3C]/20 to-transparent bg-clip-text text-transparent group-hover:from-[#8B5E3C]/15 group-hover:to-transparent transition-all duration-300 select-none">
+                  <div className="p-6 rounded-2xl bg-zinc-950/60 border border-white/5 hover:border-white/15 hover:bg-zinc-900/60 transition-all duration-300 relative group overflow-hidden shadow-xs">
+                    <span className="absolute top-2 right-4 text-3xl font-black bg-gradient-to-b from-white/10 to-transparent bg-clip-text text-transparent group-hover:from-white/15 group-hover:to-transparent transition-all duration-300 select-none">
                       {step.num}
                     </span>
                     
-                    <h3 className="text-[#1A1A1A] text-lg font-bold font-sans mb-1.5 group-hover:text-[#8B5E3C] transition-colors">
+                    <h3 className="text-white text-lg font-bold font-sans mb-1.5 group-hover:text-[#8B5E3C] transition-colors">
                       {step.title}
                     </h3>
                     
-                    <p className="text-[#7A7A7A] text-xs leading-relaxed font-medium font-sans">
+                    <p className="text-white/60 text-xs leading-relaxed font-medium font-sans">
                       {step.desc}
                     </p>
                   </div>

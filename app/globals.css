@@ -1,14 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Anton", "Impact", "Arial Black", sans-serif;
 }
 
 :root {
-  --background: #F7F4F0;
-  --foreground: #1A1A1A;
+  --background: #000000;
+  --foreground: #FFFFFF;
   --primary-accent: #8B5E3C;
   --secondary-accent: #EDE5DB;
 }
@@ -19,12 +20,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F7F4F0;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #EDE5DB;
+  background: #1A1A1A;
   border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -33,18 +35,18 @@
 
 /* Selection highlight */
 ::selection {
-  background: rgba(139, 94, 60, 0.15);
-  color: #1A1A1A;
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #F7F4F0;
+  background-color: #000000;
 }
 
 body {
-  background-color: #F7F4F0;
-  color: #1A1A1A;
+  background-color: #000000;
+  color: #FFFFFF;
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
@@ -80,4 +82,51 @@ select.select-custom {
 
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Shine effect animation */
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.animate-shine {
+  animation: shine 4s linear infinite;
+}
+
+/* spinGlow keyframes */
+@keyframes spinGlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* floatCard keyframes */
+@keyframes floatCard {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* premiumShine keyframes */
+@keyframes premiumShine {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(200%);
+  }
 }

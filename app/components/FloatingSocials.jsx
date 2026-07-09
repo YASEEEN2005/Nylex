@@ -51,7 +51,7 @@ export default function FloatingSocials() {
         className="group relative w-12 h-12 rounded-full bg-gradient-to-tr from-[#FFB800] via-[#FF007A] to-[#7A00FF] flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-[0_10px_25px_rgba(255,0,122,0.35)]"
       >
         {/* Tooltip */}
-        <span className="absolute right-14 bg-[#1C1510] text-[#EDE5DB] text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-sm uppercase font-sans whitespace-nowrap">
+        <span className="absolute right-14 bg-zinc-950 text-white border border-white/10 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-lg uppercase font-sans whitespace-nowrap">
           Instagram
         </span>
         <InstagramIcon />
@@ -68,7 +68,7 @@ export default function FloatingSocials() {
         className="group relative w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-[0_10px_25px_rgba(37,211,102,0.35)]"
       >
         {/* Tooltip */}
-        <span className="absolute right-14 bg-[#1C1510] text-[#EDE5DB] text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-sm uppercase font-sans whitespace-nowrap">
+        <span className="absolute right-14 bg-zinc-950 text-white border border-white/10 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-lg uppercase font-sans whitespace-nowrap">
           WhatsApp
         </span>
         <WhatsappIcon />

@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="antialiased select-none bg-[#F7F4F0] text-[#1A1A1A]">
+      <body className="antialiased select-none bg-black text-white">
         {/* Momentum Smooth Scrolling */}
         <SmoothScroll />
 

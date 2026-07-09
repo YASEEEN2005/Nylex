@@ -88,9 +88,11 @@ export default function Testimonials() {
   const active = testimonials[currentIndex];
 
   return (
-    <section id="testimonials" className="relative py-24 bg-[#F7F4F0] overflow-hidden z-10 border-t border-[#EDE5DB]">
+    <section id="testimonials" className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10">
       {/* Background soft glowing highlights */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
+      </div>
 
       <div className="max-w-4xl mx-auto px-6 relative flex flex-col items-center">
         
@@ -100,7 +102,7 @@ export default function Testimonials() {
         </span>
 
         {/* Large Quote Mark */}
-        <div className="w-14 h-14 rounded-full bg-[#EDE5DB]/70 border border-[#EDE5DB] flex items-center justify-center text-[#8B5E3C]/80 mb-8">
+        <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/80 mb-8">
           <Quote className="w-5 h-5 fill-current" />
         </div>
 
@@ -117,7 +119,7 @@ export default function Testimonials() {
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="flex flex-col items-center gap-6"
             >
-              <p className="text-[#1A1A1A] text-xl sm:text-2xl font-normal leading-relaxed italic font-serif tracking-wide max-w-2xl">
+              <p className="text-white text-xl sm:text-2xl font-normal leading-relaxed italic font-serif tracking-wide max-w-2xl">
                 &ldquo;{active.review}&rdquo;
               </p>
 
@@ -130,10 +132,10 @@ export default function Testimonials() {
                   {active.initials}
                 </div>
                 <div className="text-left font-sans">
-                  <h4 className="text-[#1A1A1A] text-sm font-extrabold tracking-wide">
+                  <h4 className="text-white text-sm font-extrabold tracking-wide">
                     {active.name}
                   </h4>
-                  <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">
+                  <p className="text-[9px] text-white/40 font-bold uppercase tracking-widest mt-0.5">
                     {active.role}, <span className="text-[#8B5E3C]">{active.company}</span>
                   </p>
                 </div>
@@ -147,7 +149,7 @@ export default function Testimonials() {
           <button
             onClick={handlePrev}
             data-cursor="pointer"
-            className="w-11 h-11 rounded-full border border-[#EDE5DB] flex items-center justify-center text-gray-600 hover:text-[#1A1A1A] hover:border-[#8B5E3C] hover:bg-[#EDE5DB]/30 transition-all duration-300 active:scale-95 bg-white shadow-xs"
+            className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center text-white/75 hover:text-white hover:border-[#8B5E3C] hover:bg-white/10 transition-all duration-300 active:scale-95 bg-white/5 shadow-xs"
             aria-label="Previous Testimonial"
           >
             <ArrowLeft className="w-4.5 h-4.5" />
@@ -155,7 +157,7 @@ export default function Testimonials() {
           <button
             onClick={handleNext}
             data-cursor="pointer"
-            className="w-11 h-11 rounded-full border border-[#EDE5DB] flex items-center justify-center text-gray-600 hover:text-[#1A1A1A] hover:border-[#8B5E3C] hover:bg-[#EDE5DB]/30 transition-all duration-300 active:scale-95 bg-white shadow-xs"
+            className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center text-white/75 hover:text-white hover:border-[#8B5E3C] hover:bg-white/10 transition-all duration-300 active:scale-95 bg-white/5 shadow-xs"
             aria-label="Next Testimonial"
           >
             <ArrowRight className="w-4.5 h-4.5" />
@@ -172,7 +174,7 @@ export default function Testimonials() {
                 setCurrentIndex(idx);
               }}
               className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                idx === currentIndex ? "w-5 bg-[#8B5E3C]" : "bg-gray-300 hover:bg-gray-400"
+                idx === currentIndex ? "w-5 bg-[#8B5E3C]" : "bg-white/20 hover:bg-white/45"
               }`}
               aria-label={`Go to testimonial ${idx + 1}`}
             />

@@ -54,10 +54,10 @@ export default function FeaturedProjects() {
   ];
 
   return (
-    <section id="work" className="relative py-24 bg-[#F7F4F0] overflow-hidden z-10 text-[#1A1A1A] border-t border-[#EDE5DB]">
+    <section id="work" className="relative py-28 bg-black overflow-hidden z-10 text-white border-t border-white/10">
       
       {/* Visual background lights */}
-      <div className="absolute top-1/2 left-1/4 -translate-x-1/2 w-96 h-96 bg-[#8B5E3C]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/4 -translate-x-1/2 w-96 h-96 bg-white/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative flex flex-col gap-20">
         
@@ -72,19 +72,19 @@ export default function FeaturedProjects() {
                 <span className="w-8 h-[1px] bg-[#8B5E3C]" />
               </div>
               
-              <h2 className="text-4xl sm:text-5xl font-normal text-[#1A1A1A] font-serif leading-tight tracking-tight">
+              <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight">
                 Projects That Speak for Us
               </h2>
-              <p className="text-[#7A7A7A] text-sm leading-relaxed max-w-sm font-medium">
+              <p className="text-white/60 text-sm leading-relaxed max-w-sm font-medium">
                 We build digital experiences that are not only beautiful but functional, scalable, and impactful.
               </p>
             </div>
 
             <div className="flex items-center gap-5 mt-2">
               <a
-                href="#contact"
+                href="#work"
                 data-cursor="pointer"
-                className="px-5 py-3 rounded-lg bg-[#5C3E26] hover:bg-[#8B5E3C] text-white font-bold text-xs tracking-wider transition-colors duration-300 flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-3 rounded-full bg-white hover:bg-[#8B5E3C] text-black hover:text-white font-bold text-xs tracking-wider transition-all duration-300 flex items-center gap-1.5 shadow-sm"
               >
                 View All Projects
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -92,29 +92,41 @@ export default function FeaturedProjects() {
               <a
                 href="#contact"
                 data-cursor="pointer"
-                className="text-xs font-bold text-[#1A1A1A] hover:text-[#8B5E3C] transition-colors border-b border-[#1A1A1A] hover:border-[#8B5E3C] pb-0.5"
+                className="text-xs font-bold text-white hover:text-[#8B5E3C] transition-colors border-b border-white/20 hover:border-[#8B5E3C] pb-0.5"
               >
                 Request a Proposal ↗
               </a>
             </div>
           </div>
 
-          {/* Project 01 Showcase */}
-          <div className="col-span-1 lg:col-span-7 grid grid-cols-1 sm:grid-cols-12 gap-8 items-center bg-[#EDE5DB]/20 border border-[#EDE5DB]/40 rounded-3xl p-8 relative overflow-hidden">
-            {/* Arch Outline Shape Background */}
-            <div className="absolute -right-10 -bottom-10 w-72 h-72 border border-[#8B5E3C]/10 rounded-full pointer-events-none" />
+          {/* Project 01 Showcase Card */}
+          <div className="col-span-1 lg:col-span-7 grid grid-cols-1 sm:grid-cols-12 gap-8 items-center bg-zinc-950/60 border border-white/10 hover:border-white/20 rounded-[32px] p-8 relative overflow-hidden transition-all duration-400 group">
+            {/* Spinning Border Outline */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[32px] overflow-hidden pointer-events-none z-0">
+              <div 
+                className="absolute inset-[-200%] animate-[spinGlow_12s_linear_infinite]"
+                style={{
+                  background: "conic-gradient(from 0deg, transparent, rgba(255,255,255,0.12), transparent 30%)"
+                }}
+              />
+            </div>
+            {/* Card inner backdrop clipping mask */}
+            <div className="absolute inset-[1px] rounded-[31px] bg-zinc-950 z-[1]" />
             
-            <div className="sm:col-span-5 flex flex-col items-start gap-4 z-10 font-sans">
+            {/* Arch Outline Shape Background */}
+            <div className="absolute -right-10 -bottom-10 w-72 h-72 border border-white/5 rounded-full pointer-events-none z-[1]" />
+            
+            <div className="sm:col-span-5 flex flex-col items-start gap-4 z-10 font-sans relative">
               {/* Sparkles Badge */}
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#EDE5DB] shadow-xs">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 shadow-xs">
                 <Sparkles className="w-3 text-[#8B5E3C]" />
                 <span className="text-[8px] font-bold text-[#8B5E3C] uppercase tracking-wider">50+ Projects</span>
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="text-4xl font-serif text-[#8B5E3C]/20 font-light">{projects[0].id}</span>
-                <h3 className="text-base font-extrabold text-[#1A1A1A] tracking-tight">{projects[0].title}</h3>
-                <p className="text-[11px] text-[#7A7A7A] leading-relaxed font-medium">{projects[0].desc}</p>
+                <span className="text-4xl font-serif text-white/10 font-light">{projects[0].id}</span>
+                <h3 className="text-base font-extrabold text-white tracking-tight">{projects[0].title}</h3>
+                <p className="text-[11px] text-white/60 leading-relaxed font-medium">{projects[0].desc}</p>
               </div>
 
               <a
@@ -122,7 +134,7 @@ export default function FeaturedProjects() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="pointer"
-                className="text-[10px] font-extrabold text-[#8B5E3C] hover:text-[#5C3E26] transition-colors flex items-center gap-1 mt-1 group"
+                className="text-[10px] font-extrabold text-[#8B5E3C] hover:text-white transition-colors flex items-center gap-1 mt-1 group"
               >
                 View Case Study
                 <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -130,10 +142,10 @@ export default function FeaturedProjects() {
             </div>
 
             {/* Laptop Mockup Visual */}
-            <div className="sm:col-span-7 flex justify-center z-10">
+            <div className="sm:col-span-7 flex justify-center z-10 relative">
               <div className="w-full max-w-[340px] relative">
                 {/* Macbook Base CSS */}
-                <div className="relative w-full aspect-[16/10] bg-neutral-900 rounded-t-lg p-[1.5%] shadow-xl">
+                <div className="relative w-full aspect-[16/10] bg-neutral-900 rounded-t-lg p-[1.5%] shadow-2xl border border-neutral-800">
                   <div className="relative w-full h-full rounded bg-zinc-950 overflow-hidden border border-neutral-800">
                     <Image
                       src={projects[0].image}
@@ -157,20 +169,32 @@ export default function FeaturedProjects() {
           {projects.slice(1).map((project) => (
             <div
               key={project.id}
-              className="bg-[#EDE5DB]/20 border border-[#EDE5DB]/40 rounded-3xl p-8 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center hover:border-[#8B5E3C]/30 transition-colors duration-300"
+              className="bg-zinc-950/60 border border-white/10 hover:border-white/20 rounded-[32px] p-8 grid grid-cols-1 sm:grid-cols-12 gap-6 items-center transition-all duration-400 group relative overflow-hidden"
             >
+              {/* Spinning Border Outline */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[32px] overflow-hidden pointer-events-none z-0">
+                <div 
+                  className="absolute inset-[-200%] animate-[spinGlow_12s_linear_infinite]"
+                  style={{
+                    background: "conic-gradient(from 0deg, transparent, rgba(255,255,255,0.12), transparent 30%)"
+                  }}
+                />
+              </div>
+              {/* Card inner backdrop clipping mask */}
+              <div className="absolute inset-[1px] rounded-[31px] bg-zinc-950 z-[1]" />
+
               {/* Project Metadata Details */}
-              <div className="sm:col-span-5 flex flex-col items-start gap-3 font-sans">
-                <span className="text-4xl font-serif text-[#8B5E3C]/20 font-light">{project.id}</span>
-                <h3 className="text-base font-extrabold text-[#1A1A1A] tracking-tight">{project.title}</h3>
-                <p className="text-[11px] text-[#7A7A7A] leading-relaxed font-medium">{project.desc}</p>
+              <div className="sm:col-span-5 flex flex-col items-start gap-3 font-sans relative z-10">
+                <span className="text-4xl font-serif text-white/10 font-light">{project.id}</span>
+                <h3 className="text-base font-extrabold text-white tracking-tight">{project.title}</h3>
+                <p className="text-[11px] text-white/60 leading-relaxed font-medium">{project.desc}</p>
                 
                 <a
                   href={project.link}
                   target="_blank"
                   rel="noreferrer"
                   data-cursor="pointer"
-                  className="text-[10px] font-extrabold text-[#8B5E3C] hover:text-[#5C3E26] transition-colors flex items-center gap-1 mt-1 group"
+                  className="text-[10px] font-extrabold text-[#8B5E3C] hover:text-white transition-colors flex items-center gap-1 mt-1 group"
                 >
                   View Case Study
                   <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -178,7 +202,7 @@ export default function FeaturedProjects() {
               </div>
 
               {/* Dynamic Device Mockup Visual */}
-              <div className="sm:col-span-7 flex justify-center">
+              <div className="sm:col-span-7 flex justify-center relative z-10">
                 <div className="w-full max-w-[280px]">
                   {project.device === "imac" ? (
                     /* iMac CSS Mockup */
@@ -200,7 +224,7 @@ export default function FeaturedProjects() {
                     </div>
                   ) : (
                     /* Macbook CSS Mockup */
-                    <div className="relative w-full aspect-[16/10] bg-neutral-900 rounded-t-lg p-[1.5%] shadow-xl">
+                    <div className="relative w-full aspect-[16/10] bg-neutral-900 rounded-t-lg p-[1.5%] shadow-xl border border-neutral-800">
                       <div className="relative w-full h-full rounded bg-zinc-950 overflow-hidden border border-neutral-800">
                         <Image
                           src={project.image}
