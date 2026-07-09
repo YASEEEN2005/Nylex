@@ -138,7 +138,7 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
   useEffect(() => {
     // Load custom logo image asynchronously first
     const logoImg = new Image();
-    logoImg.src = "/N logo.png";
+    logoImg.src = "/new n logo.png";
 
     logoImg.onload = () => {
       drawCanvas(logoImg);
