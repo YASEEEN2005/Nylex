@@ -103,6 +103,9 @@ export default function BandCard() {
 }
 
 function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
+  const { gl, size } = useThree();
+  const { width, height } = size;
+
   const band = useRef(null);
 
   const fixed = useRef(null);
@@ -166,7 +169,12 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
         sCtx.fillText("✦  CREATIVE AGENCY", offset + 170, 32);
       }
 
+      const maxAnisotropy = gl.capabilities.getMaxAnisotropy ? gl.capabilities.getMaxAnisotropy() : 1;
       const sTex = new THREE.CanvasTexture(strapCanvas);
+      sTex.minFilter = THREE.LinearFilter;
+      sTex.magFilter = THREE.LinearFilter;
+      sTex.generateMipmaps = false;
+      sTex.anisotropy = maxAnisotropy;
       sTex.wrapS = THREE.RepeatWrapping;
       sTex.wrapT = THREE.RepeatWrapping;
       sTex.repeat.set(-4, 1);
@@ -205,6 +213,10 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
       drawCardSide(fCtx, img, 960);
 
       const fTex = new THREE.CanvasTexture(faceCanvas);
+      fTex.minFilter = THREE.LinearFilter;
+      fTex.magFilter = THREE.LinearFilter;
+      fTex.generateMipmaps = false;
+      fTex.anisotropy = maxAnisotropy;
       fTex.flipY = false; // CRITICAL: stops card texture from rendering upside down on the GLTF mesh
       setCardFaceTexture(fTex);
     }
@@ -283,9 +295,8 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
         startX += w + 4;
       });
     }
-  }, []);
+  }, [gl]);
 
-  const { width, height } = useThree((state) => state.size);
 
   const [curve] = useState(
     () =>
