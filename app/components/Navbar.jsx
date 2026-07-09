@@ -84,21 +84,12 @@ export default function Navbar() {
           onClick={(e) => handleLinkClick(e, "top")}
           className="flex items-center gap-2.5 group shrink-0"
         >
-          {/* Double-N Line Logo Monogram */}
-          <svg
-            className="w-6.5 h-6.5 text-[#8B5E3C] group-hover:text-[#A06F4C] transition-colors duration-300"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 4v16M19 4v16M5 4l14 16"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          {/* Logo Image */}
+          <img
+            src="/new n logo.png"
+            alt="Nylex Logo"
+            className="w-9.5 h-9.5 object-contain group-hover:scale-105 transition-transform duration-300"
+          />
           
           <div className="flex flex-col items-start leading-none gap-0.5">
             <span className="text-[13px] sm:text-[14px] font-extrabold tracking-widest text-white uppercase font-sans">

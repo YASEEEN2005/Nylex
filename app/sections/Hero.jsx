@@ -46,7 +46,7 @@ export default function Hero() {
         {/* Background artwork eye centered */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <img
-            src="/hero-eye.png"
+            src="/hero image.png"
             alt="Hero Eye Visual"
             className="h-[90%] w-[90%] object-contain object-center opacity-70"
           />
@@ -65,15 +65,12 @@ export default function Hero() {
               {displayed || "\u00A0"}
             </h1>
 
-            {/* Right Display Text */}
             <p className="md:absolute md:top-28 md:right-12 mt-4 md:mt-0 text-left md:text-right text-3xl md:text-4xl lg:text-5xl leading-[1.05] max-w-xs md:max-w-md font-[Poppins] font-bold tracking-wide text-transparent bg-clip-text bg-[length:200%_auto] bg-gradient-to-r from-white via-white/60 to-white animate-shine">
-              Creating
+              We Design.
               <br />
-              Websites
+              We Develop.
               <br />
-              That Feel
-              <br />
-              Alive.
+              We Deliver.
             </p>
           </div>
 
