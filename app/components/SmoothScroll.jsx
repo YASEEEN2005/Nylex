@@ -12,8 +12,9 @@ export default function SmoothScroll() {
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
+      syncTouch: true, // Enables smooth inertial scrolling on touch devices
       wheelMultiplier: 0.95,
-      touchMultiplier: 1.4,
+      touchMultiplier: 1.8, // Slightly higher for immediate scroll response
       infinite: false,
     });
 

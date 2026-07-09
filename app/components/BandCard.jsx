@@ -452,14 +452,23 @@ function Band({ isMobile, maxSpeed = 50, minSpeed = 10 }) {
           >
             {nodes?.card?.geometry && (
               <mesh geometry={nodes.card.geometry}>
-                <meshPhysicalMaterial
-                  {...materials.base}
-                  map={cardFaceTexture || materials.base?.map}
-                  roughness={0.35}
-                  metalness={0.1}
-                  clearcoat={1}
-                  clearcoatRoughness={0.15}
-                />
+                {isMobile ? (
+                  <meshStandardMaterial
+                    {...materials.base}
+                    map={cardFaceTexture || materials.base?.map}
+                    roughness={0.45}
+                    metalness={0.1}
+                  />
+                ) : (
+                  <meshPhysicalMaterial
+                    {...materials.base}
+                    map={cardFaceTexture || materials.base?.map}
+                    roughness={0.35}
+                    metalness={0.1}
+                    clearcoat={1}
+                    clearcoatRoughness={0.15}
+                  />
+                )}
               </mesh>
             )}
 

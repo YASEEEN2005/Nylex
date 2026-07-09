@@ -50,8 +50,11 @@ export default function CanvasBackground() {
     const blueTexture = createParticleTexture("rgba(139, 94, 60, 0.5)", "rgba(139, 94, 60, 0)");
     const purpleTexture = createParticleTexture("rgba(237, 229, 219, 0.6)", "rgba(237, 229, 219, 0)");
 
+    // Detect mobile to optimize particle simulation
+    const isMobileDevice = window.innerWidth < 768;
+    const particleCount = isMobileDevice ? 150 : 600;
+
     // Particles Group 1 (Blue)
-    const particleCount = 600;
     const geometry1 = new THREE.BufferGeometry();
     const positions1 = new Float32Array(particleCount * 3);
     const originalPositions1 = new Float32Array(particleCount * 3);
@@ -168,83 +171,85 @@ export default function CanvasBackground() {
       particles2.rotation.y = -time * 0.15;
       particles2.rotation.x = -time * 0.05;
 
-      // Animate Individual Particles (Group 1)
-      const pos1Arr = geometry1.attributes.position.array;
-      const orig1Arr = originalPositions1;
+      if (!isMobileDevice) {
+        // Animate Individual Particles (Group 1)
+        const pos1Arr = geometry1.attributes.position.array;
+        const orig1Arr = originalPositions1;
 
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const oX = orig1Arr[i3];
-        const oY = orig1Arr[i3 + 1];
-        const oZ = orig1Arr[i3 + 2];
+        for (let i = 0; i < particleCount; i++) {
+          const i3 = i * 3;
+          const oX = orig1Arr[i3];
+          const oY = orig1Arr[i3 + 1];
+          const oZ = orig1Arr[i3 + 2];
 
-        // Cosmic wave drift
-        const waveX = Math.sin(time + oY * 0.01) * 3;
-        const waveY = Math.cos(time + oX * 0.01) * 3;
+          // Cosmic wave drift
+          const waveX = Math.sin(time + oY * 0.01) * 3;
+          const waveY = Math.cos(time + oX * 0.01) * 3;
 
-        // Mouse displacement
-        // Convert three space to screen space
-        const pVector = new THREE.Vector3(oX + waveX, oY + waveY, oZ);
-        pVector.applyEuler(particles1.rotation);
+          // Mouse displacement
+          // Convert three space to screen space
+          const pVector = new THREE.Vector3(oX + waveX, oY + waveY, oZ);
+          pVector.applyEuler(particles1.rotation);
 
-        // Calculate distance from screen mouse
-        const mX = mouse.current.x * 250;
-        const mY = mouse.current.y * 150;
+          // Calculate distance from screen mouse
+          const mX = mouse.current.x * 250;
+          const mY = mouse.current.y * 150;
 
-        const dX = pVector.x - mX;
-        const dY = pVector.y - mY;
-        const distance = Math.sqrt(dX * dX + dY * dY);
+          const dX = pVector.x - mX;
+          const dY = pVector.y - mY;
+          const distance = Math.sqrt(dX * dX + dY * dY);
 
-        let forceX = 0;
-        let forceY = 0;
+          let forceX = 0;
+          let forceY = 0;
 
-        if (distance < 80) {
-          const repelFactor = (80 - distance) / 80;
-          forceX = (dX / distance) * repelFactor * 15;
-          forceY = (dY / distance) * repelFactor * 15;
+          if (distance < 80) {
+            const repelFactor = (80 - distance) / 80;
+            forceX = (dX / distance) * repelFactor * 15;
+            forceY = (dY / distance) * repelFactor * 15;
+          }
+
+          pos1Arr[i3] = oX + waveX + forceX;
+          pos1Arr[i3 + 1] = oY + waveY + forceY;
         }
+        geometry1.attributes.position.needsUpdate = true;
 
-        pos1Arr[i3] = oX + waveX + forceX;
-        pos1Arr[i3 + 1] = oY + waveY + forceY;
-      }
-      geometry1.attributes.position.needsUpdate = true;
+        // Animate Individual Particles (Group 2)
+        const pos2Arr = geometry2.attributes.position.array;
+        const orig2Arr = originalPositions2;
 
-      // Animate Individual Particles (Group 2)
-      const pos2Arr = geometry2.attributes.position.array;
-      const orig2Arr = originalPositions2;
+        for (let i = 0; i < particleCount; i++) {
+          const i3 = i * 3;
+          const oX = orig2Arr[i3];
+          const oY = orig2Arr[i3 + 1];
+          const oZ = orig2Arr[i3 + 2];
 
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        const oX = orig2Arr[i3];
-        const oY = orig2Arr[i3 + 1];
-        const oZ = orig2Arr[i3 + 2];
+          const waveX = Math.cos(time * 0.8 + oY * 0.01) * 4;
+          const waveY = Math.sin(time * 0.8 + oX * 0.01) * 4;
 
-        const waveX = Math.cos(time * 0.8 + oY * 0.01) * 4;
-        const waveY = Math.sin(time * 0.8 + oX * 0.01) * 4;
+          const pVector = new THREE.Vector3(oX + waveX, oY + waveY, oZ);
+          pVector.applyEuler(particles2.rotation);
 
-        const pVector = new THREE.Vector3(oX + waveX, oY + waveY, oZ);
-        pVector.applyEuler(particles2.rotation);
+          const mX = mouse.current.x * 250;
+          const mY = mouse.current.y * 150;
 
-        const mX = mouse.current.x * 250;
-        const mY = mouse.current.y * 150;
+          const dX = pVector.x - mX;
+          const dY = pVector.y - mY;
+          const distance = Math.sqrt(dX * dX + dY * dY);
 
-        const dX = pVector.x - mX;
-        const dY = pVector.y - mY;
-        const distance = Math.sqrt(dX * dX + dY * dY);
+          let forceX = 0;
+          let forceY = 0;
 
-        let forceX = 0;
-        let forceY = 0;
+          if (distance < 90) {
+            const repelFactor = (90 - distance) / 90;
+            forceX = (dX / distance) * repelFactor * 20;
+            forceY = (dY / distance) * repelFactor * 20;
+          }
 
-        if (distance < 90) {
-          const repelFactor = (90 - distance) / 90;
-          forceX = (dX / distance) * repelFactor * 20;
-          forceY = (dY / distance) * repelFactor * 20;
+          pos2Arr[i3] = oX + waveX + forceX;
+          pos2Arr[i3 + 1] = oY + waveY + forceY;
         }
-
-        pos2Arr[i3] = oX + waveX + forceX;
-        pos2Arr[i3 + 1] = oY + waveY + forceY;
+        geometry2.attributes.position.needsUpdate = true;
       }
-      geometry2.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     };
