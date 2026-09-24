@@ -20,28 +20,22 @@ export default function WelcomeScreen() {
       animate={{ opacity: 1 }}
       exit={{
         opacity: 0,
-        scale: 1.05,
+        scale: 1.02,
         transition: {
-          duration: 1.2,
+          duration: 0.8,
           ease: [0.22, 1, 0.36, 1],
         },
       }}
-      className="fixed inset-0 z-[99999] flex items-center justify-center bg-black overflow-hidden p-5 animate-fade-in"
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-white overflow-hidden p-5 font-sans"
     >
-      {/* Background Glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[420px] h-[420px] bg-white/10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-150px] right-[-80px] w-[300px] h-[300px] bg-white/5 blur-[100px] rounded-full" />
-      </div>
-
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
-          duration: 1.2,
+          duration: 0.8,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="relative text-center text-white flex flex-col items-center gap-5 w-full max-w-[340px]"
+        className="relative text-center text-slate-900 flex flex-col items-center gap-5 w-full max-w-[340px]"
       >
         {/* Icons */}
         <motion.div
@@ -51,7 +45,7 @@ export default function WelcomeScreen() {
             hidden: {},
             visible: {
               transition: {
-                staggerChildren: 0.25,
+                staggerChildren: 0.2,
               },
             },
           }}
@@ -63,40 +57,35 @@ export default function WelcomeScreen() {
               variants={{
                 hidden: {
                   opacity: 0,
-                  scale: 0.3,
-                  rotate: -140,
-                  y: 60,
+                  scale: 0.5,
+                  y: 30,
                 },
                 visible: {
                   opacity: 1,
                   scale: 1,
-                  rotate: 0,
                   y: 0,
                 },
               }}
               transition={{
-                duration: 1.3,
+                duration: 0.8,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              whileHover={{
-                scale: 1.08,
-              }}
-              className="w-[48px] h-[48px] rounded-full border border-white/10 flex items-center justify-center bg-white/5 backdrop-blur-md shadow-[0_0_25px_rgba(255,255,255,0.05)]"
+              className="w-[48px] h-[48px] rounded-full border border-slate-200 flex items-center justify-center bg-slate-50 shadow-xs"
             >
-              <Icon size={20} className="text-white" />
+              <Icon size={20} className="text-slate-900" />
             </motion.div>
           ))}
         </motion.div>
 
         {/* Text */}
         <div className="flex flex-col items-center gap-1 font-sans">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
+          <div className="flex items-center justify-center gap-2 flex-wrap text-slate-900">
             <motion.span
-              initial={{ opacity: 0, x: 120 }}
+              initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{
-                delay: 1,
-                duration: 1.1,
+                delay: 0.6,
+                duration: 0.8,
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="text-[clamp(22px,5vw,34px)] font-black tracking-tight"
@@ -105,11 +94,11 @@ export default function WelcomeScreen() {
             </motion.span>
 
             <motion.span
-              initial={{ opacity: 0, x: -120 }}
+              initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{
-                delay: 1.2,
-                duration: 1.1,
+                delay: 0.7,
+                duration: 0.8,
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="text-[clamp(22px,5vw,34px)] font-black tracking-tight"
@@ -119,14 +108,14 @@ export default function WelcomeScreen() {
           </div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 70 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 1.4,
-              duration: 1.2,
+              delay: 0.9,
+              duration: 0.8,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-[clamp(24px,6vw,38px)] font-black tracking-tight leading-tight text-center text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70"
+            className="text-[clamp(24px,6vw,38px)] font-black tracking-tight leading-tight text-center text-slate-900"
           >
             NYLEX STUDIO
           </motion.h1>
@@ -135,12 +124,12 @@ export default function WelcomeScreen() {
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.7 }}
+          animate={{ opacity: 1 }}
           transition={{
-            delay: 1.8,
-            duration: 1,
+            delay: 1.2,
+            duration: 0.8,
           }}
-          className="text-xs text-white/60 tracking-wider font-medium"
+          className="text-xs text-slate-500 tracking-wider font-medium"
         >
           Building Premium Digital Experiences.
         </motion.p>
@@ -150,17 +139,17 @@ export default function WelcomeScreen() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: 2,
+            delay: 1.4,
             duration: 0.5,
           }}
-          className="px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-[10px] tracking-[0.25em] text-white/70 shadow-[0_0_30px_rgba(255,255,255,0.04)] overflow-hidden font-mono"
+          className="px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-[10px] tracking-[0.25em] text-slate-600 font-mono shadow-xs overflow-hidden"
         >
           <motion.span
             initial={{ width: "0ch" }}
             animate={{ width: "16ch" }}
             transition={{
-              delay: 2.2,
-              duration: 2,
+              delay: 1.5,
+              duration: 1.5,
               ease: "easeInOut",
             }}
             className="inline-block overflow-hidden whitespace-nowrap"
@@ -176,22 +165,22 @@ export default function WelcomeScreen() {
               duration: 0.5,
               repeat: Infinity,
             }}
-            className="ml-[2px]"
+            className="ml-[2px] text-[#8B5E3C]"
           >
             |
           </motion.span>
         </motion.div>
 
         {/* Bottom Loading Line */}
-        <div className="mt-10 w-[240px] bg-white/20 h-[2px] overflow-hidden rounded-full">
+        <div className="mt-8 w-[240px] bg-slate-100 h-[2px] overflow-hidden rounded-full border border-slate-200/50">
           <motion.div
             initial={{ width: "10%" }}
             animate={{ width: "100%" }}
             transition={{
-              duration: 4.5,
+              duration: 3.5,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="h-full bg-white"
+            className="h-full bg-slate-900"
           />
         </div>
       </motion.div>

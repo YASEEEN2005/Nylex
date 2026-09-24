@@ -10,9 +10,9 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "#top", id: "top" },
-    { name: "About", href: "#about", id: "about" },
     { name: "Services", href: "#services", id: "services" },
-    { name: "Projects", href: "#work", id: "work" },
+    { name: "Work", href: "#work", id: "work" },
+    { name: "Tech Stack", href: "#techstack", id: "techstack" },
     { name: "Process", href: "#process", id: "process" },
     { name: "Contact", href: "#contact", id: "contact" },
   ];
@@ -73,18 +73,17 @@ export default function Navbar() {
       <nav
         className={
           scrolled
-            ? "fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 flex items-center justify-between px-6 md:px-10 py-3.5 backdrop-blur-xl bg-black/60 border border-white/10 rounded-full select-none shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-500"
-            : "fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-xl bg-black/20 border-b border-white/10 select-none transition-all duration-500"
+            ? "fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 flex items-center justify-between px-6 md:px-10 py-3.5 backdrop-blur-xl bg-white/85 border border-slate-200/90 rounded-full select-none shadow-[0_10px_30px_rgba(0,0,0,0.06)] transition-all duration-500"
+            : "fixed top-0 left-1/2 -translate-x-1/2 w-full z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-md bg-white/60 border-b border-slate-100 select-none transition-all duration-500"
         }
       >
         
-        {/* Left branding logo matching reference design */}
+        {/* Left branding logo */}
         <a
           href="#top"
           onClick={(e) => handleLinkClick(e, "top")}
           className="flex items-center gap-2.5 group shrink-0"
         >
-          {/* Logo Image */}
           <img
             src="/new n logo.png"
             alt="Nylex Logo"
@@ -92,22 +91,22 @@ export default function Navbar() {
           />
           
           <div className="flex flex-col items-start leading-none gap-0.5">
-            <span className="text-[13px] sm:text-[14px] font-extrabold tracking-widest text-white uppercase font-sans">
+            <span className="text-[13px] sm:text-[14px] font-extrabold tracking-widest text-slate-900 uppercase font-sans">
               NYLEX
             </span>
             <span className="text-[5.5px] sm:text-[6px] font-bold tracking-[0.25em] text-[#8B5E3C] uppercase font-sans">
-              DIGITAL STUDIO
+              WEB DEVELOPMENT STUDIO
             </span>
           </div>
         </a>
 
-        {/* Desktop navigation matching exact structure */}
-        <ul className="hidden md:flex items-center gap-8 lg:gap-10 text-xs tracking-widest text-white/70 uppercase">
+        {/* Desktop navigation */}
+        <ul className="hidden md:flex items-center gap-7 lg:gap-9 text-xs tracking-widest text-slate-600 uppercase font-sans">
           {navLinks.map((link) => (
             <li
               key={link.name}
               onClick={(e) => handleLinkClick(e, link.id)}
-              className="relative hover:text-white transition-colors cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full font-semibold"
+              className="relative hover:text-slate-900 transition-colors cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-[1.5px] after:w-0 after:bg-slate-900 after:transition-all after:duration-300 hover:after:w-full font-semibold"
             >
               {link.name}
             </li>
@@ -115,14 +114,14 @@ export default function Navbar() {
         </ul>
 
         {/* Live dynamic ticking clock */}
-        <div className="hidden md:block text-[10px] tracking-[0.3em] text-white/70 uppercase font-mono">
+        <div className="hidden md:block text-[10px] tracking-[0.3em] text-slate-500 uppercase font-mono">
           {time}
         </div>
 
         {/* Mobile menu toggle */}
         <button
           onClick={() => setMobileMenu(!mobileMenu)}
-          className="md:hidden text-white z-50 cursor-pointer p-1"
+          className="md:hidden text-slate-900 z-50 cursor-pointer p-1"
           aria-label="Toggle Menu"
         >
           {mobileMenu ? <X size={24} /> : <Menu size={24} />}
@@ -131,24 +130,22 @@ export default function Navbar() {
 
       {/* Fullscreen Mobile Drawer */}
       {mobileMenu && (
-        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-10 text-white uppercase tracking-[0.3em] text-sm md:hidden">
+        <div className="fixed inset-0 z-40 bg-white/98 backdrop-blur-xl flex flex-col items-center justify-center gap-10 text-slate-900 uppercase tracking-[0.3em] text-sm md:hidden font-sans">
           
-          {/* Time display in mobile menu */}
           <div className="absolute top-28 text-center font-sans">
-            <p className="text-[10px] text-white/40 tracking-[0.3em] mb-2 font-bold">
+            <p className="text-[10px] text-slate-400 tracking-[0.3em] mb-2 font-bold">
               TIME
             </p>
-            <h2 className="text-2xl tracking-widest font-semibold font-mono">
+            <h2 className="text-2xl tracking-widest font-semibold font-mono text-slate-900">
               {time}
             </h2>
           </div>
 
-          {/* Mobile links list */}
           {navLinks.map((link) => (
             <button
               key={link.name}
               onClick={(e) => handleLinkClick(e, link.id)}
-              className="relative cursor-pointer after:absolute after:left-0 after:-bottom-2 after:h-[1px] after:w-0 after:bg-white after:transition-all hover:after:w-full font-bold"
+              className="relative cursor-pointer after:absolute after:left-0 after:-bottom-2 after:h-[2px] after:w-0 after:bg-slate-900 after:transition-all hover:after:w-full font-bold text-slate-900"
             >
               {link.name}
             </button>

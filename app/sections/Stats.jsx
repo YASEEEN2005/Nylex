@@ -33,26 +33,24 @@ export default function Stats() {
   ];
 
   return (
-    <section className="relative py-20 bg-black overflow-hidden z-10 border-t border-white/10">
-      {/* Background radial highlight */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[300px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
-
+    <section className="relative py-16 bg-white overflow-hidden z-10 border-t border-slate-200 font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Glass Container */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-0.5 rounded-[32px] bg-zinc-950/60 border border-white/10 overflow-hidden backdrop-blur-xl shadow-2xl">
+        {/* Clean Light Container Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px rounded-[28px] bg-slate-200/90 border border-slate-200 overflow-hidden shadow-xs">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-zinc-950/40 hover:bg-white/5 transition-all duration-400 p-8 md:p-12 flex flex-col items-center text-center relative group"
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
+              whileHover={{ y: -4 }}
+              className="bg-white hover:bg-slate-50 transition-all duration-300 p-8 md:p-10 flex flex-col items-center text-center relative group cursor-default"
             >
-              {/* Subtle top border glow */}
-              <span className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#8B5E3C]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Top accent line */}
+              <span className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#8B5E3C] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
-              <div className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white mb-3 drop-shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 mb-2">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </div>
               
@@ -60,7 +58,7 @@ export default function Stats() {
                 {stat.label}
               </h3>
               
-              <p className="text-xs text-white/60 font-medium font-sans">
+              <p className="text-xs text-slate-500 font-medium font-sans">
                 {stat.desc}
               </p>
             </motion.div>

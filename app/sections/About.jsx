@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Compass, HeartHandshake, Zap, CalendarCheck } from "lucide-react";
 
 export default function About() {
@@ -27,18 +28,17 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10">
-      {/* Background gradients */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 right-10 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 left-10 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
-      </div>
-
+    <section id="about" className="relative py-24 bg-slate-50/50 overflow-hidden z-10 border-t border-slate-200 text-slate-900 font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         
         {/* Left Column: Narrative Storytelling */}
-        <div className="col-span-1 lg:col-span-5 flex flex-col items-start gap-6 font-sans">
-          
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="col-span-1 lg:col-span-5 flex flex-col items-start gap-6 font-sans"
+        >
           {/* Subtitle tag */}
           <div className="flex items-center gap-3 text-[#8B5E3C]">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] font-sans">
@@ -47,47 +47,53 @@ export default function About() {
             <span className="w-8 h-[1px] bg-[#8B5E3C]" />
           </div>
 
-          {/* Heading in display clamp style */}
+          {/* Heading */}
           <div>
-            <h2 className="font-extrabold leading-[1.1] tracking-tight text-white text-[clamp(36px,5.5vw,72px)]">
-              We're More <span className="text-white/70">Than a Studio</span>
+            <h2 className="font-extrabold leading-[1.1] tracking-tight text-[clamp(36px,5.5vw,72px)] bg-gradient-to-r from-slate-900 via-[#8B5E3C] to-slate-800 bg-clip-text text-transparent">
+              We're More Than a Studio
             </h2>
           </div>
 
-          <p className="text-white/60 text-sm sm:text-base leading-relaxed font-medium">
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
             Nylex is a team of passionate designers, developers, and problem solvers. We combine creativity with technology to build digital solutions that drive real results. We believe in visual perfection, robust engineering, and close collaboration.
           </p>
 
-          <a
+          <motion.a
             href="#contact"
-            data-cursor="pointer"
-            className="inline-flex items-center gap-2 border border-white/20 text-white px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-white hover:text-black transition-all duration-300 rounded-full cursor-pointer mt-2"
+            whileHover={{ scale: 1.04, y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            className="inline-flex items-center gap-2 border border-slate-300 text-slate-900 px-6 py-3 text-xs tracking-[0.25em] uppercase font-bold hover:bg-slate-900 hover:text-white transition-all duration-300 rounded-full cursor-pointer mt-2 shadow-xs"
           >
             More About Us
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
 
         {/* Right Column: Values 2x2 Grid */}
-        <div className="col-span-1 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 border-l border-white/10 pl-0 lg:pl-12">
-          {values.map((val) => (
-            <div
+        <div className="col-span-1 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 border-l border-slate-200 pl-0 lg:pl-12">
+          {values.map((val, idx) => (
+            <motion.div
               key={val.title}
-              className="group p-5 rounded-2xl bg-zinc-950/60 border border-white/5 hover:border-white/15 hover:bg-zinc-900/40 transition-all duration-300 flex flex-col gap-3 relative overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              whileHover={{ y: -4, borderColor: "rgba(139, 94, 60, 0.5)" }}
+              className="group p-5 rounded-2xl bg-white border border-slate-200/90 hover:shadow-md transition-all duration-300 flex flex-col gap-3 relative overflow-hidden cursor-default"
             >
               {/* Rounded icon container */}
-              <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/80 group-hover:bg-[#8B5E3C] group-hover:text-black transition-colors duration-300">
+              <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-800 group-hover:bg-[#8B5E3C] group-hover:text-white transition-colors duration-300 shrink-0">
                 {val.icon}
               </div>
 
-              <div className="flex flex-col gap-2 font-sans">
-                <h3 className="text-white text-sm font-extrabold group-hover:text-[#8B5E3C] transition-colors">
+              <div className="flex flex-col gap-1.5 font-sans">
+                <h3 className="text-slate-900 text-sm font-extrabold group-hover:text-[#8B5E3C] transition-colors">
                   {val.title}
                 </h3>
-                <p className="text-white/50 text-[11px] leading-relaxed font-medium">
+                <p className="text-slate-500 text-[11px] leading-relaxed font-medium">
                   {val.desc}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 

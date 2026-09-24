@@ -1,9 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-import WelcomeScreen from "./components/WelcomeScreen";
-
 import Hero from "./sections/Hero";
 import Stats from "./sections/Stats";
 import Services from "./sections/Services";
@@ -16,23 +12,8 @@ import Testimonials from "./sections/Testimonials";
 import Contact from "./sections/Contact";
 
 export default function Home() {
-  const [showWelcome, setShowWelcome] = useState(true);
-
-  useEffect(() => {
-    // Hide the welcome loader after 4.5 seconds
-    const timer = setTimeout(() => {
-      setShowWelcome(false);
-    }, 4500);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <>
-      {/* Intro Welcome screen loader */}
-      <AnimatePresence mode="wait">
-        {showWelcome && <WelcomeScreen />}
-      </AnimatePresence>
-
       {/* Hero Section */}
       <Hero />
 

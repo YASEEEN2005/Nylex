@@ -1,20 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Sparkles, ShieldCheck, Globe2 } from "lucide-react";
 
 export default function Hero() {
   const text = "NYLEX";
   const [displayed, setDisplayed] = useState("");
-  const [colorMode, setColorMode] = useState(0);
 
-  const colors = [
-    "bg-gradient-to-b from-white via-gray-200 via-gray-500 to-black text-transparent bg-clip-text",
-    "text-white",
-    "bg-gradient-to-b from-black via-gray-500 via-gray-200 to-white text-transparent bg-clip-text",
-  ];
-
-  const techs = ["UI/UX Design", "Web Development", "Mobile Apps", "Branding"];
+  const techs = ["Web Development", "Web Applications", "UI/UX Design", "Performance & SEO"];
 
   useEffect(() => {
     setDisplayed("");
@@ -22,7 +16,7 @@ export default function Hero() {
     function type() {
       setDisplayed(text.slice(0, i + 1));
       i++;
-      if (i < text.length) setTimeout(type, 200);
+      if (i < text.length) setTimeout(type, 140);
     }
     type();
   }, []);
@@ -41,114 +35,148 @@ export default function Hero() {
     <>
       <section
         id="hero"
-        className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black select-none flex flex-col justify-between"
+        className="relative w-full min-h-[85vh] lg:min-h-[90vh] overflow-hidden bg-white select-none flex flex-col justify-between pt-24 sm:pt-32 pb-12 px-4 sm:px-8 md:px-12 lg:px-16 font-sans text-slate-900"
       >
-        {/* Background artwork eye centered */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <img
-            src="/hero image.png"
-            alt="Hero Eye Visual"
-            className="h-[90%] w-[90%] object-contain object-center opacity-70"
-          />
-        </div>
+        {/* Soft luxury background ambient gradients */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[950px] h-[500px] bg-gradient-to-tr from-amber-500/10 via-slate-100/90 to-amber-500/5 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-[450px] h-[450px] bg-[#8B5E3C]/5 rounded-full blur-[140px] pointer-events-none" />
 
-        {/* Content wrapper */}
-        <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-28 pb-10">
+        {/* Content Container */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col justify-between flex-grow gap-10 sm:gap-14">
           
-          {/* Main display grid */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-start gap-4 w-full">
-            {/* Interactive Big Typed Header */}
-            <h1
-              onClick={() => setColorMode((prev) => (prev + 1) % colors.length)}
-              className={`font-display uppercase leading-[0.85] tracking-[-0.03em] text-[20vw] md:text-[14vw] lg:text-[12rem] cursor-pointer transition-all duration-300 ${colors[colorMode]}`}
+          {/* Top Status & Live Badge Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="flex items-center justify-between border-b border-slate-200/80 pb-4"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-2.5 w-2.5 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8B5E3C] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#8B5E3C]"></span>
+              </span>
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.25em] text-[#8B5E3C]">
+                NYLEX WEB STUDIO ✦ HIGH-PERFORMANCE WEB ENGINEERING
+              </span>
+            </div>
+
+            <div className="hidden md:flex items-center gap-4 text-[10px] font-mono tracking-widest text-slate-500 uppercase font-semibold">
+              <span className="flex items-center gap-1.5"><Globe2 size={13} className="text-[#8B5E3C]" /> KOZHIKODE, IN</span>
+              <span className="text-slate-300">•</span>
+              <span className="flex items-center gap-1.5"><ShieldCheck size={13} className="text-[#8B5E3C]" /> NEXT.JS CERTIFIED</span>
+            </div>
+          </motion.div>
+
+          {/* Main Hero Content */}
+          <div className="flex flex-col items-start gap-5 sm:gap-6 my-auto pt-4 max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] sm:text-[11px] font-mono font-bold text-slate-700 uppercase tracking-widest shadow-2xs"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#8B5E3C]" />
+              WEB DEVELOPMENT STUDIO
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display uppercase leading-[0.82] tracking-[-0.04em] text-[24vw] sm:text-[20vw] md:text-[16vw] lg:text-[12.5rem] bg-gradient-to-r from-slate-900 via-[#8B5E3C] to-slate-800 bg-clip-text text-transparent drop-shadow-xs"
             >
               {displayed || "\u00A0"}
-            </h1>
+            </motion.h1>
 
-            <p className="md:absolute md:top-28 md:right-12 mt-4 md:mt-0 text-left md:text-right text-3xl md:text-4xl lg:text-5xl leading-[1.05] max-w-xs md:max-w-md font-[Poppins] font-bold tracking-wide text-transparent bg-clip-text bg-[length:200%_auto] bg-gradient-to-r from-white via-white/60 to-white animate-shine">
-              We Design.
-              <br />
-              We Develop.
-              <br />
-              We Deliver.
-            </p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              className="text-slate-600 font-medium text-base sm:text-xl md:text-2xl leading-relaxed max-w-3xl pt-2"
+            >
+              Nylex is a specialized web development studio building high-performance websites and custom web applications for modern businesses.
+            </motion.p>
           </div>
 
-          {/* Bottom detail and action rows */}
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mt-auto w-full">
-            
-            {/* Left side: descriptions and cards */}
-            <div className="flex flex-col gap-5 max-w-xl font-sans">
-              <p className="relative text-sm sm:text-base leading-relaxed font-[Poppins] font-medium tracking-wide text-transparent bg-clip-text bg-[length:200%_auto] bg-gradient-to-r from-white via-white/70 to-white animate-shine">
-                Nylex is a creative digital studio crafting premium websites, brands, and digital products that help modern businesses establish authority and scale.
-              </p>
-
-              {/* Cards / Badges */}
-              <div className="flex flex-wrap gap-2.5">
-                {techs.map((tech) => (
-                  <div
-                    key={tech}
-                    className="relative group px-4 py-2 rounded-xl text-xs font-semibold text-white/90 bg-white/5 border border-white/10 overflow-hidden transition-all duration-300 hover:border-white/20"
-                  >
-                    <span className="absolute inset-0 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 bg-gradient-to-r from-[#8B5E3C]/20 via-[#8B5E3C]/10 to-transparent" />
-                    <span className="relative z-10">{tech}</span>
-                  </div>
-                ))}
-              </div>
+          {/* Bottom Row: Tech Badges & CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.45 }}
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 sm:pt-8 border-t border-slate-200/80"
+          >
+            {/* Left side: Service pills */}
+            <div className="flex flex-wrap gap-2">
+              {techs.map((tech) => (
+                <motion.div
+                  key={tech}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold text-slate-800 bg-slate-100/90 border border-slate-200/90 hover:border-[#8B5E3C] hover:bg-white hover:shadow-xs transition-all duration-200 cursor-default"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B5E3C]" />
+                  {tech}
+                </motion.div>
+              ))}
             </div>
 
             {/* Right side: Action CTA Buttons */}
-            <div className="flex flex-wrap gap-4 items-center shrink-0">
-              <a
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center shrink-0 w-full sm:w-auto">
+              <motion.a
                 href="#work"
                 onClick={(e) => handleScrollTo(e, "work")}
-                className="inline-flex items-center gap-3 border border-white/20 text-white px-6 py-3.5 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-white hover:text-black transition-all duration-300 rounded-full cursor-pointer"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                className="inline-flex items-center justify-center gap-3 bg-slate-900 text-white border border-slate-900 px-7 py-3.5 sm:px-8 sm:py-4 text-xs tracking-[0.25em] uppercase font-bold hover:bg-[#8B5E3C] hover:border-[#8B5E3C] transition-all duration-300 rounded-full shadow-sm cursor-pointer w-full sm:w-auto"
               >
                 Explore Work
                 <ArrowUpRight size={15} />
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
                 href="#services"
                 onClick={(e) => handleScrollTo(e, "services")}
-                className="inline-flex items-center gap-3 border border-white/10 bg-white/5 text-white/80 px-6 py-3.5 text-xs tracking-[0.25em] uppercase font-semibold hover:border-white/30 hover:text-white transition-all duration-300 rounded-full cursor-pointer"
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                className="inline-flex items-center justify-center gap-3 border border-slate-200 bg-slate-100/80 text-slate-800 px-7 py-3.5 sm:px-8 sm:py-4 text-xs tracking-[0.25em] uppercase font-bold hover:border-slate-400 hover:bg-slate-200 transition-all duration-300 rounded-full cursor-pointer w-full sm:w-auto"
               >
                 Services
-              </a>
+              </motion.a>
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
       </section>
 
       {/* Marquee Strip below Hero */}
-      <div className="bg-black border-y border-white/10 py-5 overflow-hidden select-none">
-        <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
-          {["UI/UX Design", "Web Development", "Mobile Apps", "Branding", "Creative Agency"].map((logo, i) => (
+      <div className="bg-slate-50 border-y border-slate-200/80 py-4 overflow-hidden select-none font-sans">
+        <div className="flex items-center gap-12 sm:gap-16 animate-marquee whitespace-nowrap">
+          {["Custom Web Development", "Web Applications", "Next.js & React", "UI/UX Design", "Performance Engineering"].map((logo, i) => (
             <span
               key={i}
-              className="text-white/40 text-xs tracking-[0.3em] uppercase font-medium flex items-center gap-2"
+              className="text-slate-600 text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold flex items-center gap-2"
             >
-              <span>✦</span> {logo}
+              <span className="text-[#8B5E3C]">✦</span> {logo}
             </span>
           ))}
           {/* repeated to loop */}
-          {["UI/UX Design", "Web Development", "Mobile Apps", "Branding", "Creative Agency"].map((logo, i) => (
+          {["Custom Web Development", "Web Applications", "Next.js & React", "UI/UX Design", "Performance Engineering"].map((logo, i) => (
             <span
               key={i + 20}
-              className="text-white/40 text-xs tracking-[0.3em] uppercase font-medium flex items-center gap-2"
+              className="text-slate-600 text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold flex items-center gap-2"
             >
-              <span>✦</span> {logo}
+              <span className="text-[#8B5E3C]">✦</span> {logo}
             </span>
           ))}
           {/* repeated to loop */}
-          {["UI/UX Design", "Web Development", "Mobile Apps", "Branding", "Creative Agency"].map((logo, i) => (
+          {["Custom Web Development", "Web Applications", "Next.js & React", "UI/UX Design", "Performance Engineering"].map((logo, i) => (
             <span
               key={i + 40}
-              className="text-white/40 text-xs tracking-[0.3em] uppercase font-medium flex items-center gap-2"
+              className="text-slate-600 text-[11px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold flex items-center gap-2"
             >
-              <span>✦</span> {logo}
+              <span className="text-[#8B5E3C]">✦</span> {logo}
             </span>
           ))}
         </div>

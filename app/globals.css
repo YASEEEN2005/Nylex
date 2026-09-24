@@ -7,25 +7,35 @@
 }
 
 :root {
-  --background: #000000;
-  --foreground: #FFFFFF;
+  --background: #FFFFFF;
+  --foreground: #0F172A;
   --primary-accent: #8B5E3C;
-  --secondary-accent: #EDE5DB;
+  --secondary-accent: #F1F5F9;
 }
 
-/* Custom Scrollbar Styles */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom Scrollbar Styles for Light Theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1A1A1A;
+  background: #CBD5E1;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -34,18 +44,18 @@
 
 /* Selection highlight */
 ::selection {
-  background: rgba(255, 255, 255, 0.15);
-  color: #FFFFFF;
+  background: rgba(139, 94, 60, 0.15);
+  color: #0F172A;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #000000;
+  background-color: #FFFFFF;
 }
 
 body {
-  background-color: #000000;
-  color: #FFFFFF;
+  background-color: #FFFFFF;
+  color: #0F172A;
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
@@ -97,39 +107,6 @@ select.select-custom {
   animation: shine 4s linear infinite;
 }
 
-/* spinGlow keyframes */
-@keyframes spinGlow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* floatCard keyframes */
-@keyframes floatCard {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-/* premiumShine keyframes */
-@keyframes premiumShine {
-  from {
-    transform: translateX(-200%);
-  }
-  to {
-    transform: translateX(200%);
-  }
-}
-
 /* marquee keyframes matching design model */
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -139,4 +116,5 @@ select.select-custom {
 .animate-marquee {
   animation: marquee 20s linear infinite;
 }
+
 

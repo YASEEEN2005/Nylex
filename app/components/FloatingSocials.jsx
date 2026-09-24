@@ -45,13 +45,12 @@ export default function FloatingSocials() {
         href="https://instagram.com"
         target="_blank"
         rel="noreferrer"
-        data-cursor="pointer"
         whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="group relative w-12 h-12 rounded-full bg-gradient-to-tr from-[#FFB800] via-[#FF007A] to-[#7A00FF] flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-[0_10px_25px_rgba(255,0,122,0.35)]"
+        className="group relative w-12 h-12 rounded-full bg-gradient-to-tr from-[#FFB800] via-[#FF007A] to-[#7A00FF] flex items-center justify-center shadow-md transition-shadow duration-300 hover:shadow-lg"
       >
         {/* Tooltip */}
-        <span className="absolute right-14 bg-zinc-950 text-white border border-white/10 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-lg uppercase font-sans whitespace-nowrap">
+        <span className="absolute right-14 bg-slate-900 text-white border border-slate-700 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-md uppercase font-sans whitespace-nowrap">
           Instagram
         </span>
         <InstagramIcon />
@@ -62,13 +61,12 @@ export default function FloatingSocials() {
         href="https://wa.me/918921442748"
         target="_blank"
         rel="noreferrer"
-        data-cursor="pointer"
         whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="group relative w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-[0_10px_25px_rgba(37,211,102,0.35)]"
+        className="group relative w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shadow-md transition-shadow duration-300 hover:shadow-lg"
       >
         {/* Tooltip */}
-        <span className="absolute right-14 bg-zinc-950 text-white border border-white/10 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-lg uppercase font-sans whitespace-nowrap">
+        <span className="absolute right-14 bg-slate-900 text-white border border-slate-700 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-md uppercase font-sans whitespace-nowrap">
           WhatsApp
         </span>
         <WhatsappIcon />

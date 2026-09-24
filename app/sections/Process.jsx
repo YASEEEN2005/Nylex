@@ -62,88 +62,84 @@ export default function Process() {
   return (
     <section
       id="process"
-      className="relative py-28 bg-black overflow-hidden z-10 border-t border-white/10 font-sans"
+      className="relative py-16 sm:py-24 bg-white overflow-hidden z-10 border-t border-slate-200 font-sans text-slate-900 select-none"
     >
-      {/* Background gradients */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-white/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-[120px]" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative flex flex-col items-start gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-12 relative flex flex-col items-start gap-8 sm:gap-12">
         
         {/* Section Title */}
-        <div className="flex flex-col gap-6 items-start">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col gap-3 sm:gap-5 items-start"
+        >
           {/* Subtitle tag */}
           <div className="flex items-center gap-3 text-[#8B5E3C]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em]">
               OUR WORKFLOW
             </span>
             <span className="w-8 h-[1px] bg-[#8B5E3C]" />
           </div>
 
-          {/* Heading in display clamp style */}
+          {/* Heading */}
           <div>
-            <h2 className="font-extrabold leading-[1.1] tracking-tight text-white text-[clamp(36px,5.5vw,72px)]">
-              How We <span className="text-white/70">Execute</span>
+            <h2 className="font-extrabold leading-[1.1] tracking-tight text-[clamp(32px,5.5vw,72px)] bg-gradient-to-r from-slate-900 via-[#8B5E3C] to-slate-800 bg-clip-text text-transparent">
+              How We Execute
             </h2>
           </div>
           
-          <p className="text-white/60 text-sm sm:text-base leading-relaxed max-w-xl font-medium">
+          <p className="text-slate-600 text-xs sm:text-base leading-relaxed max-w-xl font-medium">
             A meticulous, systematic execution pipeline engineered to deliver world-class digital assets on schedule.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Horizontal Phases Flow */}
-        <div className="flex flex-col gap-12 w-full mt-6">
+        {/* Horizontal Phases Flow with Mobile Horizontal Swipe Track */}
+        <div className="flex flex-col gap-8 sm:gap-12 w-full mt-2 sm:mt-4">
           {phases.map((phase, pIdx) => (
             <motion.div
               key={phase.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: pIdx * 0.1 }}
-              className="flex flex-col gap-6"
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: pIdx * 0.1 }}
+              className="flex flex-col gap-4"
             >
               {/* Phase Header */}
               <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between text-[#8B5E3C] font-mono text-xs tracking-[0.2em] font-semibold uppercase">
+                <div className="flex items-center justify-between text-[#8B5E3C] font-mono text-[11px] sm:text-xs tracking-[0.2em] font-bold uppercase">
                   <span>{phase.name}</span>
-                  <span className="text-[10px] text-white/40">{phase.stepCount} Steps</span>
+                  <span className="text-[10px] text-slate-400 font-semibold">{phase.stepCount} Steps</span>
                 </div>
-                <div className="h-[1px] w-full bg-gradient-to-r from-[#8B5E3C] via-[#8B5E3C]/20 to-transparent" />
+                <div className="h-[1px] w-full bg-slate-200" />
               </div>
 
-              {/* Steps responsive grid inside phase */}
-              <div
-                className={`grid grid-cols-1 gap-6 w-full ${
-                  phase.steps.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
-                }`}
-              >
-                {phase.steps.map((step) => (
-                  <div
-                    key={step.num}
-                    className="group p-6 rounded-2xl bg-zinc-950/60 border border-white/5 hover:border-[#8B5E3C]/30 hover:bg-zinc-900/40 transition-all duration-300 flex flex-col justify-between gap-6 relative overflow-hidden h-full"
-                  >
-                    {/* Radial gold hover reflection backdrop */}
-                    <div className="absolute -inset-px bg-gradient-to-r from-transparent via-[#8B5E3C]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                    <div className="flex flex-col gap-3 relative z-10">
-                      <div className="flex items-start justify-between">
-                        <span className="text-3xl font-black bg-gradient-to-b from-white/10 to-transparent bg-clip-text text-transparent group-hover:from-[#8B5E3C] group-hover:to-transparent transition-all duration-300 select-none">
-                          {step.num}
-                        </span>
+              {/* Mobile Swipeable horizontal track / Desktop Grid */}
+              <div className="w-full">
+                <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3.5 pb-2 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible w-full">
+                  {phase.steps.map((step) => (
+                    <motion.div
+                      key={step.num}
+                      whileHover={{ y: -4, borderColor: "rgba(139, 94, 60, 0.5)" }}
+                      className="snap-center shrink-0 w-[82vw] sm:w-auto group p-5 sm:p-6 rounded-2xl bg-slate-50/80 border border-slate-200/90 hover:bg-white hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-4 relative overflow-hidden h-full cursor-default"
+                    >
+                      <div className="flex flex-col gap-2 relative z-10">
+                        <div className="flex items-start justify-between">
+                          <span className="text-2xl sm:text-3xl font-black text-slate-300 group-hover:text-[#8B5E3C] transition-colors duration-300 select-none">
+                            {step.num}
+                          </span>
+                        </div>
+                        <h3 className="text-slate-900 text-sm sm:text-base font-extrabold group-hover:text-[#8B5E3C] transition-colors duration-300">
+                          {step.title}
+                        </h3>
                       </div>
-                      <h3 className="text-white text-base font-extrabold group-hover:text-[#8B5E3C] transition-colors duration-300">
-                        {step.title}
-                      </h3>
-                    </div>
 
-                    <p className="text-white/50 text-[12px] leading-relaxed font-medium relative z-10">
-                      {step.desc}
-                    </p>
-                  </div>
-                ))}
+                      <p className="text-slate-600 text-xs leading-relaxed font-medium relative z-10">
+                        {step.desc}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ))}
