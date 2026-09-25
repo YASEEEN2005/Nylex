@@ -111,11 +111,11 @@ export default function Footer() {
               />
               <div className="flex flex-col items-start leading-none gap-0.5">
                 <span className="text-xs font-extrabold tracking-widest text-slate-900 uppercase font-sans">NYLEX</span>
-                <span className="text-[5px] font-bold tracking-[0.25em] text-[#8B5E3C] uppercase font-sans">DIGITAL STUDIO</span>
+                <span className="text-[5px] font-bold tracking-[0.25em] text-[#8B5E3C] uppercase font-sans">WEB STUDIO</span>
               </div>
             </a>
             <p className="text-slate-500 text-[10px] max-w-sm font-sans">
-              Building digital experiences that inspire and perform. Premium UI/UX & full-stack websites.
+              High-performance websites & web applications.
             </p>
           </div>
 

@@ -19,55 +19,49 @@ const techStack = [
 
 export default function TechStack() {
   return (
-    <section id="techstack" className="relative py-16 sm:py-24 bg-slate-50/50 text-slate-900 overflow-hidden z-10 border-t border-slate-200 font-sans">
+    <section id="techstack" className="relative py-24 sm:py-32 bg-[#FAF9F6] text-slate-900 overflow-hidden z-10 border-t border-slate-200/90 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-12 relative flex flex-col items-center">
         
-        {/* Section Title */}
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col items-center text-center gap-3 sm:gap-4 mb-10 sm:mb-16 font-sans max-w-xl"
+          className="flex flex-col items-center text-center gap-3 sm:gap-4 mb-12 sm:mb-16 max-w-xl"
         >
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-[#8B5E3C]">
-            ENGINEERING STACK
+          <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#8B5E3C] font-mono">
+            ✦ TECH STACK
           </span>
-          <h2 className="font-extrabold leading-[1.1] tracking-tight text-[clamp(32px,5.5vw,72px)] bg-gradient-to-r from-slate-900 via-[#8B5E3C] to-slate-800 bg-clip-text text-transparent">
-            Our Core Technologies
+          <h2 className="font-serif font-bold text-[clamp(36px,5.5vw,72px)] leading-[1.05] text-slate-900">
+            Technologies We Use
           </h2>
           <p className="text-slate-600 text-xs sm:text-base font-medium leading-relaxed">
-            We employ modern, production-grade tools designed for web application security, loading speeds, and robust functionality.
+            Modern battle-tested stack built for extreme speed, security, and scalability.
           </p>
         </motion.div>
 
-        {/* Clean, Compact Technology Card Grid Optimized for Mobile */}
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 sm:gap-6 w-full max-w-5xl">
-          {techStack.map((tech, i) => (
+        {/* Tech Grid */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 sm:gap-6 w-full max-w-5xl">
+          {techStack.map((tech, idx) => (
             <motion.div
               key={tech.name}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ duration: 0.3, delay: i * 0.03 }}
-              whileHover={{ y: -5, scale: 1.04, borderColor: "#8B5E3C" }}
-              className="group p-3.5 sm:p-5 rounded-2xl bg-white border border-slate-200/90 hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center gap-2 sm:gap-3 text-center cursor-default"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: idx * 0.04 }}
+              whileHover={{ y: -6, scale: 1.05 }}
+              className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-lg transition-all duration-300 flex flex-col items-center gap-3 text-center cursor-default group"
             >
-              <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-slate-50 flex items-center justify-center p-2 sm:p-2.5 transition-transform duration-300 group-hover:scale-110">
-                <img
-                  src={tech.icon}
-                  alt={tech.name}
-                  loading="lazy"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <span className="text-[10px] sm:text-xs text-slate-800 font-bold uppercase tracking-wider font-mono group-hover:text-[#8B5E3C] transition-colors truncate w-full">
-                {tech.name}
-              </span>
+              <img
+                src={tech.icon}
+                alt={tech.name}
+                className="w-8 h-8 object-contain group-hover:scale-110 transition-transform"
+              />
+              <span className="text-xs font-bold font-mono text-slate-800">{tech.name}</span>
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );

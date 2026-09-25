@@ -95,7 +95,7 @@ export default function Navbar() {
               NYLEX
             </span>
             <span className="text-[5.5px] sm:text-[6px] font-bold tracking-[0.25em] text-[#8B5E3C] uppercase font-sans">
-              WEB DEVELOPMENT STUDIO
+              WEB STUDIO
             </span>
           </div>
         </a>

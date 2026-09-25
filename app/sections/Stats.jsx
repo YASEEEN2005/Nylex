@@ -26,10 +26,10 @@ function Counter({ value, suffix = "", duration = 1.5 }) {
 
 export default function Stats() {
   const stats = [
-    { value: 50, suffix: "+", label: "Projects Delivered", desc: "Crafting flawless products" },
-    { value: 30, suffix: "+", label: "Happy Clients", desc: "Global trust & partnerships" },
-    { value: 99, suffix: "%", label: "Client Satisfaction", desc: "Committed to visual elegance" },
-    { value: 24, suffix: "/7", label: "Dedicated Support", desc: "Always here for your business" },
+    { value: 50, suffix: "+", label: "Projects Delivered" },
+    { value: 30, suffix: "+", label: "Happy Clients" },
+    { value: 99, suffix: "%", label: "Client Satisfaction" },
+    { value: 24, suffix: "/7", label: "Support" },
   ];
 
   return (
@@ -54,13 +54,9 @@ export default function Stats() {
                 <Counter value={stat.value} suffix={stat.suffix} />
               </div>
               
-              <h3 className="text-[10px] uppercase font-bold tracking-widest text-[#8B5E3C] mb-2 font-sans">
+              <h3 className="text-[10px] uppercase font-bold tracking-widest text-[#8B5E3C] font-sans">
                 {stat.label}
               </h3>
-              
-              <p className="text-xs text-slate-500 font-medium font-sans">
-                {stat.desc}
-              </p>
             </motion.div>
           ))}
         </div>
