@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
@@ -32,6 +32,15 @@ export default function Hero() {
     }
   };
 
+  const videoRef = useRef(null);
+
+  // Ensure autoplay triggers reliably on mobile & low-power modes
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -52,13 +61,17 @@ export default function Hero() {
           className="absolute inset-0 z-0 h-full w-full overflow-hidden pointer-events-none select-none will-change-transform"
         >
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
+            poster="/hero-poster.webp"
             className="h-full w-full object-cover object-center"
           >
+            <source src="/videos/hero-bg-small.mp4" type="video/mp4" />
+            <source src="/videos/hero-bg.mp4" type="video/mp4" />
             <source src="/videos/342580.mp4" type="video/mp4" />
           </video>
 
