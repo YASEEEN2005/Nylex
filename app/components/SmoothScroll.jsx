@@ -7,37 +7,40 @@ export default function SmoothScroll() {
   useEffect(() => {
     // Initialize scroller with custom easing curve and duration
     const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Inertial exponential easing
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential inertial easing
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      syncTouch: true, // Enables smooth inertial scrolling on touch devices
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.8, // Slightly higher for immediate scroll response
+      syncTouch: false, // Prevents mobile touch jitter while keeping momentum
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
       infinite: false,
     });
 
-    // Handle scroll animations in dynamic loops
+    // RAF loop for buttery smooth 60/120fps animation
+    let animationFrameId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      animationFrameId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    animationFrameId = requestAnimationFrame(raf);
 
-    // Connect Lenis scroll to global anchor clicks
+    // Smooth anchor click handling
     const handleAnchorClick = (e) => {
       const target = e.target.closest("a[href^='#']");
       if (target) {
         const href = target.getAttribute("href");
         if (href && href !== "#") {
           e.preventDefault();
-          const element = document.querySelector(href);
+          const targetId = href === "#top" ? "top" : href.slice(1);
+          const element = document.getElementById(targetId) || document.querySelector(href);
           if (element) {
             lenis.scrollTo(element, {
               offset: -80,
               duration: 1.2,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             });
           }
         }
@@ -46,9 +49,9 @@ export default function SmoothScroll() {
 
     document.addEventListener("click", handleAnchorClick);
 
-    // Cleanup on unmount
     return () => {
       document.removeEventListener("click", handleAnchorClick);
+      cancelAnimationFrame(animationFrameId);
       lenis.destroy();
     };
   }, []);

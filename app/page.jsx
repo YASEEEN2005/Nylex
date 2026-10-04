@@ -1,47 +1,43 @@
 "use client";
 
 import Hero from "./sections/Hero";
-import Stats from "./sections/Stats";
 import Services from "./sections/Services";
-import FeaturedProjects from "./sections/FeaturedProjects";
 import About from "./sections/About";
-import WhyChooseUs from "./sections/WhyChooseUs";
-import TechStack from "./sections/TechStack";
+import FeaturedProjects from "./sections/FeaturedProjects";
 import Process from "./sections/Process";
+import TechStack from "./sections/TechStack";
 import Testimonials from "./sections/Testimonials";
+import Blog from "./sections/Blog";
 import Contact from "./sections/Contact";
 
 export default function Home() {
   return (
     <>
-      {/* Hero Section */}
+      {/* 01. Homepage (Hero Section) */}
       <Hero />
 
-      {/* Statistics counters */}
-      <Stats />
-
-      {/* Services Grid (What We Do) */}
+      {/* 02. Services */}
       <Services />
 
-      {/* Featured Projects Grid (Our Work) */}
-      <FeaturedProjects />
-
-      {/* About storytelling section (About Us) */}
+      {/* 03. About */}
       <About />
 
-      {/* Value Propositions */}
-      <WhyChooseUs />
+      {/* 04. Portfolio / Work */}
+      <FeaturedProjects />
 
-      {/* Technology Cloud Grid */}
-      <TechStack />
-
-      {/* Workflow Phase Timeline */}
+      {/* 05. Process */}
       <Process />
 
-      {/* Testimonials Slider */}
+      {/* 06. Technology */}
+      <TechStack />
+
+      {/* 07. Testimonials */}
       <Testimonials />
 
-      {/* Client Submission Form */}
+      {/* 08. Blog */}
+      <Blog />
+
+      {/* 09. Contact */}
       <Contact />
     </>
   );

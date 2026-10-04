@@ -15,9 +15,12 @@ export default function InvoicePrintPage({ params: paramsPromise }) {
   const fetchInvoice = async () => {
     try {
       const res = await fetch(`/api/invoices/${params.id}`);
-      const data = await res.json();
-      if (data.success) {
-        setInvoice(data.invoice);
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.success) {
+          setInvoice(data.invoice);
+        }
       }
     } catch (err) {
       console.error(err);

@@ -1,103 +1,144 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code, Layout, Smartphone, Zap } from "lucide-react";
+import {
+  Globe,
+  Smartphone,
+  Code2,
+  Bot,
+  PenTool,
+  ShoppingCart,
+  Megaphone,
+  TrendingUp,
+  ArrowUpRight
+} from "lucide-react";
+
+const services = [
+  {
+    num: "01",
+    title: "Web Development",
+    description: "Modern, high-performance responsive websites and web applications built with the latest technologies.",
+    icon: Globe,
+  },
+  {
+    num: "02",
+    title: "Application Development",
+    description: "Native and cross-platform mobile apps for iOS and Android engineered with scalable cloud backends.",
+    icon: Smartphone,
+  },
+  {
+    num: "03",
+    title: "Software Development",
+    description: "Custom software solutions, enterprise platforms and scalable backend architectures for your business.",
+    icon: Code2,
+  },
+  {
+    num: "04",
+    title: "AI Solutions",
+    description: "AI integration, intelligent automation workflows, LLM applications and custom smart assistants.",
+    icon: Bot,
+  },
+  {
+    num: "05",
+    title: "UI/UX Design",
+    description: "Stunning user interface design, design systems, interactive prototypes and intuitive user experiences.",
+    icon: PenTool,
+  },
+  {
+    num: "06",
+    title: "E-commerce Solutions",
+    description: "High-converting online storefronts, payment gateways, product catalogs and seamless checkout pipelines.",
+    icon: ShoppingCart,
+  },
+  {
+    num: "07",
+    title: "Digital Marketing",
+    description: "Targeted digital marketing campaigns, social media growth, performance ads and brand positioning strategies.",
+    icon: Megaphone,
+  },
+  {
+    num: "08",
+    title: "SEO & Digital Growth",
+    description: "Technical SEO optimization, speed enhancement, search visibility and performance-driven digital strategies.",
+    icon: TrendingUp,
+  },
+];
 
 export default function Services() {
-  const services = [
-    {
-      icon: <Code className="w-5 h-5" />,
-      title: "Custom Web Development",
-      desc: "High-speed, responsive custom websites built with Next.js, React, and modern CSS animation architecture.",
-    },
-    {
-      icon: <Layout className="w-5 h-5" />,
-      title: "Web Applications & SaaS",
-      desc: "Scalable web applications, interactive portals, and real-time custom business dashboards.",
-    },
-    {
-      icon: <Smartphone className="w-5 h-5" />,
-      title: "UI/UX Experience Design",
-      desc: "Aesthetic, user-first interfaces designed for maximum engagement and brand distinction.",
-    },
-    {
-      icon: <Zap className="w-5 h-5" />,
-      title: "Speed & SEO Optimization",
-      desc: "Sub-second page load times, 100/100 Lighthouse performance, and technical SEO structure.",
-    },
-  ];
+  const handleScrollTo = (e, id) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <section
       id="services"
-      className="relative w-full bg-[#FAF9F6] text-slate-900 overflow-hidden flex flex-col items-center px-4 sm:px-8 md:px-12 py-20 sm:py-28 select-none border-t border-slate-200/80 font-sans"
+      className="relative z-20 w-full bg-white text-primary-black py-16 sm:py-24 lg:py-32 font-inter rounded-t-[28px] sm:rounded-t-[44px] shadow-[0_-25px_60px_rgba(0,0,0,0.35)] border-t border-neutral-200/80"
     >
-      <div className="max-w-7xl mx-auto w-full flex flex-col items-start gap-10 sm:gap-14 relative z-10">
-        
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-start gap-3 sm:gap-4 max-w-2xl"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] tracking-[0.25em] uppercase text-[#8B5E3C] font-mono font-bold">
-              ✦ CORE EXPERTISE
-            </span>
-          </div>
-
-          <h2 className="font-serif font-bold leading-[1.05] tracking-tight text-[clamp(36px,5.5vw,72px)] text-slate-900">
-            Our Specialist Services
-          </h2>
-
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
-            Clean, high-performance web solutions engineered to scale your digital presence.
-          </p>
-        </motion.div>
-
-        {/* Services Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-          {services.map((service, idx) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08, ease: "easeOut" }}
-              whileHover={{ y: -8 }}
-              className="group p-7 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between gap-6 cursor-default"
-            >
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-800 group-hover:bg-[#8B5E3C] group-hover:text-white group-hover:scale-110 transition-all duration-300 shrink-0">
-                  {service.icon}
-                </div>
-                <h3 className="text-slate-900 text-lg font-bold group-hover:text-[#8B5E3C] transition-colors duration-200">
-                  {service.title}
-                </h3>
-                <p className="text-slate-600 text-xs leading-relaxed font-medium">
-                  {service.desc}
-                </p>
-              </div>
-
-              <div className="pt-2 flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#8B5E3C] uppercase tracking-wider group-hover:translate-x-1 transition-transform">
-                <span>Explore Details →</span>
-              </div>
-            </motion.div>
-          ))}
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-[120px]">
+        {/* Section Heading */}
+        <div className="text-center lg:text-left pb-10 sm:pb-16 max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h2 className="font-manrope text-3xl sm:text-4xl lg:text-5xl font-medium uppercase tracking-tight text-neutral-950">
+              OUR SERVICES
+            </h2>
+            <p className="mt-3 sm:mt-4 font-inter text-sm sm:text-base md:text-lg text-neutral-600">
+              End-to-end digital solutions to help your business grow.
+            </p>
+          </motion.div>
         </div>
 
-        {/* CTA Button */}
-        <div className="pt-4">
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.96 }}
-            className="inline-flex items-center justify-center gap-2 bg-slate-900 text-white hover:bg-[#8B5E3C] px-8 py-4 text-xs tracking-[0.2em] uppercase font-bold transition-all duration-300 rounded-full cursor-pointer shadow-md"
-          >
-            Start Your Project
-          </motion.a>
+        {/* Numbered Services List with Scroll Reveal */}
+        <div className="flex flex-col divide-y divide-neutral-200/80 border-y border-neutral-200/80">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+
+            return (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                onClick={(e) => handleScrollTo(e, "contact")}
+                className="group relative flex items-center justify-between gap-3 sm:gap-6 py-4 sm:py-6 md:py-8 transition-all duration-300 hover:px-3 sm:hover:px-6 hover:bg-neutral-50/80 rounded-2xl cursor-pointer"
+              >
+                {/* Left: Number, Icon & Title */}
+                <div className="flex items-center gap-3 sm:gap-5 min-w-0">
+                  <span className="font-mono text-sm sm:text-lg md:text-xl font-bold text-[#00507D] shrink-0">
+                    {service.num}
+                  </span>
+
+                  <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-[#f0f9ff] text-[#00507D] group-hover:bg-[#00507D] group-hover:text-white transition-all duration-300 group-hover:scale-105">
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                  </div>
+
+                  <h3 className="font-manrope text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-neutral-950 group-hover:text-[#00507D] transition-colors truncate sm:whitespace-normal">
+                    {service.title}
+                  </h3>
+                </div>
+
+                {/* Right: Description (Hidden on Mobile) & Arrow */}
+                <div className="flex items-center gap-4 sm:gap-6 shrink-0 md:max-w-md lg:max-w-lg">
+                  <p className="hidden md:block font-inter text-sm sm:text-base text-neutral-600 leading-relaxed">
+                    {service.description}
+                  </p>
+
+                  <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 group-hover:border-[#00507D] group-hover:bg-[#00507D] group-hover:text-white transition-all duration-300 shadow-2xs">
+                    <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

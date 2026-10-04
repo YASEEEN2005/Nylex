@@ -1,27 +1,28 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Sparkles, ShieldCheck, Globe2 } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 
 export default function Hero() {
   const containerRef = useRef(null);
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Scroll Animation #1: Parallax Scale & Y Drift
+  // Track scroll progress of the hero section
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  const headlineY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const pillDriftLeft = useTransform(scrollYProgress, [0, 1], ["0px", "-40px"]);
-  const pillDriftRight = useTransform(scrollYProgress, [0, 1], ["0px", "40px"]);
+  // 1. Cinematic Background Video Zoom-In (Zooms 1.0x -> 1.65x as you scroll into Services)
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.65]);
+
+  // 2. Hero Headline & Description: Zooms slightly and fades smoothly
+  const textScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.15]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 0.6], [0, -60]);
+
+  // 3. Scroll Indicator fades early
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   const handleScrollTo = (e, id) => {
     e.preventDefault();
@@ -32,114 +33,117 @@ export default function Hero() {
   };
 
   return (
-    <section
+    <div
       ref={containerRef}
-      id="hero"
-      className="relative w-full min-h-[90vh] bg-white text-slate-900 select-none flex flex-col justify-between pt-24 sm:pt-32 pb-16 px-4 sm:px-8 md:px-12 lg:px-16 font-sans overflow-hidden border-b border-slate-100"
+      id="hero-wrapper"
+      className="relative w-full h-[100dvh]"
     >
-      {/* Background radial highlight */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br from-[#8B5E3C]/5 via-amber-500/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
+      <div id="top" className="absolute top-0" />
 
-      {/* Main Container */}
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col items-center justify-center text-center relative z-10 py-12">
+      {/* Sticky Fixed Hero Viewport - Stays fixed while zooming */}
+      <div className="sticky top-0 h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-black">
         
-        {/* Status Tag */}
+        {/* Zoom-In Video */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{ y: headlineY }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200/90 text-slate-700 text-[11px] font-mono font-bold uppercase tracking-wider mb-8 shadow-2xs"
+          id="hero"
+          style={{
+            scale: videoScale,
+          }}
+          className="absolute inset-0 z-0 h-full w-full overflow-hidden pointer-events-none select-none will-change-transform"
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Available for New Projects 2026</span>
-          <Sparkles className="w-3.5 h-3.5 text-[#8B5E3C]" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover object-center"
+          >
+            <source src="/videos/342580.mp4" type="video/mp4" />
+          </video>
+
+          {/* Clean Scrim for high contrast */}
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/50" />
         </motion.div>
 
-        {/* Hero Headline with Scroll Animation #1 */}
+        {/* Hero Main Content (Zooms slightly into viewer & fades cleanly) */}
         <motion.div
-          style={mounted ? { y: headlineY, opacity: headlineOpacity } : undefined}
-          suppressHydrationWarning
-          className="flex flex-col items-center gap-4 max-w-5xl"
+          style={{
+            scale: textScale,
+            opacity: textOpacity,
+            y: textY,
+          }}
+          className="relative z-10 flex w-full flex-col items-center justify-center text-center max-w-4xl mx-auto my-auto py-6 px-4 sm:px-6 lg:px-8 will-change-transform"
         >
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[clamp(40px,7.5vw,96px)] font-serif font-bold leading-[1.02] tracking-tight text-slate-900"
-          >
-            Crafting Digital Platforms <br className="hidden sm:block" />
-            <span className="bg-gradient-to-r from-slate-900 via-[#8B5E3C] to-slate-800 bg-clip-text text-transparent italic font-normal">
-              That Define Brands
-            </span>
-          </motion.h1>
+          {/* Masked Headline Reveal */}
+          <div className="overflow-hidden w-full">
+            <motion.h1
+              initial={{ opacity: 0, y: 35 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="font-manrope text-[34px] xs:text-[38px] sm:text-[54px] md:text-[64px] lg:text-[74px] xl:text-[82px] font-normal leading-[1.06] tracking-[-0.03em] text-white uppercase break-words drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]"
+            >
+              CRAFTING <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#53e6ff] to-[#0070f3]">
+                DIGITAL
+              </span>{" "}
+              <br className="hidden sm:inline" />
+              POSSIBILITIES
+            </motion.h1>
+          </div>
 
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="text-slate-600 text-sm sm:text-lg max-w-2xl font-medium leading-relaxed mt-2"
+            transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-5 sm:mt-8 font-inter text-sm sm:text-base md:text-lg lg:text-xl text-neutral-200/90 max-w-2xl mx-auto leading-relaxed px-2 font-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
           >
-            NYLEX builds ultra-high performance websites, web applications, and digital experiences engineered for visual elegance and high conversion.
+            We build high-performance websites, scalable software, and AI-powered solutions engineered for ambitious modern businesses.
           </motion.p>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full sm:w-auto"
+          >
+            <motion.a
+              href="#contact"
+              onClick={(e) => handleScrollTo(e, "contact")}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.96 }}
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#00507D] hover:bg-[#003e61] px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-xl transition-all duration-200 hover:shadow-2xl cursor-pointer group"
+            >
+              <span>Start a Project</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </motion.a>
+
+            <motion.a
+              href="#work"
+              onClick={(e) => handleScrollTo(e, "work")}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.96 }}
+              className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-md px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-lg hover:border-white/60 hover:bg-white/20 transition-all duration-200 cursor-pointer"
+            >
+              View Our Work
+            </motion.a>
+          </motion.div>
         </motion.div>
 
-        {/* Primary CTA Action Buttons */}
+        {/* Scroll Indicator */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full sm:w-auto"
+          style={{ opacity: scrollOpacity }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 text-neutral-400 pointer-events-none"
         >
-          <motion.a
-            href="#work"
-            onClick={(e) => handleScrollTo(e, "work")}
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.96 }}
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-900 hover:bg-[#8B5E3C] text-white font-bold text-xs uppercase tracking-[0.2em] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Explore Work</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </motion.a>
-
-          <motion.a
-            href="#contact"
-            onClick={(e) => handleScrollTo(e, "contact")}
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.96 }}
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-900 font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Get In Touch</span>
-          </motion.a>
+          <span className="text-[10px] uppercase font-mono tracking-[0.25em] text-neutral-300/80">
+            SCROLL DOWN
+          </span>
+          <ChevronDown className="h-4 w-4 animate-bounce text-[#53e6ff]" />
         </motion.div>
-
-        {/* Floating Drifting Service Pills (Scroll Drift Animation) */}
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-3 max-w-3xl">
-          <motion.div
-            style={{ x: pillDriftLeft }}
-            className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-mono font-semibold flex items-center gap-2 shadow-2xs"
-          >
-            <ShieldCheck className="w-4 h-4 text-[#8B5E3C]" />
-            <span>Next.js App Architecture</span>
-          </motion.div>
-
-          <motion.div
-            style={{ x: pillDriftRight }}
-            className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-mono font-semibold flex items-center gap-2 shadow-2xs"
-          >
-            <Globe2 className="w-4 h-4 text-emerald-600" />
-            <span>100/100 Lighthouse Performance</span>
-          </motion.div>
-
-          <motion.div
-            style={{ x: pillDriftLeft }}
-            className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-mono font-semibold flex items-center gap-2 shadow-2xs"
-          >
-            <Sparkles className="w-4 h-4 text-indigo-500" />
-            <span>Custom UI/UX Engineering</span>
-          </motion.div>
-        </div>
       </div>
-    </section>
+    </div>
   );
 }

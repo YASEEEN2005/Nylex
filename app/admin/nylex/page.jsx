@@ -91,10 +91,13 @@ export default function AdminPortal() {
   const checkSession = async () => {
     try {
       const res = await fetch("/api/auth/me");
-      const data = await res.json();
-      if (data.authenticated) {
-        setAuthenticated(true);
-        fetchAllData();
+      const contentType = res.headers.get("content-type");
+      if (res.ok && contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.authenticated) {
+          setAuthenticated(true);
+          fetchAllData();
+        }
       }
     } catch (err) {
       console.error("Session check error", err);
@@ -112,15 +115,25 @@ export default function AdminPortal() {
         fetch("/api/invoices"),
         fetch("/api/enquiries"),
       ]);
-      const dataP = await resP.json();
-      const dataC = await resC.json();
-      const dataI = await resI.json();
-      const dataE = await resE.json();
 
-      if (dataP.success) setProjects(dataP.projects);
-      if (dataC.success) setClients(dataC.clients);
-      if (dataI.success) setInvoices(dataI.invoices);
-      if (dataE.success) setEnquiries(dataE.enquiries);
+      const parseJsonSafe = async (res) => {
+        if (!res) return null;
+        const ct = res.headers.get("content-type");
+        if (res.ok && ct && ct.includes("application/json")) {
+          return await res.json();
+        }
+        return null;
+      };
+
+      const dataP = await parseJsonSafe(resP);
+      const dataC = await parseJsonSafe(resC);
+      const dataI = await parseJsonSafe(resI);
+      const dataE = await parseJsonSafe(resE);
+
+      if (dataP?.success) setProjects(dataP.projects);
+      if (dataC?.success) setClients(dataC.clients);
+      if (dataI?.success) setInvoices(dataI.invoices);
+      if (dataE?.success) setEnquiries(dataE.enquiries);
     } catch (error) {
       console.error("Failed to fetch dashboard data", error);
     } finally {
@@ -139,13 +152,17 @@ export default function AdminPortal() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        setAuthenticated(true);
-        fetchAllData();
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setAuthenticated(true);
+          fetchAllData();
+        } else {
+          setLoginError(data.error || "Login failed");
+        }
       } else {
-        setLoginError(data.error || "Login failed");
+        setLoginError("Unexpected server response");
       }
     } catch (err) {
       setLoginError("Network connection error");

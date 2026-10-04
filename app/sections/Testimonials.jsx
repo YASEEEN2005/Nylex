@@ -1,131 +1,137 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Quote, Star } from "lucide-react";
+import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
+
+const testimonials = [
+  {
+    id: 1,
+    quote:
+      "NYLEX Digital Studio delivered an amazing website for our business. The team is professional, creative and easy to work with.",
+    name: "Sarah Johnson",
+    role: "Business Owner, USA",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: 2,
+    quote:
+      "The custom booking and web application developed by NYLEX transformed our customer experience and scaled our operations seamlessly.",
+    name: "Michael Chen",
+    role: "Founder, TechVentures",
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80",
+  },
+  {
+    id: 3,
+    quote:
+      "Exceptional quality, blazing fast page load speed, and great attention to detail. Highly recommend NYLEX to any ambitious team.",
+    name: "Elena Rostova",
+    role: "Product Lead, Luxe Living",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+  },
+];
 
 export default function Testimonials() {
-  const testimonials = [
-    {
-      id: 1,
-      name: "Amelia Thorne",
-      role: "CEO",
-      company: "Vogue Couture",
-      review:
-        "NYLEX built our luxury retail platform with exceptional speed and clean aesthetics. Our online conversion rate increased significantly within 30 days of launch.",
-      initials: "AT",
-    },
-    {
-      id: 2,
-      name: "Marcus Vance",
-      role: "Founder",
-      company: "Amazink Tattoo Studio",
-      review:
-        "The team understood our artistic vision immediately. Their custom artist booking module is seamless and our clients love the mobile experience.",
-      initials: "MV",
-    },
-    {
-      id: 3,
-      name: "Dr. Sarah Jenkins",
-      role: "Director of Systems",
-      company: "MediLink Group",
-      review:
-        "The custom dashboards engineered by NYLEX are intuitive and ultra-fast. Managing records and appointments is now completely effortless.",
-      initials: "SJ",
-    },
-  ];
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  }, [testimonials.length]);
-
-  const handlePrev = () => {
+  const prev = () => {
     setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => handleNext(), 6000);
-    return () => clearInterval(timer);
-  }, [handleNext]);
+  const next = () => {
+    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+  };
 
   const active = testimonials[currentIndex];
 
   return (
-    <section id="testimonials" className="relative py-24 sm:py-32 bg-[#FAF9F6] text-slate-900 overflow-hidden z-10 border-t border-slate-200/90 font-sans">
-      <div className="max-w-4xl mx-auto px-6 relative flex flex-col items-center">
-        
-        {/* Section Tag */}
-        <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#8B5E3C] mb-4 font-mono">
-          ✦ CLIENT TESTIMONIALS
-        </span>
-        <h2 className="font-serif font-bold text-[clamp(32px,5vw,60px)] leading-[1.08] text-slate-900 mb-12 text-center">
-          What Our Partners Say
-        </h2>
-
-        {/* Testimonial Card */}
-        <div className="w-full bg-white p-8 sm:p-12 rounded-3xl border border-slate-200/90 shadow-sm relative overflow-hidden min-h-[260px] flex flex-col justify-between">
-          <Quote className="w-12 h-12 text-[#8B5E3C]/15 absolute top-6 right-6" />
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col gap-6"
-            >
-              <div className="flex items-center gap-1 text-amber-500">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-
-              <p className="text-slate-800 text-base sm:text-xl font-medium leading-relaxed italic">
-                "{active.review}"
-              </p>
-
-              <div className="flex items-center gap-4 pt-4 border-t border-slate-100">
-                <div className="w-12 h-12 rounded-full bg-[#8B5E3C] text-white font-mono font-bold flex items-center justify-center text-sm shadow-xs">
-                  {active.initials}
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="font-bold text-slate-900 text-sm">{active.name}</h4>
-                  <span className="text-slate-500 text-xs font-medium">
-                    {active.role}, {active.company}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+    <section
+      id="testimonials"
+      className="relative z-10 w-full bg-white text-primary-black py-20 sm:py-28 lg:py-32 font-inter border-t border-neutral-200/80"
+    >
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-[120px]">
+        {/* Header */}
+        <div className="text-center lg:text-left pb-12 sm:pb-16 max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h2 className="font-manrope text-3xl sm:text-4xl lg:text-5xl font-medium uppercase tracking-tight text-neutral-950">
+              WHAT CLIENTS SAY
+            </h2>
+            <p className="mt-3 font-inter text-base sm:text-lg text-neutral-600">
+              Trusted by businesses worldwide.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Carousel Controls */}
-        <div className="flex items-center gap-3 mt-8">
-          <button
-            onClick={handlePrev}
-            className="p-3 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-900 hover:text-white transition-colors shadow-2xs cursor-pointer"
+        {/* Testimonial Card */}
+        <div className="max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="relative rounded-3xl border border-neutral-200/90 bg-white p-6 sm:p-10 md:p-12 shadow-sm"
           >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          <div className="flex items-center gap-1.5 px-3">
-            {testimonials.map((_, i) => (
-              <span
-                key={i}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === currentIndex ? "w-6 bg-[#8B5E3C]" : "bg-slate-300"
-                }`}
-              />
-            ))}
-          </div>
-          <button
-            onClick={handleNext}
-            className="p-3 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-900 hover:text-white transition-colors shadow-2xs cursor-pointer"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
+            {/* Quote Icon */}
+            <div className="text-[#00507D] mb-4 sm:mb-6">
+              <Quote className="h-8 w-8 sm:h-10 sm:w-10 fill-[#00507D]/10 rotate-180" />
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="font-manrope text-base sm:text-xl md:text-2xl font-medium text-neutral-900 leading-relaxed">
+                  "{active.quote}"
+                </p>
+
+                {/* Author & Controls Row */}
+                <div className="mt-8 pt-6 sm:mt-10 sm:pt-8 border-t border-neutral-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5 sm:gap-4">
+                    <img
+                      src={active.avatar}
+                      alt={active.name}
+                      className="h-11 w-11 sm:h-12 sm:w-12 rounded-full object-cover border border-neutral-200"
+                    />
+                    <div>
+                      <h3 className="font-manrope text-sm sm:text-base md:text-lg font-bold text-neutral-950">
+                        {active.name}
+                      </h3>
+                      <p className="font-inter text-xs sm:text-sm text-neutral-500">
+                        {active.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Arrow Buttons */}
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                    <button
+                      onClick={prev}
+                      className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 hover:border-[#00507D] hover:bg-[#00507D] hover:text-white transition-all cursor-pointer"
+                      aria-label="Previous testimonial"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={next}
+                      className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 hover:border-[#00507D] hover:bg-[#00507D] hover:text-white transition-all cursor-pointer"
+                      aria-label="Next testimonial"
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         </div>
       </div>
     </section>

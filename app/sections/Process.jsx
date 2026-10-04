@@ -1,108 +1,99 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Search, Map, Palette, Code2, Rocket } from "lucide-react";
+
+const steps = [
+  {
+    num: "01",
+    title: "Discover",
+    desc: "Understanding your goals",
+    icon: Search,
+  },
+  {
+    num: "02",
+    title: "Plan",
+    desc: "Strategy and roadmap",
+    icon: Map,
+  },
+  {
+    num: "03",
+    title: "Design",
+    desc: "Creative and modern design",
+    icon: Palette,
+  },
+  {
+    num: "04",
+    title: "Develop",
+    desc: "Build with latest technologies",
+    icon: Code2,
+  },
+  {
+    num: "05",
+    title: "Launch",
+    desc: "Test, deploy and support",
+    icon: Rocket,
+  },
+];
 
 export default function Process() {
-  const containerRef = useRef(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Scroll Animation #4: Active Phase Scroll Tracker
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  const progressScale = useTransform(scrollYProgress, [0.1, 0.9], [0.1, 1]);
-
-  const steps = [
-    {
-      num: "01",
-      title: "Discovery & Strategy",
-      desc: "We research your target audience, define business goals, and map project specifications.",
-    },
-    {
-      num: "02",
-      title: "UI/UX Architecture",
-      desc: "We design clean visual layouts, interactive prototypes, and custom UI components.",
-    },
-    {
-      num: "03",
-      title: "Next.js Engineering",
-      desc: "We build clean production code using Next.js, React, and MongoDB database infrastructure.",
-    },
-    {
-      num: "04",
-      title: "Testing & Launch",
-      desc: "We run sub-second speed audits, security checks, custom domain SSL setup, and live deployment.",
-    },
-  ];
-
   return (
     <section
-      ref={containerRef}
       id="process"
-      className="relative py-24 sm:py-32 bg-white text-slate-900 overflow-hidden z-10 border-t border-slate-200/90 font-sans"
+      className="relative z-10 w-full bg-white text-primary-black py-20 sm:py-28 lg:py-32 font-inter border-t border-neutral-200/80"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-12 flex flex-col gap-14">
-        
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-[120px]">
         {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3 max-w-2xl mx-auto">
-          <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#8B5E3C] font-mono">
-            ✦ WORKFLOW PROCESS
-          </span>
-          <h2 className="font-serif font-bold text-[clamp(36px,5.5vw,72px)] leading-[1.05] text-slate-900">
-            How We Execute Projects
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
-            A structured, 4-phase methodology engineered for predictability, speed, and exceptional quality.
-          </p>
-
-          {/* Scroll Progress Bar (Scroll Animation #4) */}
-          <div className="w-full max-w-md h-1.5 bg-slate-100 rounded-full mt-4 overflow-hidden">
-            <motion.div
-              style={mounted ? { scaleX: progressScale, transformOrigin: "left" } : { transformOrigin: "left" }}
-              suppressHydrationWarning
-              className="h-full bg-gradient-to-r from-[#8B5E3C] to-indigo-600 rounded-full"
-            />
-          </div>
+        <div className="text-center lg:text-left pb-12 sm:pb-16 max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h2 className="font-manrope text-3xl sm:text-4xl lg:text-5xl font-medium uppercase tracking-tight text-neutral-950">
+              OUR PROCESS
+            </h2>
+            <p className="mt-3 font-inter text-base sm:text-lg text-neutral-600">
+              A simple and transparent process to bring your ideas to life.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Process Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((step, idx) => (
-            <motion.div
-              key={step.num}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              whileHover={{ y: -6 }}
-              className="p-8 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-2xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between gap-6 relative overflow-hidden"
-            >
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-mono font-black text-[#8B5E3C]">
+        {/* 5-Step Process Flow */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -6 }}
+                className="group relative flex flex-col items-center sm:items-start text-center sm:text-left rounded-2xl border border-neutral-200/90 bg-white p-6 shadow-xs hover:border-[#00507D]/50 hover:shadow-xl transition-all duration-300"
+              >
+                {/* Step Number & Icon */}
+                <div className="flex w-full items-center justify-between mb-6 pb-4 border-b border-neutral-100">
+                  <span className="font-manrope text-xl font-extrabold text-[#00507D] transition-transform duration-300 group-hover:scale-110">
                     {step.num}
                   </span>
-                  <CheckCircle2 className="w-5 h-5 text-slate-300 group-hover:text-emerald-500" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f0f9ff] text-[#00507D] group-hover:bg-[#00507D] group-hover:text-white transition-all duration-300 group-hover:scale-105">
+                    <Icon className="h-5 w-5" />
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900">{step.title}</h3>
-                <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">
+
+                <h3 className="font-manrope text-lg sm:text-xl font-bold text-neutral-950 group-hover:text-[#00507D] transition-colors">
+                  {step.title}
+                </h3>
+
+                <p className="mt-2 font-inter text-xs sm:text-sm text-neutral-600 leading-relaxed">
                   {step.desc}
                 </p>
-              </div>
-
-              <div className="pt-2 flex items-center gap-1 text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
-                <span>Phase Completed</span>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Inline SVG for Instagram
 const InstagramIcon = () => (
@@ -37,8 +38,22 @@ const WhatsappIcon = () => (
 );
 
 export default function FloatingSocials() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleMenuEvent = (e) => {
+      if (e.detail && typeof e.detail.open === "boolean") {
+        setMenuOpen(e.detail.open);
+      }
+    };
+    window.addEventListener("nylex-mobile-menu", handleMenuEvent);
+    return () => window.removeEventListener("nylex-mobile-menu", handleMenuEvent);
+  }, []);
+
+  if (menuOpen) return null;
+
   return (
-    <div className="fixed bottom-6 right-6 z-45 flex flex-col gap-3.5 select-none pointer-events-auto">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-3 select-none pointer-events-auto transition-opacity duration-300">
       
       {/* Instagram Button */}
       <motion.a
@@ -47,10 +62,11 @@ export default function FloatingSocials() {
         rel="noreferrer"
         whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="group relative w-12 h-12 rounded-full bg-gradient-to-tr from-[#FFB800] via-[#FF007A] to-[#7A00FF] flex items-center justify-center shadow-md transition-shadow duration-300 hover:shadow-lg"
+        className="group relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr from-[#FFB800] via-[#FF007A] to-[#7A00FF] flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-xl cursor-pointer"
+        aria-label="Instagram"
       >
         {/* Tooltip */}
-        <span className="absolute right-14 bg-slate-900 text-white border border-slate-700 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-md uppercase font-sans whitespace-nowrap">
+        <span className="hidden sm:block absolute right-14 bg-slate-900 text-white border border-slate-700 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-md uppercase font-sans whitespace-nowrap">
           Instagram
         </span>
         <InstagramIcon />
@@ -63,10 +79,11 @@ export default function FloatingSocials() {
         rel="noreferrer"
         whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="group relative w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center shadow-md transition-shadow duration-300 hover:shadow-lg"
+        className="group relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-xl cursor-pointer"
+        aria-label="WhatsApp"
       >
         {/* Tooltip */}
-        <span className="absolute right-14 bg-slate-900 text-white border border-slate-700 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-md uppercase font-sans whitespace-nowrap">
+        <span className="hidden sm:block absolute right-14 bg-slate-900 text-white border border-slate-700 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-300 shadow-md uppercase font-sans whitespace-nowrap">
           WhatsApp
         </span>
         <WhatsappIcon />
