@@ -1,5 +1,5 @@
 export default function robots() {
-  const baseUrl = "https://nylex.in";
+  const baseUrl = "https://nylex.online";
 
   return {
     rules: [

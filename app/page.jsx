@@ -5,7 +5,7 @@ import Services from "./sections/Services";
 import About from "./sections/About";
 import FeaturedProjects from "./sections/FeaturedProjects";
 import Process from "./sections/Process";
-import TechStack from "./sections/TechStack";
+import Clients from "./sections/Clients";
 import Testimonials from "./sections/Testimonials";
 import Blog from "./sections/Blog";
 import Contact from "./sections/Contact";
@@ -28,8 +28,8 @@ export default function Home() {
       {/* 05. Process */}
       <Process />
 
-      {/* 06. Technology */}
-      <TechStack />
+      {/* 06. Clients */}
+      <Clients />
 
       {/* 07. Testimonials */}
       <Testimonials />

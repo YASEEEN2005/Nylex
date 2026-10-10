@@ -20,7 +20,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://nylex.in"),
+  metadataBase: new URL("https://nylex.online"),
   title: {
     default: "NYLEX | Web Development, Custom Software & AI Studio",
     template: "%s | NYLEX Digital Studio",
@@ -41,7 +41,7 @@ export const metadata = {
     "Software Engineering Studio",
     "Kozhikode Web Designers",
   ],
-  authors: [{ name: "NYLEX Digital Studio", url: "https://nylex.in" }],
+  authors: [{ name: "NYLEX Digital Studio", url: "https://nylex.online" }],
   creator: "NYLEX Digital Studio",
   publisher: "NYLEX Digital Studio",
   formatDetection: {
@@ -56,7 +56,7 @@ export const metadata = {
     title: "NYLEX | Web Development, Custom Software & AI Studio",
     description:
       "Transforming ambitious ideas into world-class digital realities. High-performance web applications, scalable software, and AI-powered solutions.",
-    url: "https://nylex.in",
+    url: "https://nylex.online",
     siteName: "NYLEX Digital Studio",
     locale: "en_US",
     type: "website",
@@ -89,8 +89,8 @@ export const metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/nylex-icon.png",
+    shortcut: "/nylex-icon.png",
     apple: "/nylex-icon.png",
   },
   category: "technology",
@@ -108,12 +108,12 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://nylex.in/#organization",
+      "@id": "https://nylex.online/#organization",
       name: "NYLEX Digital Studio",
-      url: "https://nylex.in",
+      url: "https://nylex.online",
       logo: {
         "@type": "ImageObject",
-        url: "https://nylex.in/nylex-icon.png",
+        url: "https://nylex.online/nylex-icon.png",
       },
       sameAs: [
         "https://instagram.com",
@@ -137,10 +137,10 @@ const jsonLd = {
     },
     {
       "@type": "ProfessionalService",
-      "@id": "https://nylex.in/#service",
+      "@id": "https://nylex.online/#service",
       name: "NYLEX Digital Studio",
-      image: "https://nylex.in/nylex-icon.png",
-      url: "https://nylex.in",
+      image: "https://nylex.online/nylex-icon.png",
+      url: "https://nylex.online",
       telephone: "+918921507051",
       email: "buildwithnylex@gmail.com",
       priceRange: "$$",
@@ -191,11 +191,11 @@ const jsonLd = {
     },
     {
       "@type": "WebSite",
-      "@id": "https://nylex.in/#website",
-      url: "https://nylex.in",
+      "@id": "https://nylex.online/#website",
+      url: "https://nylex.online",
       name: "NYLEX Digital Studio",
       publisher: {
-        "@id": "https://nylex.in/#organization",
+        "@id": "https://nylex.online/#organization",
       },
     },
   ],

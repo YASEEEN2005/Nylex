@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = "https://nylex.in";
+  const baseUrl = "https://nylex.online";
   const currentDate = new Date().toISOString();
 
   return [
@@ -34,7 +34,7 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#techstack`,
+      url: `${baseUrl}/#clients`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.8,
