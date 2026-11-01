@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   Upload,
   Sparkles,
@@ -37,77 +37,14 @@ export default function LogoStudioModal({
   const [isProcessed, setIsProcessed] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
 
   const canvasRef = useRef(null);
   const originalCanvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Reset state when opened or closed
-  useEffect(() => {
-    if (isOpen) {
-      setErrorMsg("");
-      setIsProcessed(false);
-      if (initialImageUrl) {
-        loadImageFromUrl(initialImageUrl);
-      }
-    } else {
-      setSelectedFile(null);
-      setOriginalImage(null);
-      setImageLoaded(false);
-      setIsProcessed(false);
-    }
-  }, [isOpen, initialImageUrl]);
-
-  const loadImageFromUrl = (url) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      setOriginalImage(img);
-      setImageLoaded(true);
-      setTimeout(() => initCanvas(img), 50);
-    };
-    img.onerror = () => {
-      setErrorMsg("Failed to load initial image for editing.");
-    };
-    img.src = url;
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setErrorMsg("");
-
-    // Validate type
-    const validTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/svg+xml"];
-    if (!validTypes.includes(file.type)) {
-      setErrorMsg("Please upload a valid image file (PNG, JPG, WebP, or SVG).");
-      return;
-    }
-
-    // Validate size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setErrorMsg("Image size exceeds 5MB limit. Please upload a smaller logo.");
-      return;
-    }
-
-    setSelectedFile(file);
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = new Image();
-      img.onload = () => {
-        setOriginalImage(img);
-        setImageLoaded(true);
-        setTimeout(() => initCanvas(img), 50);
-      };
-      img.src = event.target?.result;
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const initCanvas = (img) => {
+  const initCanvas = useCallback((img) => {
     const canvas = canvasRef.current;
     if (!canvas || !img) return;
 
@@ -159,6 +96,65 @@ export default function LogoStudioModal({
     }
 
     setIsProcessed(false);
+  }, []);
+
+  // Reset state on cleanup and load initial image if provided
+  useEffect(() => {
+    if (isOpen && initialImageUrl) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        setOriginalImage(img);
+        setImageLoaded(true);
+        setTimeout(() => initCanvas(img), 50);
+      };
+      img.onerror = () => {
+        setErrorMsg("Failed to load initial image for editing.");
+      };
+      img.src = initialImageUrl;
+    }
+
+    return () => {
+      setSelectedFile(null);
+      setOriginalImage(null);
+      setImageLoaded(false);
+      setIsProcessed(false);
+      setErrorMsg("");
+    };
+  }, [isOpen, initialImageUrl, initCanvas]);
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setErrorMsg("");
+
+    // Validate type
+    const validTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/svg+xml"];
+    if (!validTypes.includes(file.type)) {
+      setErrorMsg("Please upload a valid image file (PNG, JPG, WebP, or SVG).");
+      return;
+    }
+
+    // Validate size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg("Image size exceeds 5MB limit. Please upload a smaller logo.");
+      return;
+    }
+
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        setOriginalImage(img);
+        setImageLoaded(true);
+        setTimeout(() => initCanvas(img), 50);
+      };
+      img.src = event.target?.result;
+    };
+    reader.readAsDataURL(file);
   };
 
   // Click on canvas to sample color to remove
@@ -311,9 +307,10 @@ export default function LogoStudioModal({
     ctx.putImageData(croppedData, 0, 0);
   };
 
-  // Convert canvas to Blob and upload to Cloudinary
+  // Convert canvas to Blob and upload to Cloudinary with byte progress
   const handleApproveAndUpload = async (useOriginal = false) => {
     setUploading(true);
+    setUploadProgress(10);
     setErrorMsg("");
 
     try {
@@ -342,23 +339,44 @@ export default function LogoStudioModal({
       formData.append("file", uploadPayload, "client-logo.png");
       formData.append("folder", "nylex/client-logos");
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/upload");
 
-      const data = await res.json();
-      if (res.ok && data.success) {
-        onUploadSuccess(data.url, data.public_id);
-        onClose();
-      } else {
-        throw new Error(data.error || "Upload failed. Please try again.");
-      }
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.min(85, Math.max(10, Math.round((event.loaded / event.total) * 85)));
+          setUploadProgress(percent);
+        }
+      };
+
+      await new Promise((resolve, reject) => {
+        xhr.onload = () => {
+          setUploadProgress(95);
+          try {
+            const data = JSON.parse(xhr.responseText);
+            if (xhr.status >= 200 && xhr.status < 300 && data.success) {
+              setUploadProgress(100);
+              setTimeout(() => {
+                onUploadSuccess(data.url, data.public_id);
+                onClose();
+                resolve();
+              }, 300);
+            } else {
+              reject(new Error(data.error || "Upload failed. Please try again."));
+            }
+          } catch {
+            reject(new Error("Invalid upload response"));
+          }
+        };
+        xhr.onerror = () => reject(new Error("Network error during logo upload."));
+        xhr.send(formData);
+      });
     } catch (err) {
       console.error("Upload error:", err);
       setErrorMsg(err.message || "Failed to upload logo to Cloudinary.");
     } finally {
       setUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -612,7 +630,7 @@ export default function LogoStudioModal({
                 {/* Information Callout */}
                 <div className="p-3 rounded-2xl bg-neutral-50 text-[11px] font-inter text-neutral-500 leading-relaxed border border-neutral-200/60">
                   <span className="font-semibold text-neutral-800 block mb-0.5">Dual-Mode Upload:</span>
-                  You can upload with background removal or click <b>"Upload Original"</b> if your logo is already transparent.
+                  You can upload with background removal or click <b>&quot;Upload Original&quot;</b> if your logo is already transparent.
                 </div>
               </div>
             </div>
@@ -651,7 +669,7 @@ export default function LogoStudioModal({
                 {uploading ? (
                   <>
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    <span>Uploading to Cloudinary...</span>
+                    <span>Uploading ({uploadProgress}%)...</span>
                   </>
                 ) : (
                   <>

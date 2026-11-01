@@ -160,8 +160,19 @@ export default function AdminPortal() {
     }, 3500);
   };
 
-  // Cloudinary Upload Loading State
+  // Cloudinary Upload Loading & Progress State
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatusText, setUploadStatusText] = useState("");
+  const [activeUploadTarget, setActiveUploadTarget] = useState("");
+
+  // Action Button Submitting States
+  const [savingProject, setSavingProject] = useState(false);
+  const [savingClient, setSavingClient] = useState(false);
+  const [savingLogo, setSavingLogo] = useState(false);
+  const [savingInvoice, setSavingInvoice] = useState(false);
+  const [savingPayment, setSavingPayment] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Form Models
   const [projectForm, setProjectForm] = useState({
@@ -372,38 +383,80 @@ export default function AdminPortal() {
     setAuthenticated(false);
   };
 
-  // --- Cloudinary File Uploader Helper ---
-  const handleFileUpload = async (e, folder, onUploadSuccess) => {
+  // --- Cloudinary File Uploader Helper with Real Byte Progress ---
+  const handleFileUpload = (e, folder, onUploadSuccess, targetName = "") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reset input value so re-uploading the same file triggers onChange
+    e.target.value = "";
+
     setUploadingImage(true);
+    setActiveUploadTarget(targetName);
+    setUploadProgress(10);
+    setUploadStatusText(`Uploading ${file.name}...`);
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("folder", folder);
 
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        onUploadSuccess(data.url, data.public_id);
-        showToast("Image uploaded to Cloudinary successfully.", "success");
-      } else {
-        showToast(data.error || "Upload failed. Please try again.", "error");
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/upload");
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.min(85, Math.max(10, Math.round((event.loaded / event.total) * 85)));
+        setUploadProgress(percent);
       }
-    } catch (err) {
-      showToast("Failed to upload image to Cloudinary.", "error");
-    } finally {
+    };
+
+    xhr.onload = () => {
+      setUploadProgress(95);
+      setUploadStatusText("Processing in Cloudinary...");
+      try {
+        const data = JSON.parse(xhr.responseText);
+        if (xhr.status >= 200 && xhr.status < 300 && data.success) {
+          setUploadProgress(100);
+          setUploadStatusText("Upload complete!");
+          setTimeout(() => {
+            onUploadSuccess(data.url, data.public_id);
+            showToast("Photo uploaded to Cloudinary successfully.", "success");
+            setUploadingImage(false);
+            setUploadProgress(0);
+            setUploadStatusText("");
+            setActiveUploadTarget("");
+          }, 350);
+        } else {
+          showToast(data.error || "Upload failed. Please try again.", "error");
+          setUploadingImage(false);
+          setUploadProgress(0);
+          setUploadStatusText("");
+          setActiveUploadTarget("");
+        }
+      } catch {
+        showToast("Error processing upload response.", "error");
+        setUploadingImage(false);
+        setUploadProgress(0);
+        setUploadStatusText("");
+        setActiveUploadTarget("");
+      }
+    };
+
+    xhr.onerror = () => {
+      showToast("Network error uploading photo.", "error");
       setUploadingImage(false);
-    }
+      setUploadProgress(0);
+      setUploadStatusText("");
+      setActiveUploadTarget("");
+    };
+
+    xhr.send(formData);
   };
 
   // --- Project Handlers ---
   const handleSaveProject = async (e) => {
     e.preventDefault();
+    setSavingProject(true);
     try {
       const url = editingId ? `/api/projects/${editingId}` : "/api/projects";
       const method = editingId ? "PUT" : "POST";
@@ -426,6 +479,8 @@ export default function AdminPortal() {
       }
     } catch (err) {
       showToast("Error saving project.", "error");
+    } finally {
+      setSavingProject(false);
     }
   };
 
@@ -455,6 +510,7 @@ export default function AdminPortal() {
   // --- Client Handlers ---
   const handleSaveClient = async (e) => {
     e.preventDefault();
+    setSavingClient(true);
     try {
       const url = editingId ? `/api/clients/${editingId}` : "/api/clients";
       const method = editingId ? "PUT" : "POST";
@@ -474,6 +530,8 @@ export default function AdminPortal() {
       }
     } catch (err) {
       showToast("Error saving client.", "error");
+    } finally {
+      setSavingClient(false);
     }
   };
 
@@ -503,6 +561,7 @@ export default function AdminPortal() {
   // --- Dynamic Client Logo Management Handlers ---
   const handleSaveClientLogo = async (e) => {
     e.preventDefault();
+    setSavingLogo(true);
     try {
       const url = editingLogoId ? `/api/client-logos/${editingLogoId}` : "/api/client-logos";
       const method = editingLogoId ? "PUT" : "POST";
@@ -527,6 +586,8 @@ export default function AdminPortal() {
       }
     } catch {
       showToast("Error saving client logo.", "error");
+    } finally {
+      setSavingLogo(false);
     }
   };
 
@@ -637,6 +698,7 @@ export default function AdminPortal() {
 
   const handleSaveInvoice = async (e) => {
     e.preventDefault();
+    setSavingInvoice(true);
     try {
       const res = await fetch("/api/invoices", {
         method: "POST",
@@ -653,6 +715,8 @@ export default function AdminPortal() {
       }
     } catch (err) {
       showToast("Error generating invoice.", "error");
+    } finally {
+      setSavingInvoice(false);
     }
   };
 
@@ -696,6 +760,7 @@ export default function AdminPortal() {
   const handleSavePayment = async (e) => {
     e.preventDefault();
     if (!activeInvoiceForPayment) return;
+    setSavingPayment(true);
     try {
       const res = await fetch("/api/payments", {
         method: "POST",
@@ -716,6 +781,8 @@ export default function AdminPortal() {
       }
     } catch (err) {
       showToast("Error recording payment.", "error");
+    } finally {
+      setSavingPayment(false);
     }
   };
 
@@ -1035,11 +1102,10 @@ export default function AdminPortal() {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 md:shrink ${
-                  active
+                className={`flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 md:shrink ${active
                     ? "bg-[#00507D] text-white font-semibold shadow-md shadow-[#00507D]/20"
                     : "bg-white md:bg-transparent border border-neutral-200/70 md:border-transparent text-neutral-600 hover:text-[#00507D] hover:bg-[#f0f9ff]"
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-2.5">
                   <Icon className="w-4 h-4" />
@@ -1047,9 +1113,8 @@ export default function AdminPortal() {
                 </div>
                 {item.count !== undefined && item.count > 0 && (
                   <span
-                    className={`ml-2 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
-                      active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-600"
-                    }`}
+                    className={`ml-2 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-600"
+                      }`}
                   >
                     {item.count}
                   </span>
@@ -1254,11 +1319,10 @@ export default function AdminPortal() {
                             fetchAnalytics(item.key);
                           }
                         }}
-                        className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-medium ${
-                          analyticsRange === item.key
+                        className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-medium ${analyticsRange === item.key
                             ? "bg-[#00507D] text-white font-semibold shadow-xs"
                             : "text-neutral-600 hover:text-neutral-950 hover:bg-white"
-                        }`}
+                          }`}
                       >
                         {item.label}
                       </button>
@@ -1629,21 +1693,19 @@ export default function AdminPortal() {
                     <div className="flex items-center p-0.5 bg-neutral-100 rounded-xl text-xs font-inter border border-neutral-200">
                       <button
                         onClick={() => setPagesSubTab("landing")}
-                        className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
-                          pagesSubTab === "landing"
+                        className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${pagesSubTab === "landing"
                             ? "bg-[#00507D] text-white font-semibold"
                             : "text-neutral-600 hover:text-neutral-900"
-                        }`}
+                          }`}
                       >
                         Landing
                       </button>
                       <button
                         onClick={() => setPagesSubTab("exit")}
-                        className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
-                          pagesSubTab === "exit"
+                        className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${pagesSubTab === "exit"
                             ? "bg-[#00507D] text-white font-semibold"
                             : "text-neutral-600 hover:text-neutral-900"
-                        }`}
+                          }`}
                       >
                         Exit
                       </button>
@@ -1772,8 +1834,8 @@ export default function AdminPortal() {
                         dev.device === "mobile"
                           ? Smartphone
                           : dev.device === "tablet"
-                          ? Tablet
-                          : Monitor;
+                            ? Tablet
+                            : Monitor;
                       return (
                         <div key={dev.device} className="flex items-center justify-between text-xs font-inter">
                           <div className="flex items-center gap-2.5">
@@ -2451,17 +2513,15 @@ export default function AdminPortal() {
                               <button
                                 type="button"
                                 onClick={() => handleToggleLogoStatus(logo)}
-                                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
-                                  logo.is_active
+                                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${logo.is_active
                                     ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
                                     : "bg-neutral-100 text-neutral-500 border border-neutral-200 hover:bg-neutral-200"
-                                }`}
+                                  }`}
                                 title="Click to toggle visibility on public website"
                               >
                                 <span
-                                  className={`w-1.5 h-1.5 rounded-full ${
-                                    logo.is_active ? "bg-emerald-500 animate-pulse" : "bg-neutral-400"
-                                  }`}
+                                  className={`w-1.5 h-1.5 rounded-full ${logo.is_active ? "bg-emerald-500 animate-pulse" : "bg-neutral-400"
+                                    }`}
                                 />
                                 <span>{logo.is_active ? "Visible on Site" : "Hidden"}</span>
                               </button>
@@ -2571,56 +2631,56 @@ export default function AdminPortal() {
                         <th className="p-4 pr-6 text-right">Actions</th>
                       </tr>
                     </thead>
-                  <tbody className="divide-y divide-neutral-100">
-                    {clients.map((c) => (
-                      <tr key={c.id} className="hover:bg-[#f0f9ff]/40 transition-colors">
-                        <td className="p-4 pl-6">
-                          <div className="w-10 h-10 rounded-xl bg-neutral-50 border border-neutral-200/80 overflow-hidden flex items-center justify-center p-1">
-                            {c.logo_url ? (
-                              <img
-                                src={c.logo_url}
-                                alt={c.company}
-                                className="w-full h-full object-contain"
-                              />
-                            ) : (
-                              <Users className="w-4 h-4 text-neutral-400" />
-                            )}
-                          </div>
-                        </td>
-                        <td className="p-4 font-manrope font-bold text-neutral-950 text-sm">
-                          {c.name}
-                        </td>
-                        <td className="p-4 text-neutral-600">{c.company || "—"}</td>
-                        <td className="p-4 font-mono text-[11px] text-neutral-500">
-                          {c.email || c.phone || "—"}
-                        </td>
-                        <td className="p-4">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            {c.status}
-                          </span>
-                        </td>
-                        <td className="p-4 pr-6 text-right">
-                          <button
-                            onClick={() => {
-                              setClientForm(c);
-                              setEditingId(c.id);
-                              setClientModal(true);
-                            }}
-                            className="p-1.5 rounded-lg text-neutral-500 hover:text-[#00507D] hover:bg-[#f0f9ff] transition-colors"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteClient(c.id, c.name)}
-                            className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors ml-1"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    <tbody className="divide-y divide-neutral-100">
+                      {clients.map((c) => (
+                        <tr key={c.id} className="hover:bg-[#f0f9ff]/40 transition-colors">
+                          <td className="p-4 pl-6">
+                            <div className="w-10 h-10 rounded-xl bg-neutral-50 border border-neutral-200/80 overflow-hidden flex items-center justify-center p-1">
+                              {c.logo_url ? (
+                                <img
+                                  src={c.logo_url}
+                                  alt={c.company}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <Users className="w-4 h-4 text-neutral-400" />
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-4 font-manrope font-bold text-neutral-950 text-sm">
+                            {c.name}
+                          </td>
+                          <td className="p-4 text-neutral-600">{c.company || "—"}</td>
+                          <td className="p-4 font-mono text-[11px] text-neutral-500">
+                            {c.email || c.phone || "—"}
+                          </td>
+                          <td className="p-4">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              {c.status}
+                            </span>
+                          </td>
+                          <td className="p-4 pr-6 text-right">
+                            <button
+                              onClick={() => {
+                                setClientForm(c);
+                                setEditingId(c.id);
+                                setClientModal(true);
+                              }}
+                              className="p-1.5 rounded-lg text-neutral-500 hover:text-[#00507D] hover:bg-[#f0f9ff] transition-colors"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClient(c.id, c.name)}
+                              className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors ml-1"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -2657,79 +2717,78 @@ export default function AdminPortal() {
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[700px] text-left text-xs font-inter">
                     <thead className="bg-neutral-50/80 border-b border-neutral-200/80 text-[10px] font-mono uppercase text-neutral-500 tracking-wider">
-                    <tr>
-                      <th className="p-4 pl-6">Invoice #</th>
-                      <th className="p-4">Client</th>
-                      <th className="p-4">Total</th>
-                      <th className="p-4">Paid</th>
-                      <th className="p-4">Status</th>
-                      <th className="p-4 pr-6 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-100">
-                    {invoices.map((inv) => {
-                      const total = Number(inv.total) || 0;
-                      const paid = Number(inv.paid_amount) || 0;
-                      return (
-                        <tr key={inv.id} className="hover:bg-[#f0f9ff]/40 transition-colors">
-                          <td className="p-4 pl-6 font-mono font-bold text-[#00507D]">
-                            {inv.invoice_number}
-                          </td>
-                          <td className="p-4">
-                            <span className="font-manrope font-bold text-neutral-950 block">
-                              {inv.client_name}
-                            </span>
-                            <span className="text-[11px] text-neutral-500">
-                              {inv.client_company}
-                            </span>
-                          </td>
-                          <td className="p-4 font-mono font-bold text-neutral-950">
-                            ${total.toLocaleString()}
-                          </td>
-                          <td className="p-4 font-mono font-semibold text-emerald-600">
-                            ${paid.toLocaleString()}
-                          </td>
-                          <td className="p-4">
-                            <span
-                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase ${
-                                inv.status === "Paid"
-                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                                  : inv.status === "Partial"
-                                  ? "bg-blue-50 text-[#00507D] border border-[#00507D]/20"
-                                  : "bg-amber-50 text-amber-700 border border-amber-200"
-                              }`}
-                            >
-                              {inv.status}
-                            </span>
-                          </td>
-                          <td className="p-4 pr-6 text-right space-x-2">
-                            <button
-                              onClick={() => openPaymentModal(inv)}
-                              className="px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 font-inter text-[11px] font-semibold transition-colors cursor-pointer"
-                              title="Record payment"
-                            >
-                              + Pay
-                            </button>
-                            <Link
-                              href={`/admin/nylex/invoice/${inv.id}`}
-                              target="_blank"
-                              className="px-3 py-1 rounded-full bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 font-inter text-[11px] font-semibold inline-flex items-center gap-1 transition-colors"
-                            >
-                              <Printer className="w-3 h-3" />
-                              <span>PDF</span>
-                            </Link>
-                            <button
-                              onClick={() => handleDeleteInvoice(inv.id, inv.invoice_number)}
-                              className="p-1.5 text-neutral-400 hover:text-rose-600 inline-block align-middle"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      <tr>
+                        <th className="p-4 pl-6">Invoice #</th>
+                        <th className="p-4">Client</th>
+                        <th className="p-4">Total</th>
+                        <th className="p-4">Paid</th>
+                        <th className="p-4">Status</th>
+                        <th className="p-4 pr-6 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-100">
+                      {invoices.map((inv) => {
+                        const total = Number(inv.total) || 0;
+                        const paid = Number(inv.paid_amount) || 0;
+                        return (
+                          <tr key={inv.id} className="hover:bg-[#f0f9ff]/40 transition-colors">
+                            <td className="p-4 pl-6 font-mono font-bold text-[#00507D]">
+                              {inv.invoice_number}
+                            </td>
+                            <td className="p-4">
+                              <span className="font-manrope font-bold text-neutral-950 block">
+                                {inv.client_name}
+                              </span>
+                              <span className="text-[11px] text-neutral-500">
+                                {inv.client_company}
+                              </span>
+                            </td>
+                            <td className="p-4 font-mono font-bold text-neutral-950">
+                              ${total.toLocaleString()}
+                            </td>
+                            <td className="p-4 font-mono font-semibold text-emerald-600">
+                              ${paid.toLocaleString()}
+                            </td>
+                            <td className="p-4">
+                              <span
+                                className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase ${inv.status === "Paid"
+                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                    : inv.status === "Partial"
+                                      ? "bg-blue-50 text-[#00507D] border border-[#00507D]/20"
+                                      : "bg-amber-50 text-amber-700 border border-amber-200"
+                                  }`}
+                              >
+                                {inv.status}
+                              </span>
+                            </td>
+                            <td className="p-4 pr-6 text-right space-x-2">
+                              <button
+                                onClick={() => openPaymentModal(inv)}
+                                className="px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 font-inter text-[11px] font-semibold transition-colors cursor-pointer"
+                                title="Record payment"
+                              >
+                                + Pay
+                              </button>
+                              <Link
+                                href={`/admin/nylex/invoice/${inv.id}`}
+                                target="_blank"
+                                className="px-3 py-1 rounded-full bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 font-inter text-[11px] font-semibold inline-flex items-center gap-1 transition-colors"
+                              >
+                                <Printer className="w-3 h-3" />
+                                <span>PDF</span>
+                              </Link>
+                              <button
+                                onClick={() => handleDeleteInvoice(inv.id, inv.invoice_number)}
+                                className="p-1.5 text-neutral-400 hover:text-rose-600 inline-block align-middle"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -2751,11 +2810,10 @@ export default function AdminPortal() {
                 {enquiries.map((enq) => (
                   <div
                     key={enq.id}
-                    className={`p-5 rounded-2xl border transition-all ${
-                      enq.is_read
+                    className={`p-5 rounded-2xl border transition-all ${enq.is_read
                         ? "bg-white border-neutral-200/70"
                         : "bg-white border-[#00507D]/40 shadow-md shadow-[#00507D]/5"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
@@ -2857,11 +2915,10 @@ export default function AdminPortal() {
 
                     <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
                       <span
-                        className={`text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full ${
-                          t.is_approved
+                        className={`text-[10px] font-mono font-semibold px-2.5 py-0.5 rounded-full ${t.is_approved
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                             : "bg-amber-50 text-amber-700 border border-amber-200"
-                        }`}
+                          }`}
                       >
                         {t.is_approved ? "Live on Website" : "Pending Review"}
                       </span>
@@ -2964,16 +3021,26 @@ export default function AdminPortal() {
                     </div>
                     <div className="flex items-center gap-2">
                       <label className="cursor-pointer px-3 py-1.5 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-1.5 transition-colors">
-                        <Upload className="w-3 h-3" />
-                        <span>Replace</span>
+                        {uploadingImage && activeUploadTarget === "project-cover" ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                            <span>{uploadProgress}%</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-3 h-3" />
+                            <span>Replace</span>
+                          </>
+                        )}
                         <input
                           type="file"
                           accept="image/*"
+                          disabled={uploadingImage}
                           className="hidden"
                           onChange={(e) =>
                             handleFileUpload(e, "nylex/projects", (url, public_id) => {
                               setProjectForm({ ...projectForm, image_url: url, image_public_id: public_id });
-                            })
+                            }, "project-cover")
                           }
                         />
                       </label>
@@ -2990,16 +3057,26 @@ export default function AdminPortal() {
                 ) : (
                   <div className="flex items-center gap-3">
                     <label className="cursor-pointer px-4 py-2 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-2 transition-colors">
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>{uploadingImage ? "Uploading to Cloudinary..." : "Upload Cover Screenshot"}</span>
+                      {uploadingImage && activeUploadTarget === "project-cover" ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                          <span>Uploading Cover ({uploadProgress}%)...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>Upload Cover Screenshot</span>
+                        </>
+                      )}
                       <input
                         type="file"
                         accept="image/*"
+                        disabled={uploadingImage}
                         className="hidden"
                         onChange={(e) =>
                           handleFileUpload(e, "nylex/projects", (url, public_id) => {
                             setProjectForm({ ...projectForm, image_url: url, image_public_id: public_id });
-                          })
+                          }, "project-cover")
                         }
                       />
                     </label>
@@ -3019,11 +3096,21 @@ export default function AdminPortal() {
                     </p>
                   </div>
                   <label className="cursor-pointer px-3 py-1.5 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-1.5 transition-colors">
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add Photo</span>
+                    {uploadingImage && activeUploadTarget === "project-gallery" ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                        <span>Adding ({uploadProgress}%)...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add Photo</span>
+                      </>
+                    )}
                     <input
                       type="file"
                       accept="image/*"
+                      disabled={uploadingImage}
                       className="hidden"
                       onChange={(e) =>
                         handleFileUpload(e, "nylex/projects/gallery", (url, public_id) => {
@@ -3031,7 +3118,7 @@ export default function AdminPortal() {
                             ...prev,
                             gallery: [...(prev.gallery || []), { image_url: url, public_id, caption: "" }],
                           }));
-                        })
+                        }, "project-gallery")
                       }
                     />
                   </label>
@@ -3091,9 +3178,13 @@ export default function AdminPortal() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] text-white font-semibold shadow-md transition-all cursor-pointer"
+                  disabled={savingProject}
+                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] disabled:opacity-50 text-white font-semibold shadow-md transition-all cursor-pointer flex items-center gap-2"
                 >
-                  Save Project
+                  {savingProject && (
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  )}
+                  <span>{savingProject ? "Saving Project..." : (editingId ? "Update Project" : "Save Project")}</span>
                 </button>
               </div>
             </form>
@@ -3193,16 +3284,26 @@ export default function AdminPortal() {
                     </div>
                     <div className="flex items-center gap-2">
                       <label className="cursor-pointer px-3 py-1.5 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-1.5 transition-colors">
-                        <Upload className="w-3 h-3" />
-                        <span>Replace</span>
+                        {uploadingImage && activeUploadTarget === "client-logo" ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                            <span>{uploadProgress}%</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-3 h-3" />
+                            <span>Replace</span>
+                          </>
+                        )}
                         <input
                           type="file"
                           accept="image/*"
+                          disabled={uploadingImage}
                           className="hidden"
                           onChange={(e) =>
                             handleFileUpload(e, "nylex/clients", (url, public_id) => {
                               setClientForm({ ...clientForm, logo_url: url, logo_public_id: public_id });
-                            })
+                            }, "client-logo")
                           }
                         />
                       </label>
@@ -3219,16 +3320,26 @@ export default function AdminPortal() {
                 ) : (
                   <div className="flex items-center gap-3">
                     <label className="cursor-pointer px-4 py-2 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-2 transition-colors">
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>{uploadingImage ? "Uploading to Cloudinary..." : "Upload Logo"}</span>
+                      {uploadingImage && activeUploadTarget === "client-logo" ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                          <span>Uploading Logo ({uploadProgress}%)...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>Upload Logo</span>
+                        </>
+                      )}
                       <input
                         type="file"
                         accept="image/*"
+                        disabled={uploadingImage}
                         className="hidden"
                         onChange={(e) =>
                           handleFileUpload(e, "nylex/clients", (url, public_id) => {
                             setClientForm({ ...clientForm, logo_url: url, logo_public_id: public_id });
-                          })
+                          }, "client-logo")
                         }
                       />
                     </label>
@@ -3246,9 +3357,13 @@ export default function AdminPortal() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] text-white font-semibold shadow-md transition-all cursor-pointer"
+                  disabled={savingClient}
+                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] disabled:opacity-50 text-white font-semibold shadow-md transition-all cursor-pointer flex items-center gap-2"
                 >
-                  Save Client
+                  {savingClient && (
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  )}
+                  <span>{savingClient ? "Saving Client..." : (editingId ? "Update Client" : "Save Client")}</span>
                 </button>
               </div>
             </form>
@@ -3376,11 +3491,10 @@ export default function AdminPortal() {
                       <button
                         type="button"
                         onClick={() => setLogoPreviewTheme("white")}
-                        className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors cursor-pointer ${
-                          logoPreviewTheme === "white"
+                        className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors cursor-pointer ${logoPreviewTheme === "white"
                             ? "bg-white text-neutral-900 shadow-xs"
                             : "text-neutral-500 hover:text-neutral-900"
-                        }`}
+                          }`}
                         title="Preview on white"
                       >
                         White
@@ -3388,11 +3502,10 @@ export default function AdminPortal() {
                       <button
                         type="button"
                         onClick={() => setLogoPreviewTheme("dark")}
-                        className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors cursor-pointer ${
-                          logoPreviewTheme === "dark"
+                        className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors cursor-pointer ${logoPreviewTheme === "dark"
                             ? "bg-neutral-900 text-white shadow-xs"
                             : "text-neutral-500 hover:text-neutral-900"
-                        }`}
+                          }`}
                         title="Preview on dark"
                       >
                         Dark
@@ -3400,11 +3513,10 @@ export default function AdminPortal() {
                       <button
                         type="button"
                         onClick={() => setLogoPreviewTheme("checker")}
-                        className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors cursor-pointer ${
-                          logoPreviewTheme === "checker"
+                        className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors cursor-pointer ${logoPreviewTheme === "checker"
                             ? "bg-sky-100 text-[#00507D] shadow-xs"
                             : "text-neutral-500 hover:text-neutral-900"
-                        }`}
+                          }`}
                         title="Preview on transparency grid"
                       >
                         Grid
@@ -3416,13 +3528,12 @@ export default function AdminPortal() {
                 {clientLogoForm.image_url ? (
                   <div className="rounded-2xl border border-neutral-200 overflow-hidden bg-white">
                     <div
-                      className={`h-32 flex items-center justify-center p-4 transition-colors ${
-                        logoPreviewTheme === "dark"
+                      className={`h-32 flex items-center justify-center p-4 transition-colors ${logoPreviewTheme === "dark"
                           ? "bg-[#090d16]"
                           : logoPreviewTheme === "checker"
-                          ? "bg-[linear-gradient(45deg,#f0f0f0_25%,transparent_25%),linear-gradient(-45deg,#f0f0f0_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f0f0f0_75%),linear-gradient(-45deg,transparent_75%,#f0f0f0_75%)] bg-[size:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0]"
-                          : "bg-white border-b border-neutral-100"
-                      }`}
+                            ? "bg-[linear-gradient(45deg,#f0f0f0_25%,transparent_25%),linear-gradient(-45deg,#f0f0f0_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f0f0f0_75%),linear-gradient(-45deg,transparent_75%,#f0f0f0_75%)] bg-[size:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0]"
+                            : "bg-white border-b border-neutral-100"
+                        }`}
                     >
                       <img
                         src={clientLogoForm.image_url}
@@ -3485,15 +3596,24 @@ export default function AdminPortal() {
 
                     <label className="p-4 rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50 hover:bg-neutral-100 text-neutral-700 flex flex-col items-center justify-center gap-2 transition-all cursor-pointer text-center group">
                       <div className="w-10 h-10 rounded-xl bg-white text-neutral-600 shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform">
-                        <Upload className="w-5 h-5" />
+                        {uploadingImage && activeUploadTarget === "client-logo-direct" ? (
+                          <div className="w-5 h-5 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <Upload className="w-5 h-5" />
+                        )}
                       </div>
                       <div>
-                        <span className="font-semibold text-xs block">Quick Direct Upload</span>
+                        <span className="font-semibold text-xs block">
+                          {uploadingImage && activeUploadTarget === "client-logo-direct"
+                            ? `Uploading (${uploadProgress}%)...`
+                            : "Quick Direct Upload"}
+                        </span>
                         <span className="text-[10px] text-neutral-500 block">PNG, SVG, WebP (&lt;5MB)</span>
                       </div>
                       <input
                         type="file"
                         accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                        disabled={uploadingImage}
                         className="hidden"
                         onChange={(e) =>
                           handleFileUpload(e, "nylex/client-logos", (url, public_id) => {
@@ -3502,7 +3622,7 @@ export default function AdminPortal() {
                               image_url: url,
                               cloudinary_public_id: public_id,
                             });
-                          })
+                          }, "client-logo-direct")
                         }
                       />
                     </label>
@@ -3521,10 +3641,13 @@ export default function AdminPortal() {
                 </button>
                 <button
                   type="submit"
-                  disabled={!clientLogoForm.client_name || !clientLogoForm.image_url}
-                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold shadow-md transition-all cursor-pointer"
+                  disabled={savingLogo || !clientLogoForm.client_name || !clientLogoForm.image_url}
+                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold shadow-md transition-all cursor-pointer flex items-center gap-2"
                 >
-                  {editingLogoId ? "Update Logo" : "Save & Publish Logo"}
+                  {savingLogo && (
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  )}
+                  <span>{savingLogo ? "Saving Logo..." : (editingLogoId ? "Update Logo" : "Save & Publish Logo")}</span>
                 </button>
               </div>
             </form>
@@ -3632,11 +3755,10 @@ export default function AdminPortal() {
                         className="p-1 cursor-pointer transition-transform hover:scale-110"
                       >
                         <Star
-                          className={`w-5 h-5 ${
-                            star <= (testimonialForm.rating || 5)
+                          className={`w-5 h-5 ${star <= (testimonialForm.rating || 5)
                               ? "fill-amber-400 text-amber-400"
                               : "text-neutral-300"
-                          }`}
+                            }`}
                         />
                       </button>
                     ))}
@@ -3663,15 +3785,41 @@ export default function AdminPortal() {
 
               <div>
                 <label className="block font-inter text-xs font-semibold text-neutral-700 mb-1">
-                  Avatar Image URL <span className="text-neutral-400 font-normal">(Optional)</span>
+                  Avatar Photo <span className="text-neutral-400 font-normal">(Direct Upload or Image URL)</span>
                 </label>
-                <input
-                  type="text"
-                  value={testimonialForm.avatar_url}
-                  onChange={(e) => setTestimonialForm({ ...testimonialForm, avatar_url: e.target.value })}
-                  placeholder="https://images.unsplash.com/... or leave blank"
-                  className="w-full text-xs font-inter px-3 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-[#00507D] focus:ring-1 focus:ring-[#00507D]"
-                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={testimonialForm.avatar_url}
+                    onChange={(e) => setTestimonialForm({ ...testimonialForm, avatar_url: e.target.value })}
+                    placeholder="https://... or click Upload Photo"
+                    className="flex-1 text-xs font-inter px-3 py-2.5 rounded-xl border border-neutral-200 focus:outline-none focus:border-[#00507D] focus:ring-1 focus:ring-[#00507D]"
+                  />
+                  <label className="cursor-pointer px-3 py-2.5 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-1.5 transition-colors shrink-0">
+                    {uploadingImage && activeUploadTarget === "testimonial-avatar" ? (
+                      <>
+                        <div className="w-3 h-3 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                        <span>{uploadProgress}%</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Upload Photo</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingImage}
+                      className="hidden"
+                      onChange={(e) =>
+                        handleFileUpload(e, "nylex/testimonials", (url) => {
+                          setTestimonialForm((prev) => ({ ...prev, avatar_url: url }));
+                        }, "testimonial-avatar")
+                      }
+                    />
+                  </label>
+                </div>
               </div>
 
               <div className="flex items-center gap-2.5 p-3 rounded-xl bg-neutral-50 border border-neutral-200/80">
@@ -3843,9 +3991,13 @@ export default function AdminPortal() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] text-white font-semibold shadow-md transition-all cursor-pointer"
+                  disabled={savingInvoice}
+                  className="px-6 py-2 rounded-full bg-[#00507D] hover:bg-[#003d5f] disabled:opacity-50 text-white font-semibold shadow-md transition-all cursor-pointer flex items-center gap-2"
                 >
-                  Generate Invoice
+                  {savingInvoice && (
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  )}
+                  <span>{savingInvoice ? "Generating Invoice..." : "Generate Invoice"}</span>
                 </button>
               </div>
             </form>
@@ -3955,11 +4107,21 @@ export default function AdminPortal() {
                     </div>
                     <div className="flex items-center gap-2">
                       <label className="cursor-pointer px-3 py-1.5 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-1.5 transition-colors">
-                        <Upload className="w-3 h-3" />
-                        <span>Replace</span>
+                        {uploadingImage && activeUploadTarget === "receipt" ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                            <span>{uploadProgress}%</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-3 h-3" />
+                            <span>Replace</span>
+                          </>
+                        )}
                         <input
                           type="file"
                           accept="image/*,application/pdf"
+                          disabled={uploadingImage}
                           className="hidden"
                           onChange={(e) =>
                             handleFileUpload(e, "nylex/receipts", (url, public_id) => {
@@ -3968,7 +4130,7 @@ export default function AdminPortal() {
                                 receipt_url: url,
                                 receipt_public_id: public_id,
                               });
-                            })
+                            }, "receipt")
                           }
                         />
                       </label>
@@ -3987,11 +4149,21 @@ export default function AdminPortal() {
                 ) : (
                   <div className="flex items-center gap-3">
                     <label className="cursor-pointer px-4 py-2 bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] border border-[#00507D]/20 rounded-xl font-semibold text-xs flex items-center gap-2 transition-colors">
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>{uploadingImage ? "Uploading to Cloudinary..." : "Upload Receipt"}</span>
+                      {uploadingImage && activeUploadTarget === "receipt" ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                          <span>Uploading Receipt ({uploadProgress}%)...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>Upload Receipt</span>
+                        </>
+                      )}
                       <input
                         type="file"
                         accept="image/*,application/pdf"
+                        disabled={uploadingImage}
                         className="hidden"
                         onChange={(e) =>
                           handleFileUpload(e, "nylex/receipts", (url, public_id) => {
@@ -4000,7 +4172,7 @@ export default function AdminPortal() {
                               receipt_url: url,
                               receipt_public_id: public_id,
                             });
-                          })
+                          }, "receipt")
                         }
                       />
                     </label>
@@ -4018,9 +4190,13 @@ export default function AdminPortal() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-md transition-all cursor-pointer"
+                  disabled={savingPayment}
+                  className="px-6 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold shadow-md transition-all cursor-pointer flex items-center gap-2"
                 >
-                  Record Payment
+                  {savingPayment && (
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  )}
+                  <span>{savingPayment ? "Recording Payment..." : "Record Payment"}</span>
                 </button>
               </div>
             </form>
@@ -4038,22 +4214,20 @@ export default function AdminPortal() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className={`fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border backdrop-blur-md text-xs font-medium font-inter ${
-              toast.type === "error"
+            className={`fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border backdrop-blur-md text-xs font-medium font-inter ${toast.type === "error"
                 ? "bg-white/95 border-rose-200 text-rose-800 shadow-rose-900/10"
                 : toast.type === "info"
-                ? "bg-white/95 border-sky-200 text-[#00507D] shadow-sky-900/10"
-                : "bg-white/95 border-emerald-200 text-emerald-850 shadow-emerald-900/10"
-            }`}
+                  ? "bg-white/95 border-sky-200 text-[#00507D] shadow-sky-900/10"
+                  : "bg-white/95 border-emerald-200 text-emerald-850 shadow-emerald-900/10"
+              }`}
           >
             <div
-              className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
-                toast.type === "error"
+              className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${toast.type === "error"
                   ? "bg-rose-50 text-rose-600"
                   : toast.type === "info"
-                  ? "bg-[#f0f9ff] text-[#00507D]"
-                  : "bg-emerald-50 text-emerald-600"
-              }`}
+                    ? "bg-[#f0f9ff] text-[#00507D]"
+                    : "bg-emerald-50 text-emerald-600"
+                }`}
             >
               {toast.type === "error" ? (
                 <X className="w-4 h-4" />
@@ -4113,14 +4287,67 @@ export default function AdminPortal() {
                 </button>
                 <button
                   type="button"
-                  onClick={confirmModal.onConfirm}
-                  className="px-5 py-2 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
+                  disabled={isDeleting}
+                  onClick={async () => {
+                    setIsDeleting(true);
+                    try {
+                      await confirmModal.onConfirm();
+                    } finally {
+                      setIsDeleting(false);
+                    }
+                  }}
+                  className="px-5 py-2 rounded-full bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-semibold shadow-md transition-all cursor-pointer flex items-center gap-1.5"
                 >
-                  {confirmModal.confirmText}
+                  {isDeleting && (
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                  )}
+                  <span>{isDeleting ? "Deleting..." : (confirmModal.confirmText || "Delete")}</span>
                 </button>
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================= */}
+      {/* REAL-TIME PHOTO UPLOAD PROGRESS BADGE / CARD              */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {uploadingImage && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-6 right-6 z-[9999] bg-white/95 border border-[#00507D]/25 shadow-2xl rounded-2xl p-4 w-80 sm:w-88 backdrop-blur-md"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-lg bg-[#f0f9ff] text-[#00507D] flex items-center justify-center shrink-0">
+                  <div className="w-4 h-4 border-2 border-[#00507D] border-t-transparent rounded-full animate-spin" />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-manrope text-xs font-bold text-neutral-900 truncate">
+                    {uploadStatusText || "Uploading photo..."}
+                  </p>
+                  <p className="font-inter text-[10px] text-neutral-500">
+                    Secure upload to Cloudinary
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-xs font-extrabold text-[#00507D] shrink-0 ml-2">
+                {uploadProgress}%
+              </span>
+            </div>
+
+            {/* Smooth Animated Progress Bar */}
+            <div className="w-full bg-neutral-100 rounded-full h-2 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-[#00507D] via-[#0284c7] to-sky-400 h-full rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -4209,13 +4436,12 @@ export default function AdminPortal() {
                       return (
                         <div key={idx} className="pt-2.5 flex items-start gap-3">
                           <div
-                            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold ${
-                              isFirst
+                            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold ${isFirst
                                 ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                                 : isLast
-                                ? "bg-rose-500/20 text-rose-400 border border-rose-500/40"
-                                : "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
-                            }`}
+                                  ? "bg-rose-500/20 text-rose-400 border border-rose-500/40"
+                                  : "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
+                              }`}
                           >
                             {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
                           </div>
