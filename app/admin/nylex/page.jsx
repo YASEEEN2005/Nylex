@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Lock,
@@ -212,29 +212,7 @@ export default function AdminPortal() {
     notes: "",
   });
 
-  const checkSession = async () => {
-    try {
-      const res = await fetch("/api/auth/me");
-      if (res.ok) {
-        const data = await res.json();
-        if (data.authenticated) {
-          setAuthenticated(true);
-          fetchAllData();
-        }
-      }
-    } catch (err) {
-      console.error("Session check error", err);
-    } finally {
-      setAuthChecked(true);
-    }
-  };
-
-  // Check auth session on load
-  useEffect(() => {
-    checkSession();
-  }, []);
-
-  const fetchAllData = async () => {
+  const fetchAllData = useCallback(async () => {
     setLoadingData(true);
     try {
       const [resP, resC, resI, resE, resT, resS, resL] = await Promise.all([
@@ -280,7 +258,36 @@ export default function AdminPortal() {
     } finally {
       setLoadingData(false);
     }
-  };
+  }, []);
+
+  // Check auth session on load
+  useEffect(() => {
+    let isMounted = true;
+    const verifyAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok && isMounted) {
+          const data = await res.json();
+          if (data.authenticated) {
+            setAuthenticated(true);
+            fetchAllData();
+          }
+        }
+      } catch (err) {
+        console.error("Session check error", err);
+      } finally {
+        if (isMounted) {
+          setAuthChecked(true);
+        }
+      }
+    };
+
+    verifyAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fetchAllData]);
 
   const fetchAnalytics = async (
     range = analyticsRange,
@@ -987,20 +994,22 @@ export default function AdminPortal() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link
             href="/"
             target="_blank"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-100 hover:bg-[#f0f9ff] text-neutral-700 hover:text-[#00507D] border border-neutral-200/80 text-xs font-medium transition-colors"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-[#f0f9ff] text-neutral-700 hover:text-[#00507D] border border-neutral-200/80 text-[11px] sm:text-xs font-medium transition-colors cursor-pointer"
+            title="Open Live Website"
           >
-            <span>Live Website</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Live Website</span>
+            <span className="inline sm:hidden">Live Site</span>
+            <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </Link>
           <button
             onClick={handleLogout}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs font-semibold font-inter transition-all cursor-pointer"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-[11px] sm:text-xs font-semibold font-inter transition-all cursor-pointer"
           >
-            <LogOut className="w-3.5 h-3.5" />
+            <LogOut className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             <span>Sign Out</span>
           </button>
         </div>
@@ -1009,7 +1018,7 @@ export default function AdminPortal() {
       {/* Main Container */}
       <div className="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 gap-8">
         {/* Left Sidebar Navigation */}
-        <aside className="w-full md:w-60 shrink-0 flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+        <aside className="w-full md:w-60 shrink-0 flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0 scroll-smooth touch-pan-x scrollbar-thin scrollbar-thumb-neutral-200">
           {[
             { id: "overview", label: "Overview", icon: Layers },
             { id: "analytics", label: "Website Analytics", icon: BarChart3, count: analyticsData?.summary?.totalViews },
@@ -1207,99 +1216,28 @@ export default function AdminPortal() {
           )}
 
           {/* ========================================================= */}
-          {/* TAB: WEBSITE ANALYTICS & CYBERSECURITY TELEMETRY          */}
+          {/* TAB: WEBSITE ANALYTICS & TRAFFIC OVERVIEW (MINIMALIST THEME)*/}
           {/* ========================================================= */}
           {activeTab === "analytics" && (
-            <div className="bg-[#090d16] text-neutral-100 border border-emerald-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-8 font-inter">
-              {/* Top Cybersecurity Telemetry Banner */}
-              <div className="bg-[#0d1527]/90 border border-emerald-500/25 rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 backdrop-blur-md relative overflow-hidden">
-                {/* Subtle cyber background grid accent */}
-                <div className="absolute inset-0 bg-[radial-gradient(#00f5a0_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none" />
-
-                <div className="flex items-start sm:items-center gap-5 relative z-10">
-                  {/* Cartoon-Style Cybersecurity Mascot SVG Illustration */}
-                  <div className="relative shrink-0 hidden sm:block">
-                    <svg
-                      viewBox="0 0 88 88"
-                      className="w-20 h-20 drop-shadow-[0_0_15px_rgba(0,245,160,0.35)]"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      {/* Shield Outer Body */}
-                      <path
-                        d="M44 8L74 20V48C74 65 44 80 44 80C44 80 14 65 14 48V20L44 8Z"
-                        fill="#0b1728"
-                        stroke="#00f5a0"
-                        strokeWidth="2.5"
-                        strokeLinejoin="round"
-                      />
-                      {/* Shield Inner Inset */}
-                      <path
-                        d="M44 14L68 24V46C68 60 44 73 44 73C44 73 20 60 20 46V24L44 14Z"
-                        fill="#050a14"
-                        stroke="#00d2ff"
-                        strokeWidth="1.2"
-                        strokeDasharray="3 3"
-                      />
-                      {/* Cyber Visor / Glasses */}
-                      <rect
-                        x="28"
-                        y="34"
-                        width="32"
-                        height="14"
-                        rx="7"
-                        fill="#002b36"
-                        stroke="#00f5a0"
-                        strokeWidth="1.5"
-                      />
-                      <rect x="31" y="37" width="26" height="8" rx="4" fill="#00f5a0" fillOpacity="0.25" />
-                      {/* Terminal Glint in Visor */}
-                      <circle cx="36" cy="41" r="1.5" fill="#00f5a0" />
-                      <circle cx="52" cy="41" r="1.5" fill="#00d2ff" />
-                      <path d="M41 41H47" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-                      {/* Cute Antenna / Sensor with Pulsing Beacon */}
-                      <line x1="44" y1="8" x2="44" y2="2" stroke="#00d2ff" strokeWidth="2" strokeLinecap="round" />
-                      <circle cx="44" cy="2" r="3" fill="#00f5a0" className="animate-pulse" />
-                      {/* Cyber Circuit Accents */}
-                      <circle cx="34" cy="58" r="1.5" fill="#00d2ff" />
-                      <circle cx="54" cy="58" r="1.5" fill="#00d2ff" />
-                      <path d="M34 58H54" stroke="#00d2ff" strokeWidth="1" strokeDasharray="2 2" />
-                    </svg>
-                    <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[9px] border border-emerald-400/40">
-                      v2.0
-                    </span>
+            <div className="space-y-6 font-inter">
+              {/* Header Card */}
+              <div className="bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f0f9ff] text-[#00507D] text-xs font-semibold mb-2">
+                    <span className="w-2 h-2 rounded-full bg-[#00507D] animate-pulse" />
+                    <span>Live Website Analytics</span>
                   </div>
-
-                  <div>
-                    {/* Terminal Prompt Bar */}
-                    <div className="flex flex-wrap items-center gap-2 mb-2 font-mono text-xs">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        SYS.TELEMETRY: ONLINE
-                      </div>
-                      <span className="text-neutral-500 hidden sm:inline">•</span>
-                      <span className="text-neutral-400 text-[11px]">
-                        NODE: <span className="text-cyan-400 font-semibold">NEON_PG (US-EAST)</span>
-                      </span>
-                      <span className="text-neutral-500 hidden sm:inline">•</span>
-                      <span className="text-neutral-400 text-[11px]">
-                        PRIVACY: <span className="text-emerald-300 font-semibold">RAW_IP_PURGED</span>
-                      </span>
-                    </div>
-
-                    <h2 className="font-manrope text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                      Website Analytics & Security Telemetry
-                    </h2>
-                    <p className="mt-1 font-mono text-xs sm:text-sm text-neutral-400 flex items-center gap-2">
-                      <Terminal className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span>root@nylex:~$ privacy-compliant audience attribution & visitor journeys</span>
-                    </p>
-                  </div>
+                  <h2 className="font-manrope text-2xl font-bold text-neutral-950">
+                    Website Analytics & Audience Insights
+                  </h2>
+                  <p className="font-inter text-xs sm:text-sm text-neutral-500 mt-1">
+                    Track visitor volume, audience sources, page performance, and device metrics in real-time
+                  </p>
                 </div>
 
-                {/* Cyber Range Filters */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 relative z-10">
-                  <div className="inline-flex items-center p-1 bg-[#070b14] rounded-2xl border border-emerald-500/30 text-xs font-mono flex-wrap gap-1">
+                {/* Range Filter Controls */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="inline-flex items-center p-1 bg-neutral-100 rounded-2xl border border-neutral-200 text-xs font-inter flex-wrap gap-1">
                     {[
                       { key: "today", label: "Today" },
                       { key: "yesterday", label: "Yesterday" },
@@ -1318,8 +1256,8 @@ export default function AdminPortal() {
                         }}
                         className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer font-medium ${
                           analyticsRange === item.key
-                            ? "bg-emerald-500 text-neutral-950 font-bold shadow-[0_0_12px_rgba(0,245,160,0.4)]"
-                            : "text-neutral-400 hover:text-white hover:bg-neutral-800/60"
+                            ? "bg-[#00507D] text-white font-semibold shadow-xs"
+                            : "text-neutral-600 hover:text-neutral-950 hover:bg-white"
                         }`}
                       >
                         {item.label}
@@ -1330,146 +1268,157 @@ export default function AdminPortal() {
                   <button
                     onClick={() => fetchAnalytics(analyticsRange)}
                     disabled={analyticsLoading}
-                    className="p-2.5 rounded-xl border border-emerald-500/30 bg-[#070b14] hover:bg-emerald-500/10 text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer shadow-xs disabled:opacity-50"
-                    title="Refresh telemetry stream"
+                    className="p-2.5 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 text-neutral-600 hover:text-[#00507D] transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                    title="Refresh analytics data"
                   >
-                    <RefreshCw className={`w-4 h-4 ${analyticsLoading ? "animate-spin text-cyan-400" : ""}`} />
+                    <RefreshCw className={`w-4 h-4 ${analyticsLoading ? "animate-spin text-[#00507D]" : ""}`} />
                   </button>
                 </div>
               </div>
 
               {/* Custom Date Inputs if selected */}
               {analyticsRange === "custom" && (
-                <div className="p-4 rounded-2xl bg-[#0d1527]/90 border border-emerald-500/30 shadow-md flex flex-wrap items-center gap-4 text-xs font-mono">
+                <div className="p-5 rounded-3xl bg-white border border-neutral-200/80 shadow-xs flex flex-wrap items-center gap-4 text-xs font-inter">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-emerald-400 uppercase text-[11px]">[START_DATE]:</span>
+                    <span className="font-semibold text-neutral-700">Start Date:</span>
                     <input
                       type="date"
                       value={customRange.startDate}
                       onChange={(e) => setCustomRange({ ...customRange, startDate: e.target.value })}
-                      className="px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#070b14] text-white focus:outline-none focus:border-emerald-400"
+                      className="px-3 py-1.5 rounded-xl border border-neutral-200 bg-white text-neutral-800 focus:outline-none focus:border-[#00507D]"
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-cyan-400 uppercase text-[11px]">[END_DATE]:</span>
+                    <span className="font-semibold text-neutral-700">End Date:</span>
                     <input
                       type="date"
                       value={customRange.endDate}
                       onChange={(e) => setCustomRange({ ...customRange, endDate: e.target.value })}
-                      className="px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-[#070b14] text-white focus:outline-none focus:border-cyan-400"
+                      className="px-3 py-1.5 rounded-xl border border-neutral-200 bg-white text-neutral-800 focus:outline-none focus:border-[#00507D]"
                     />
                   </div>
                   <button
                     onClick={() => fetchAnalytics("custom", customRange.startDate, customRange.endDate)}
                     disabled={!customRange.startDate || !customRange.endDate || analyticsLoading}
-                    className="px-4 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold transition-all cursor-pointer disabled:opacity-50 shadow-[0_0_12px_rgba(0,245,160,0.3)]"
+                    className="px-4 py-1.5 rounded-xl bg-[#00507D] hover:bg-[#003d5f] text-white font-semibold transition-all cursor-pointer disabled:opacity-50 shadow-xs"
                   >
-                    Apply Filter
+                    Apply Range
                   </button>
                 </div>
               )}
 
-              {/* 5 Top Cyber KPI Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-2xl p-5 shadow-lg hover:border-emerald-400/40 transition-all backdrop-blur-md">
-                  <span className="font-mono text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>Page Views</span>
-                    <Eye className="w-3.5 h-3.5 text-cyan-400" />
-                  </span>
-                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-white mt-1">
+              {/* Top 5 Metric Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                {/* 1. Page Views */}
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-inter text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                      Page Views
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-[#f0f9ff] text-[#00507D] flex items-center justify-center">
+                      <Eye className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-neutral-950">
                     {analyticsData?.summary?.totalViews?.toLocaleString() || "0"}
                   </p>
-                  <div className="flex items-center justify-between text-xs mt-2 font-mono">
-                    <span className="text-emerald-400 font-semibold">
-                      +{analyticsData?.summary?.todayViews || 0} today
-                    </span>
-                    <span className="text-[10px] text-neutral-500">[LOGS]</span>
-                  </div>
+                  <span className="inline-block text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full mt-2">
+                    +{analyticsData?.summary?.todayViews || 0} today
+                  </span>
                 </div>
 
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-2xl p-5 shadow-lg hover:border-emerald-400/40 transition-all backdrop-blur-md">
-                  <span className="font-mono text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>Unique Visitors</span>
-                    <Users className="w-3.5 h-3.5 text-emerald-400" />
-                  </span>
-                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1">
+                {/* 2. Unique Visitors */}
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-inter text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                      Unique Visitors
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                      <Users className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-neutral-950">
                     {analyticsData?.summary?.uniqueVisitors?.toLocaleString() || "0"}
                   </p>
-                  <div className="flex items-center justify-between text-xs mt-2 font-mono">
-                    <span className="text-neutral-400">
-                      {analyticsData?.summary?.totalSessions || 0} sessions
-                    </span>
-                    <span className="text-[10px] text-neutral-500">[ANON_VID]</span>
-                  </div>
+                  <span className="inline-block text-[11px] font-medium text-neutral-500 mt-2">
+                    {analyticsData?.summary?.totalSessions || 0} sessions
+                  </span>
                 </div>
 
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-2xl p-5 shadow-lg hover:border-emerald-400/40 transition-all backdrop-blur-md">
-                  <span className="font-mono text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>New Visitors</span>
-                    <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                  </span>
-                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-cyan-400 mt-1">
+                {/* 3. New Visitors */}
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-inter text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                      New Visitors
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-neutral-950">
                     {analyticsData?.summary?.newVisitors?.toLocaleString() || "0"}
                   </p>
-                  <div className="flex items-center justify-between text-xs mt-2 font-mono">
-                    <span className="text-neutral-400">
-                      {analyticsData?.summary?.returningVisitors || 0} returning
-                    </span>
-                    <span className="text-[10px] text-neutral-500">[RATIO]</span>
-                  </div>
+                  <span className="inline-block text-[11px] font-medium text-neutral-500 mt-2">
+                    {analyticsData?.summary?.returningVisitors || 0} returning
+                  </span>
                 </div>
 
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-2xl p-5 shadow-lg hover:border-emerald-400/40 transition-all backdrop-blur-md">
-                  <span className="font-mono text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>Yesterday</span>
-                    <Clock className="w-3.5 h-3.5 text-neutral-400" />
-                  </span>
-                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                {/* 4. Yesterday Baseline */}
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-5 shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-inter text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                      Yesterday
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-neutral-100 text-neutral-600 flex items-center justify-center">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-neutral-950">
                     {analyticsData?.summary?.yesterdayViews?.toLocaleString() || "0"}
                   </p>
-                  <div className="flex items-center justify-between text-xs mt-2 font-mono">
-                    <span className="text-neutral-400">24h prior baseline</span>
-                    <span className="text-[10px] text-neutral-500">[BASELINE]</span>
-                  </div>
+                  <span className="inline-block text-[11px] font-medium text-neutral-500 mt-2">
+                    24h prior baseline
+                  </span>
                 </div>
 
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-2xl p-5 shadow-lg hover:border-emerald-400/40 transition-all backdrop-blur-md">
-                  <span className="font-mono text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>Avg Duration</span>
-                    <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                  </span>
-                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                {/* 5. Avg Session Duration */}
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-5 shadow-xs col-span-2 sm:col-span-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-inter text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                      Avg Duration
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                      <Activity className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="font-manrope text-2xl sm:text-3xl font-extrabold text-neutral-950">
                     {formatDuration(analyticsData?.summary?.avgDurationSeconds)}
                   </p>
-                  <div className="flex items-center justify-between text-xs mt-2 font-mono">
-                    <span className="text-emerald-400">Active telemetry</span>
-                    <span className="text-[10px] text-neutral-500">[PULSE]</span>
-                  </div>
+                  <span className="inline-block text-[11px] font-medium text-neutral-500 mt-2">
+                    Per active session
+                  </span>
                 </div>
               </div>
 
-              {/* Traffic Timeline Chart (Dark Cyberpunk SVG Area Chart) */}
-              <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-8 shadow-xl space-y-4">
+              {/* Traffic Timeline Chart (Clean Luxury Minimalist Style) */}
+              <div className="bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                      <h3 className="font-manrope text-lg font-bold text-white">
-                        Traffic Telemetry Trend
-                      </h3>
-                    </div>
-                    <p className="font-mono text-xs text-neutral-400 mt-0.5">
-                      [QUERY_WINDOW: {analyticsRange.toUpperCase()}] Daily pageviews & unique browser volume
+                    <h3 className="font-manrope text-lg font-bold text-neutral-950">
+                      Traffic Trend
+                    </h3>
+                    <p className="font-inter text-xs text-neutral-500 mt-0.5">
+                      Daily page views and unique visitors in selected period
                     </p>
                   </div>
-                  <div className="flex items-center gap-4 text-xs font-mono">
+                  <div className="flex items-center gap-4 text-xs font-inter">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-md bg-cyan-400 shadow-[0_0_8px_rgba(0,210,255,0.6)]" />
-                      <span className="text-neutral-300">Page Views</span>
+                      <span className="w-3 h-3 rounded-md bg-[#00507D]" />
+                      <span className="text-neutral-700 font-medium">Page Views</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-md bg-emerald-400 shadow-[0_0_8px_rgba(0,245,160,0.6)]" />
-                      <span className="text-neutral-300">Unique Visitors</span>
+                      <span className="w-3 h-3 rounded-md bg-sky-400" />
+                      <span className="text-neutral-700 font-medium">Unique Visitors</span>
                     </div>
                   </div>
                 </div>
@@ -1503,16 +1452,16 @@ export default function AdminPortal() {
                           <svg
                             viewBox={`0 0 ${chartW} ${chartH}`}
                             className="w-full h-52 overflow-visible"
-                            aria-label="Cybersecurity Traffic Trend Chart"
+                            aria-label="Traffic Trend Chart"
                           >
                             <defs>
-                              <linearGradient id="cyberViewsGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#00d2ff" stopOpacity="0.3" />
-                                <stop offset="100%" stopColor="#00d2ff" stopOpacity="0.0" />
+                              <linearGradient id="nylexViewsGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#00507D" stopOpacity="0.18" />
+                                <stop offset="100%" stopColor="#00507D" stopOpacity="0.0" />
                               </linearGradient>
                             </defs>
 
-                            {/* Horizontal Dark Grid lines */}
+                            {/* Horizontal Grid lines */}
                             {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
                               const y = chartH - padB - ratio * usableH;
                               const val = Math.round(ratio * maxViews);
@@ -1523,14 +1472,14 @@ export default function AdminPortal() {
                                     y1={y}
                                     x2={chartW - padR}
                                     y2={y}
-                                    stroke="#1e293b"
+                                    stroke="#e2e8f0"
                                     strokeDasharray="4 4"
                                   />
                                   <text
                                     x={padL - 8}
                                     y={y + 3}
                                     textAnchor="end"
-                                    className="text-[10px] fill-neutral-500 font-mono"
+                                    className="text-[10px] fill-neutral-400 font-mono"
                                   >
                                     {val}
                                   </text>
@@ -1539,12 +1488,12 @@ export default function AdminPortal() {
                             })}
 
                             {/* Shaded Area for Views */}
-                            <path d={areaPath} fill="url(#cyberViewsGradient)" />
+                            <path d={areaPath} fill="url(#nylexViewsGradient)" />
 
                             {/* Views Line */}
                             <polyline
                               fill="none"
-                              stroke="#00d2ff"
+                              stroke="#00507D"
                               strokeWidth="2.5"
                               strokeLinecap="round"
                               strokeLinejoin="round"
@@ -1554,9 +1503,9 @@ export default function AdminPortal() {
                             {/* Visitors Line */}
                             <polyline
                               fill="none"
-                              stroke="#00f5a0"
+                              stroke="#38bdf8"
                               strokeWidth="2"
-                              strokeDasharray="5 3"
+                              strokeDasharray="4 4"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               points={visitorsPoints}
@@ -1574,9 +1523,9 @@ export default function AdminPortal() {
                                     cx={x}
                                     cy={yViews}
                                     r="4"
-                                    fill="#00d2ff"
-                                    stroke="#070b14"
-                                    strokeWidth="2"
+                                    fill="#ffffff"
+                                    stroke="#00507D"
+                                    strokeWidth="2.5"
                                     className="cursor-pointer transition-all hover:r-6"
                                   >
                                     <title>{`${d.date}: ${d.views} views, ${d.visitors} unique visitors`}</title>
@@ -1586,7 +1535,7 @@ export default function AdminPortal() {
                                       x={x}
                                       y={chartH - 8}
                                       textAnchor="middle"
-                                      className="text-[10px] fill-neutral-400 font-mono"
+                                      className="text-[10px] fill-neutral-500 font-mono"
                                     >
                                       {d.date.slice(5)}
                                     </text>
@@ -1600,13 +1549,13 @@ export default function AdminPortal() {
                     </div>
                   </div>
                 ) : (
-                  <div className="py-12 flex flex-col items-center justify-center text-center text-neutral-500 font-mono">
-                    <BarChart3 className="w-10 h-10 text-neutral-600 mb-2" />
-                    <p className="text-sm font-semibold text-neutral-300">
-                      [TELEMETRY_STATUS: NO_DATA_IN_TIMEFRAME]
+                  <div className="py-12 flex flex-col items-center justify-center text-center text-neutral-400 font-inter">
+                    <BarChart3 className="w-10 h-10 text-neutral-300 mb-2" />
+                    <p className="text-sm font-semibold text-neutral-700">
+                      No traffic data in this timeframe
                     </p>
                     <p className="text-xs text-neutral-500 mt-1 max-w-sm">
-                      Visit your live website to register telemetry beacons in real time.
+                      Visit your live website to record analytics in real time.
                     </p>
                   </div>
                 )}
@@ -1615,19 +1564,18 @@ export default function AdminPortal() {
               {/* Grid 1: Pages Performance & Navigation Journeys */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Most Visited Pages */}
-                <div className="lg:col-span-7 bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                <div className="lg:col-span-7 bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
                     <div>
-                      <h3 className="font-manrope text-base font-bold text-white flex items-center gap-2">
-                        <Terminal className="w-4 h-4 text-emerald-400" />
-                        Most Visited Pages
+                      <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center gap-2">
+                        <span>Most Visited Pages</span>
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400">
-                        Top destination paths ranked by view frequency
+                      <p className="font-inter text-xs text-neutral-500">
+                        Top website paths ranked by view frequency
                       </p>
                     </div>
-                    <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">
-                      {analyticsData?.topPages?.length || 0} Paths
+                    <span className="font-mono text-[10px] px-2.5 py-0.5 rounded-full bg-neutral-100 text-neutral-700 font-semibold border border-neutral-200">
+                      {analyticsData?.topPages?.length || 0} Pages
                     </span>
                   </div>
 
@@ -1640,22 +1588,22 @@ export default function AdminPortal() {
                           <div key={pg.path + idx} className="space-y-1.5">
                             <div className="flex items-center justify-between text-xs">
                               <div className="flex items-center gap-2 min-w-0">
-                                <span className="font-mono text-[11px] font-bold text-cyan-400 w-6">
-                                  [{idx + 1 < 10 ? `0${idx + 1}` : idx + 1}]
+                                <span className="font-mono text-[11px] font-bold text-[#00507D] w-5">
+                                  {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
                                 </span>
-                                <span className="font-mono text-xs font-semibold text-neutral-200 truncate">
+                                <span className="font-mono text-xs font-semibold text-neutral-800 truncate">
                                   {pg.path}
                                 </span>
                               </div>
-                              <div className="flex items-center gap-3 shrink-0 font-mono text-[11px]">
-                                <span className="text-neutral-400">{pg.visitors} visitors</span>
-                                <span className="font-bold text-emerald-400">{pg.views} views</span>
+                              <div className="flex items-center gap-3 shrink-0 font-inter text-[11px]">
+                                <span className="text-neutral-500">{pg.visitors} visitors</span>
+                                <span className="font-bold text-[#00507D]">{pg.views} views</span>
                               </div>
                             </div>
-                            <div className="h-1.5 w-full bg-[#070b14] rounded-full overflow-hidden border border-neutral-800">
+                            <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full transition-all duration-500"
-                                style={{ width: `${Math.max(pct, 4)}%` }}
+                                className="h-full bg-[#00507D] rounded-full transition-all duration-500"
+                                style={{ width: `${Math.max(pct, 5)}%` }}
                               />
                             </div>
                           </div>
@@ -1663,29 +1611,28 @@ export default function AdminPortal() {
                       })}
                     </div>
                   ) : (
-                    <p className="text-xs font-mono text-neutral-500 py-6 text-center">[NO_PAGE_RECORDS]</p>
+                    <p className="text-xs font-inter text-neutral-400 py-6 text-center">No page records yet</p>
                   )}
                 </div>
 
                 {/* Landing vs Exit Pages */}
-                <div className="lg:col-span-5 bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                <div className="lg:col-span-5 bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
                     <div>
-                      <h3 className="font-manrope text-base font-bold text-white flex items-center gap-2">
-                        <Navigation className="w-4 h-4 text-cyan-400" />
+                      <h3 className="font-manrope text-base font-bold text-neutral-950">
                         Session Journeys
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400">
+                      <p className="font-inter text-xs text-neutral-500">
                         Top entry points and departure exit paths
                       </p>
                     </div>
-                    <div className="flex items-center p-0.5 bg-[#070b14] rounded-xl text-[11px] font-mono border border-emerald-500/20">
+                    <div className="flex items-center p-0.5 bg-neutral-100 rounded-xl text-xs font-inter border border-neutral-200">
                       <button
                         onClick={() => setPagesSubTab("landing")}
                         className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                           pagesSubTab === "landing"
-                            ? "bg-emerald-500 text-neutral-950 font-bold"
-                            : "text-neutral-400 hover:text-white"
+                            ? "bg-[#00507D] text-white font-semibold"
+                            : "text-neutral-600 hover:text-neutral-900"
                         }`}
                       >
                         Landing
@@ -1694,8 +1641,8 @@ export default function AdminPortal() {
                         onClick={() => setPagesSubTab("exit")}
                         className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
                           pagesSubTab === "exit"
-                            ? "bg-emerald-500 text-neutral-950 font-bold"
-                            : "text-neutral-400 hover:text-white"
+                            ? "bg-[#00507D] text-white font-semibold"
+                            : "text-neutral-600 hover:text-neutral-900"
                         }`}
                       >
                         Exit
@@ -1703,15 +1650,15 @@ export default function AdminPortal() {
                     </div>
                   </div>
 
-                  <div className="space-y-2.5 pt-1">
+                  <div className="space-y-2 pt-1">
                     {(pagesSubTab === "landing" ? analyticsData?.landingPages : analyticsData?.exitPages)?.map(
                       (item, idx) => (
                         <div
                           key={item.path + idx}
-                          className="flex items-center justify-between p-2.5 rounded-xl bg-[#070b14] border border-neutral-800 text-xs font-mono"
+                          className="flex items-center justify-between p-2.5 rounded-xl bg-neutral-50 border border-neutral-100 text-xs font-inter"
                         >
-                          <span className="text-neutral-200 truncate">{item.path}</span>
-                          <span className="text-[11px] font-bold text-cyan-400 shrink-0 ml-2">
+                          <span className="text-neutral-700 font-mono text-[11px] truncate">{item.path}</span>
+                          <span className="text-xs font-bold text-[#00507D] shrink-0 ml-2">
                             {item.count} sessions
                           </span>
                         </div>
@@ -1724,18 +1671,17 @@ export default function AdminPortal() {
               {/* Grid 2: Acquisition Sources & Referrers */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Traffic Channels */}
-                <div className="lg:col-span-6 bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                <div className="lg:col-span-6 bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
                     <div>
-                      <h3 className="font-manrope text-base font-bold text-white flex items-center gap-2">
-                        <Share2 className="w-4 h-4 text-emerald-400" />
-                        Acquisition Channels
+                      <h3 className="font-manrope text-base font-bold text-neutral-950">
+                        Traffic Channels
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400">
-                        Visitor origin classification (Search, Social, Direct, Paid)
+                      <p className="font-inter text-xs text-neutral-500">
+                        Visitor origin classification (Direct, Social, Search, Referral)
                       </p>
                     </div>
-                    <Radio className="w-4 h-4 text-cyan-400" />
+                    <Share2 className="w-4 h-4 text-neutral-400" />
                   </div>
 
                   {analyticsData?.trafficSources && analyticsData.trafficSources.length > 0 ? (
@@ -1745,17 +1691,17 @@ export default function AdminPortal() {
                         const pct = Math.round((src.count / total) * 100);
                         return (
                           <div key={src.source} className="space-y-1.5">
-                            <div className="flex items-center justify-between text-xs font-mono">
-                              <span className="font-semibold text-neutral-200">
+                            <div className="flex items-center justify-between text-xs font-inter">
+                              <span className="font-semibold text-neutral-800">
                                 {src.source}
                               </span>
-                              <span className="font-bold text-cyan-400">
+                              <span className="font-bold text-[#00507D]">
                                 {src.count} ({pct}%)
                               </span>
                             </div>
-                            <div className="h-1.5 w-full bg-[#070b14] rounded-full overflow-hidden border border-neutral-800">
+                            <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full"
+                                className="h-full bg-gradient-to-r from-[#00507D] to-sky-500 rounded-full"
                                 style={{ width: `${Math.max(pct, 5)}%` }}
                               />
                             </div>
@@ -1764,22 +1710,22 @@ export default function AdminPortal() {
                       })}
                     </div>
                   ) : (
-                    <p className="text-xs font-mono text-neutral-500 py-6 text-center">[NO_ATTRIBUTION_DATA]</p>
+                    <p className="text-xs font-inter text-neutral-400 py-6 text-center">No traffic source data</p>
                   )}
                 </div>
 
                 {/* Top Referring Domains */}
-                <div className="lg:col-span-6 bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                <div className="lg:col-span-6 bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
                     <div>
-                      <h3 className="font-manrope text-base font-bold text-white flex items-center gap-2">
-                        <Globe className="w-4 h-4 text-cyan-400" />
-                        Referring Websites
+                      <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center gap-2">
+                        <span>Referring Websites</span>
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400">
+                      <p className="font-inter text-xs text-neutral-500">
                         External hosts delivering incoming traffic
                       </p>
                     </div>
+                    <Globe className="w-4 h-4 text-neutral-400" />
                   </div>
 
                   {analyticsData?.referrers && analyticsData.referrers.length > 0 ? (
@@ -1787,22 +1733,22 @@ export default function AdminPortal() {
                       {analyticsData.referrers.map((ref) => (
                         <div
                           key={ref.domain}
-                          className="flex items-center justify-between p-3 rounded-2xl bg-[#070b14] border border-neutral-800 text-xs font-mono"
+                          className="flex items-center justify-between p-3 rounded-2xl bg-neutral-50 border border-neutral-100 text-xs font-inter"
                         >
                           <div className="flex items-center gap-2 min-w-0">
-                            <ArrowUpRight className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                            <span className="text-neutral-200 truncate">{ref.domain}</span>
+                            <ArrowUpRight className="w-3.5 h-3.5 text-[#00507D] shrink-0" />
+                            <span className="text-neutral-800 font-medium truncate">{ref.domain}</span>
                           </div>
-                          <span className="font-bold text-cyan-400 ml-2 shrink-0">
+                          <span className="font-bold text-[#00507D] ml-2 shrink-0">
                             {ref.count} visits
                           </span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="py-8 text-center text-xs font-mono text-neutral-500">
-                      <p>[ORIGIN: DIRECT_NAVIGATION]</p>
-                      <p className="text-[11px] text-neutral-600 mt-1">External referral hosts appear automatically.</p>
+                    <div className="py-8 text-center text-xs font-inter text-neutral-400">
+                      <p>Direct Navigation</p>
+                      <p className="text-[11px] text-neutral-400 mt-1">External referral websites appear automatically as visitors arrive.</p>
                     </div>
                   )}
                 </div>
@@ -1811,13 +1757,12 @@ export default function AdminPortal() {
               {/* Grid 3: Devices, Browsers & Operating Systems */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Devices */}
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 shadow-xl space-y-4">
-                  <h3 className="font-manrope text-base font-bold text-white flex items-center justify-between">
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-6 shadow-xs space-y-4">
+                  <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                      <Monitor className="w-4 h-4 text-emerald-400" />
+                      <Monitor className="w-4 h-4 text-[#00507D]" />
                       Device Category
                     </span>
-                    <span className="font-mono text-[10px] text-neutral-500">[PLATFORM]</span>
                   </h3>
                   <div className="space-y-3 pt-2">
                     {analyticsData?.devices?.map((dev) => {
@@ -1830,16 +1775,16 @@ export default function AdminPortal() {
                           ? Tablet
                           : Monitor;
                       return (
-                        <div key={dev.device} className="flex items-center justify-between text-xs font-mono">
+                        <div key={dev.device} className="flex items-center justify-between text-xs font-inter">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-xl bg-[#f0f9ff] text-[#00507D] border border-sky-100 flex items-center justify-center">
                               <Icon className="w-4 h-4" />
                             </div>
-                            <span className="capitalize text-neutral-200">
+                            <span className="capitalize text-neutral-800 font-medium">
                               {dev.device}
                             </span>
                           </div>
-                          <span className="font-bold text-emerald-400">
+                          <span className="font-bold text-neutral-900">
                             {pct}% ({dev.count})
                           </span>
                         </div>
@@ -1849,13 +1794,12 @@ export default function AdminPortal() {
                 </div>
 
                 {/* Browsers */}
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 shadow-xl space-y-4">
-                  <h3 className="font-manrope text-base font-bold text-white flex items-center justify-between">
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-6 shadow-xs space-y-4">
+                  <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                      <Compass className="w-4 h-4 text-cyan-400" />
+                      <Compass className="w-4 h-4 text-sky-600" />
                       Web Browsers
                     </span>
-                    <span className="font-mono text-[10px] text-neutral-500">[CLIENT]</span>
                   </h3>
                   <div className="space-y-3 pt-2">
                     {analyticsData?.browsers?.map((br) => {
@@ -1863,12 +1807,12 @@ export default function AdminPortal() {
                       const pct = Math.round((br.count / total) * 100);
                       return (
                         <div key={br.browser} className="space-y-1">
-                          <div className="flex items-center justify-between text-xs font-mono">
-                            <span className="text-neutral-200">{br.browser}</span>
-                            <span className="font-bold text-cyan-400">{br.count}</span>
+                          <div className="flex items-center justify-between text-xs font-inter">
+                            <span className="text-neutral-800 font-medium">{br.browser}</span>
+                            <span className="font-bold text-[#00507D]">{br.count}</span>
                           </div>
-                          <div className="h-1.5 w-full bg-[#070b14] rounded-full overflow-hidden border border-neutral-800">
-                            <div className="h-full bg-cyan-400 rounded-full" style={{ width: `${pct}%` }} />
+                          <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-sky-500 rounded-full" style={{ width: `${pct}%` }} />
                           </div>
                         </div>
                       );
@@ -1877,13 +1821,12 @@ export default function AdminPortal() {
                 </div>
 
                 {/* Operating Systems */}
-                <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 shadow-xl space-y-4">
-                  <h3 className="font-manrope text-base font-bold text-white flex items-center justify-between">
+                <div className="bg-white border border-neutral-200/80 rounded-3xl p-6 shadow-xs space-y-4">
+                  <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-emerald-400" />
+                      <Cpu className="w-4 h-4 text-emerald-600" />
                       Operating Systems
                     </span>
-                    <span className="font-mono text-[10px] text-neutral-500">[KERNEL]</span>
                   </h3>
                   <div className="space-y-3 pt-2">
                     {analyticsData?.operatingSystems?.map((o) => {
@@ -1891,12 +1834,12 @@ export default function AdminPortal() {
                       const pct = Math.round((o.count / total) * 100);
                       return (
                         <div key={o.os} className="space-y-1">
-                          <div className="flex items-center justify-between text-xs font-mono">
-                            <span className="text-neutral-200">{o.os}</span>
-                            <span className="font-bold text-emerald-400">{o.count}</span>
+                          <div className="flex items-center justify-between text-xs font-inter">
+                            <span className="text-neutral-800 font-medium">{o.os}</span>
+                            <span className="font-bold text-emerald-700">{o.count}</span>
                           </div>
-                          <div className="h-1.5 w-full bg-[#070b14] rounded-full overflow-hidden border border-neutral-800">
-                            <div className="h-full bg-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
+                          <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${pct}%` }} />
                           </div>
                         </div>
                       );
@@ -1908,110 +1851,105 @@ export default function AdminPortal() {
               {/* Grid 4: Geographics & Live Visitor Stream */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Geographic Locations */}
-                <div className="lg:col-span-5 bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                <div className="lg:col-span-5 bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
                     <div>
-                      <h3 className="font-manrope text-base font-bold text-white flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-cyan-400" />
+                      <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-[#00507D]" />
                         Visitor Locations
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400">
-                        Approximate country & city telemetry
+                      <p className="font-inter text-xs text-neutral-500">
+                        Country and city visitor distribution
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-2.5 pt-1">
+                  <div className="space-y-2 pt-1">
                     {analyticsData?.countries?.map((c) => (
                       <div
                         key={c.country}
-                        className="flex items-center justify-between p-2.5 rounded-xl bg-[#070b14] border border-neutral-800 text-xs font-mono"
+                        className="flex items-center justify-between p-2.5 rounded-xl bg-neutral-50 border border-neutral-100 text-xs font-inter"
                       >
                         <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-[10px] font-bold text-emerald-400">
+                          <span className="w-6 h-6 rounded-md bg-neutral-200/80 text-neutral-700 flex items-center justify-center text-[10px] font-bold font-mono">
                             {c.country_code || "IN"}
                           </span>
-                          <span className="text-neutral-200">{c.country}</span>
+                          <span className="text-neutral-800 font-medium">{c.country}</span>
                         </div>
-                        <span className="font-bold text-emerald-400">{c.count} visits</span>
+                        <span className="font-bold text-[#00507D]">{c.count} visits</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-[11px] font-mono text-emerald-300 flex items-start gap-2.5">
-                    <Shield className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+                  <div className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/60 text-[11px] font-inter text-neutral-500 flex items-start gap-2.5">
+                    <Shield className="w-4 h-4 shrink-0 text-[#00507D] mt-0.5" />
                     <span>
-                      <b>Zero-IP Retention Guarantee:</b> Locations derived server-side via trusted edge proxy headers. Raw IP addresses are immediately purged and never stored in Neon PostgreSQL.
+                      <b>Privacy-Compliant Analytics:</b> Location data is determined via cloud edge proxy headers without storing personal IP addresses.
                     </span>
                   </div>
                 </div>
 
                 {/* Live Real-time Activity Stream */}
-                <div className="lg:col-span-7 bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                <div className="lg:col-span-7 bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
                     <div>
-                      <h3 className="font-manrope text-base font-bold text-white flex items-center gap-2">
-                        <Terminal className="w-4 h-4 text-emerald-400" />
-                        Live Inbound Beacon Stream
+                      <h3 className="font-manrope text-base font-bold text-neutral-950 flex items-center gap-2">
+                        <Activity className="w-4 h-4 text-emerald-600" />
+                        Live Visitor Activity Stream
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400">
-                        Latest incoming visits across the studio
+                      <p className="font-inter text-xs text-neutral-500">
+                        Latest incoming pageviews across the website
                       </p>
                     </div>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-mono font-semibold border border-emerald-500/30">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Live Sync
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-inter font-semibold border border-emerald-200">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Live Stream
                     </span>
                   </div>
 
                   {analyticsData?.recentEvents && analyticsData.recentEvents.length > 0 ? (
-                    <div className="divide-y divide-neutral-800/80 overflow-x-auto max-h-[380px] scrollbar-none font-mono">
+                    <div className="divide-y divide-neutral-100 overflow-x-auto max-h-[380px] scrollbar-none font-inter">
                       {analyticsData.recentEvents.map((evt) => (
                         <div key={evt.id} className="py-2.5 flex items-center justify-between gap-3 text-xs">
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <span className="text-[10px] text-neutral-500 shrink-0">
+                            <span className="text-[10px] text-neutral-400 font-mono shrink-0">
                               {new Date(evt.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </span>
-                            <span className="font-semibold text-neutral-200 truncate max-w-[150px] sm:max-w-[200px]">
+                            <span className="font-semibold text-neutral-800 font-mono truncate max-w-[150px] sm:max-w-[200px]">
                               {evt.path}
                             </span>
-                            <span className="hidden sm:inline-flex px-2 py-0.5 rounded-md bg-[#070b14] border border-cyan-500/30 text-cyan-400 text-[10px]">
+                            <span className="hidden sm:inline-flex px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-600 text-[10px]">
                               {evt.traffic_source || "Direct"}
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-2 shrink-0 text-[11px] text-neutral-400">
+                          <div className="flex items-center gap-2 shrink-0 text-[11px] text-neutral-500">
                             <span className="capitalize">{evt.device_type}</span>
                             <span>•</span>
-                            <span className="font-semibold text-emerald-400">{evt.country || "IN"}</span>
+                            <span className="font-semibold text-neutral-700">{evt.country || "India"}</span>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs font-mono text-neutral-500 py-8 text-center">[NO_INBOUND_BEACONS]</p>
+                    <p className="text-xs font-inter text-neutral-400 py-8 text-center">No visitor events recorded yet</p>
                   )}
                 </div>
               </div>
 
-              {/* ========================================================= */}
-              {/* SECTION: INDIVIDUAL VISITOR ACTIVITY MATRIX (TABLE)       */}
-              {/* ========================================================= */}
-              <div className="bg-[#0d1527]/90 border border-emerald-500/20 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-800">
+              {/* Individual Visitor Activity Sessions (Table) */}
+              <div className="bg-white border border-neutral-200/80 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <Footprints className="w-4 h-4 text-emerald-400" />
-                      <h3 className="font-manrope text-lg font-bold text-white">
-                        Individual Visitor Activity Matrix
-                      </h3>
-                    </div>
-                    <p className="font-mono text-xs text-neutral-400 mt-1">
-                      Granular session logs with sequential path journey traces. Anonymous browser tokens (VID) only.
+                    <h3 className="font-manrope text-lg font-bold text-neutral-950">
+                      Individual Visitor Sessions
+                    </h3>
+                    <p className="font-inter text-xs text-neutral-500 mt-1">
+                      Detailed session history and sequential navigation journeys
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-[11px] px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                    <span className="font-inter text-xs px-3 py-1 rounded-full bg-[#f0f9ff] text-[#00507D] border border-sky-100 font-medium">
                       {analyticsData?.visitorSessions?.length || 0} Sessions Logged
                     </span>
                   </div>
@@ -2027,96 +1965,86 @@ export default function AdminPortal() {
 
                     return (
                       <div className="space-y-4">
+                        <div className="sm:hidden px-2 text-[11px] font-inter text-neutral-500">
+                          ← Swipe horizontally to see all columns →
+                        </div>
                         <div className="overflow-x-auto">
-                          <table className="w-full text-left text-xs font-mono">
+                          <table className="w-full min-w-[700px] text-left text-xs font-inter">
                             <thead>
-                              <tr className="border-b border-neutral-800 text-neutral-400 text-[11px] uppercase tracking-wider">
-                                <th className="pb-3 font-semibold">Anonymous VID / Session</th>
-                                <th className="pb-3 font-semibold">Timestamps</th>
+                              <tr className="border-b border-neutral-100 text-neutral-400 text-[10px] font-mono uppercase tracking-wider">
+                                <th className="pb-3 font-semibold">Visitor / Session</th>
+                                <th className="pb-3 font-semibold">Time Active</th>
                                 <th className="pb-3 font-semibold">Page Sequence</th>
-                                <th className="pb-3 font-semibold">Source</th>
+                                <th className="pb-3 font-semibold">Traffic Source</th>
                                 <th className="pb-3 font-semibold">Device / OS</th>
                                 <th className="pb-3 font-semibold">Location</th>
                                 <th className="pb-3 font-semibold text-right">Journey</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-neutral-800/60">
+                            <tbody className="divide-y divide-neutral-100">
                               {displayed.map((session, sIdx) => {
                                 const vidShort = session.visitor_id
                                   ? session.visitor_id.length > 14
                                     ? session.visitor_id.slice(0, 10) + "…"
                                     : session.visitor_id
-                                  : "anon_vid";
-                                const sidShort = session.session_id
-                                  ? session.session_id.length > 12
-                                    ? session.session_id.slice(-8)
-                                    : session.session_id
-                                  : "sid";
+                                  : "visitor";
 
                                 return (
                                   <tr
                                     key={session.visitor_id + session.session_id + sIdx}
-                                    className="hover:bg-neutral-800/30 transition-colors"
+                                    className="hover:bg-[#f0f9ff]/40 transition-colors"
                                   >
-                                    {/* VID / SID */}
+                                    {/* Visitor ID */}
                                     <td className="py-3.5 pr-3">
-                                      <div className="space-y-1">
-                                        <div className="flex items-center gap-1.5">
-                                          <span className="px-2 py-0.5 rounded-md bg-[#070b14] border border-emerald-500/30 text-emerald-400 font-bold text-[11px]">
-                                            #{vidShort}
+                                      <div className="flex items-center gap-1.5 font-mono">
+                                        <span className="px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-800 font-semibold text-[11px]">
+                                          #{vidShort}
+                                        </span>
+                                        {session.is_new_visitor ? (
+                                          <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                                            NEW
                                           </span>
-                                          {session.is_new_visitor ? (
-                                            <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
-                                              NEW
-                                            </span>
-                                          ) : (
-                                            <span className="px-1.5 py-0.2 rounded text-[9px] bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
-                                              RETURN
-                                            </span>
-                                          )}
-                                        </div>
-                                        <div className="text-[10px] text-neutral-500">
-                                          sid: <span className="text-neutral-400">{sidShort}</span>
-                                        </div>
+                                        ) : (
+                                          <span className="px-1.5 py-0.2 rounded text-[9px] bg-sky-50 text-sky-700 font-bold border border-sky-200">
+                                            RETURNING
+                                          </span>
+                                        )}
                                       </div>
                                     </td>
 
-                                    {/* Timestamps */}
+                                    {/* Time Active */}
                                     <td className="py-3.5 pr-3">
-                                      <div className="space-y-0.5">
-                                        <div className="text-neutral-200 text-[11px]">
-                                          {new Date(session.last_seen).toLocaleTimeString([], {
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                            second: "2-digit",
-                                          })}
-                                        </div>
-                                        <div className="text-[10px] text-neutral-500">
-                                          {formatDuration(session.duration_seconds)} active
-                                        </div>
+                                      <div className="text-neutral-800 text-xs font-medium">
+                                        {new Date(session.last_seen).toLocaleTimeString([], {
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                        })}
+                                      </div>
+                                      <div className="text-[10px] text-neutral-400">
+                                        {formatDuration(session.duration_seconds)}
                                       </div>
                                     </td>
 
                                     {/* Page sequence preview */}
-                                    <td className="py-3.5 pr-3 max-w-[260px]">
+                                    <td className="py-3.5 pr-3 max-w-[240px]">
                                       <div className="space-y-1">
-                                        <div className="flex items-center gap-1 text-[11px] font-bold text-cyan-400">
-                                          <span>{session.page_views} pageviews</span>
-                                        </div>
+                                        <span className="text-[11px] font-bold text-[#00507D]">
+                                          {session.page_views} pageviews
+                                        </span>
                                         <div className="flex items-center gap-1 flex-wrap">
                                           {session.pages_sequence &&
                                             session.pages_sequence.slice(0, 3).map((p, pIdx) => (
                                               <span
                                                 key={pIdx}
-                                                className="px-1.5 py-0.5 rounded bg-[#070b14] border border-neutral-700 text-[10px] text-neutral-300 truncate max-w-[80px]"
+                                                className="px-1.5 py-0.5 rounded bg-neutral-100 text-[10px] font-mono text-neutral-700 truncate max-w-[80px]"
                                                 title={p}
                                               >
                                                 {p}
                                               </span>
                                             ))}
                                           {session.pages_sequence && session.pages_sequence.length > 3 && (
-                                            <span className="text-[10px] text-neutral-500">
-                                              +{session.pages_sequence.length - 3} more
+                                            <span className="text-[10px] text-neutral-400">
+                                              +{session.pages_sequence.length - 3}
                                             </span>
                                           )}
                                         </div>
@@ -2125,39 +2053,25 @@ export default function AdminPortal() {
 
                                     {/* Source */}
                                     <td className="py-3.5 pr-3">
-                                      <div className="space-y-0.5">
-                                        <span className="px-2 py-0.5 rounded-md bg-[#070b14] border border-neutral-700 text-neutral-200 text-[10px]">
-                                          {session.traffic_source || "Direct"}
-                                        </span>
-                                        {session.referrer_domain && (
-                                          <div className="text-[10px] text-neutral-500 truncate max-w-[100px]">
-                                            {session.referrer_domain}
-                                          </div>
-                                        )}
-                                      </div>
+                                      <span className="px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-700 text-[11px] font-medium">
+                                        {session.traffic_source || "Direct"}
+                                      </span>
                                     </td>
 
                                     {/* Device / OS */}
                                     <td className="py-3.5 pr-3">
-                                      <div className="space-y-0.5">
-                                        <div className="text-neutral-200 text-[11px] capitalize">
-                                          {session.device_type}
-                                        </div>
-                                        <div className="text-[10px] text-neutral-400">
-                                          {session.browser} / {session.os}
-                                        </div>
+                                      <div className="text-neutral-800 text-xs capitalize font-medium">
+                                        {session.device_type}
+                                      </div>
+                                      <div className="text-[11px] text-neutral-500">
+                                        {session.browser} / {session.os}
                                       </div>
                                     </td>
 
                                     {/* Location */}
                                     <td className="py-3.5 pr-3">
-                                      <div className="space-y-0.5">
-                                        <div className="text-neutral-200 text-[11px]">
-                                          {session.city ? `${session.city}, ` : ""}{session.country || "India"}
-                                        </div>
-                                        <div className="text-[10px] text-emerald-400">
-                                          [RAW_IP: DISCARDED]
-                                        </div>
+                                      <div className="text-neutral-800 text-xs font-medium">
+                                        {session.city ? `${session.city}, ` : ""}{session.country || "India"}
                                       </div>
                                     </td>
 
@@ -2165,7 +2079,7 @@ export default function AdminPortal() {
                                     <td className="py-3.5 text-right">
                                       <button
                                         onClick={() => setSelectedJourneyVisitor(session)}
-                                        className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5"
+                                        className="px-3 py-1.5 rounded-xl bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#00507D] text-xs font-semibold cursor-pointer transition-colors inline-flex items-center gap-1.5"
                                       >
                                         <Footprints className="w-3.5 h-3.5" />
                                         <span>Inspect</span>
@@ -2180,7 +2094,7 @@ export default function AdminPortal() {
 
                         {/* Pagination Footer */}
                         {totalPages > 1 && (
-                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-neutral-800 text-xs font-mono text-neutral-400">
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-neutral-100 text-xs font-inter text-neutral-500">
                             <div>
                               Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
                               {Math.min(currentPage * itemsPerPage, allSessions.length)} of {allSessions.length} sessions
@@ -2189,18 +2103,18 @@ export default function AdminPortal() {
                               <button
                                 onClick={() => setVisitorTablePage((p) => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
-                                className="px-3 py-1.5 rounded-xl border border-neutral-700 bg-[#070b14] text-neutral-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1"
+                                className="px-3 py-1.5 rounded-xl border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 font-medium"
                               >
                                 <ChevronLeft className="w-3.5 h-3.5" />
                                 <span>Prev</span>
                               </button>
-                              <span className="px-3 py-1.5 rounded-xl bg-[#070b14] border border-emerald-500/30 text-emerald-400 font-bold">
+                              <span className="px-3 py-1.5 rounded-xl bg-neutral-100 text-neutral-800 font-bold font-mono">
                                 {currentPage} / {totalPages}
                               </span>
                               <button
                                 onClick={() => setVisitorTablePage((p) => Math.min(totalPages, p + 1))}
                                 disabled={currentPage === totalPages}
-                                className="px-3 py-1.5 rounded-xl border border-neutral-700 bg-[#070b14] text-neutral-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1"
+                                className="px-3 py-1.5 rounded-xl border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 font-medium"
                               >
                                 <span>Next</span>
                                 <ChevronRight className="w-3.5 h-3.5" />
@@ -2212,33 +2126,25 @@ export default function AdminPortal() {
                     );
                   })()
                 ) : (
-                  <p className="text-xs font-mono text-neutral-500 py-10 text-center">
-                    [NO_INDIVIDUAL_SESSIONS_RECORDED]
+                  <p className="text-xs font-inter text-neutral-400 py-10 text-center">
+                    No individual visitor sessions recorded yet
                   </p>
                 )}
               </div>
 
-              {/* ========================================================= */}
-              {/* DANGER ZONE: PURGE ALL WEBSITE ANALYTICS TELEMETRY        */}
-              {/* ========================================================= */}
-              <div className="bg-[#180a0e] border border-rose-500/30 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
+              {/* Danger Zone: Clear Analytics Data */}
+              <div className="bg-white border border-rose-200 rounded-3xl p-6 sm:p-7 shadow-xs">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-start gap-3.5">
-                    <div className="w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
                       <ShieldAlert className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold border border-rose-500/30 mb-1">
-                        [DANGER_ZONE: PURGE_DATA]
-                      </div>
-                      <h3 className="font-manrope text-base font-bold text-white">
-                        Clear All Website Analytics Telemetry
+                      <h3 className="font-manrope text-base font-bold text-neutral-950">
+                        Clear Website Analytics Data
                       </h3>
-                      <p className="font-mono text-xs text-neutral-400 mt-1 max-w-xl">
-                        Permanently purge all visitor logs, sessions, and telemetry events from Neon PostgreSQL.
-                        <span className="text-rose-300 block mt-0.5 font-semibold">
-                          Business records (projects, invoices, clients, enquiries, admin accounts) are 100% safe and unaffected.
-                        </span>
+                      <p className="font-inter text-xs text-neutral-500 mt-1 max-w-xl">
+                        Reset all visitor tracking history and analytics sessions. Client accounts, invoices, projects, and portfolio data are completely safe and untouched.
                       </p>
                     </div>
                   </div>
@@ -2248,10 +2154,10 @@ export default function AdminPortal() {
                       setClearConfirmText("");
                       setClearAnalyticsModal(true);
                     }}
-                    className="px-5 py-2.5 rounded-2xl bg-rose-500/20 hover:bg-rose-600 border border-rose-500/40 text-rose-200 hover:text-white font-mono text-xs font-bold transition-all cursor-pointer shadow-lg shrink-0 flex items-center justify-center gap-2"
+                    className="px-5 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2"
                   >
                     <Trash2 className="w-4 h-4" />
-                    <span>Clear All Analytics Data</span>
+                    <span>Clear Analytics</span>
                   </button>
                 </div>
               </div>
@@ -2649,17 +2555,22 @@ export default function AdminPortal() {
               </div>
 
               <div className="bg-white border border-neutral-200/80 rounded-3xl overflow-hidden shadow-xs">
-                <table className="w-full text-left text-xs font-inter">
-                  <thead className="bg-neutral-50/80 border-b border-neutral-200/80 text-[10px] font-mono uppercase text-neutral-500 tracking-wider">
-                    <tr>
-                      <th className="p-4 pl-6">Logo</th>
-                      <th className="p-4">Client Name</th>
-                      <th className="p-4">Company</th>
-                      <th className="p-4">Contact</th>
-                      <th className="p-4">Status</th>
-                      <th className="p-4 pr-6 text-right">Actions</th>
-                    </tr>
-                  </thead>
+                <div className="sm:hidden px-4 py-2 bg-neutral-50/80 border-b border-neutral-100 flex items-center justify-between text-[11px] font-inter text-neutral-500">
+                  <span>← Swipe horizontally to see all columns →</span>
+                  <span className="font-mono text-[10px]">{clients.length} clients</span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[680px] text-left text-xs font-inter">
+                    <thead className="bg-neutral-50/80 border-b border-neutral-200/80 text-[10px] font-mono uppercase text-neutral-500 tracking-wider">
+                      <tr>
+                        <th className="p-4 pl-6">Logo</th>
+                        <th className="p-4">Client Name</th>
+                        <th className="p-4">Company</th>
+                        <th className="p-4">Contact</th>
+                        <th className="p-4">Status</th>
+                        <th className="p-4 pr-6 text-right">Actions</th>
+                      </tr>
+                    </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {clients.map((c) => (
                       <tr key={c.id} className="hover:bg-[#f0f9ff]/40 transition-colors">
@@ -2710,6 +2621,7 @@ export default function AdminPortal() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}
@@ -2738,8 +2650,13 @@ export default function AdminPortal() {
               </div>
 
               <div className="bg-white border border-neutral-200/80 rounded-3xl overflow-hidden shadow-xs">
-                <table className="w-full text-left text-xs font-inter">
-                  <thead className="bg-neutral-50/80 border-b border-neutral-200/80 text-[10px] font-mono uppercase text-neutral-500 tracking-wider">
+                <div className="sm:hidden px-4 py-2 bg-neutral-50/80 border-b border-neutral-100 flex items-center justify-between text-[11px] font-inter text-neutral-500">
+                  <span>← Swipe horizontally to see all columns →</span>
+                  <span className="font-mono text-[10px]">{invoices.length} invoices</span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[700px] text-left text-xs font-inter">
+                    <thead className="bg-neutral-50/80 border-b border-neutral-200/80 text-[10px] font-mono uppercase text-neutral-500 tracking-wider">
                     <tr>
                       <th className="p-4 pl-6">Invoice #</th>
                       <th className="p-4">Client</th>
@@ -2813,6 +2730,7 @@ export default function AdminPortal() {
                     })}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}
