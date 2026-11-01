@@ -1,41 +1,58 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/dbConnect";
-import Enquiry from "@/models/Enquiry";
+import { getDb } from "@/lib/db";
+import { getAdminSession } from "@/lib/auth";
 
 export async function GET() {
-    try {
-        await dbConnect();
-        const enquiries = await Enquiry.find({}).sort({ createdAt: -1 });
-        return NextResponse.json({ success: true, enquiries });
-    } catch (error) {
-        console.error("Fetch Enquiries Error:", error);
-        return NextResponse.json(
-            { success: false, error: "Failed to fetch enquiries" },
-            { status: 500 }
-        );
+  try {
+    const session = await getAdminSession();
+    if (!session) {
+      return NextResponse.json({ success: false, error: "Unauthorized." }, { status: 401 });
     }
+
+    const sql = getDb();
+    const rows = await sql`
+      SELECT id, name, email, phone, service, message, is_read, created_at
+      FROM enquiries
+      ORDER BY id DESC;
+    `;
+
+    return NextResponse.json({ success: true, enquiries: rows });
+  } catch (err) {
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  }
 }
 
-export async function DELETE(req) {
-    try {
-        await dbConnect();
-        const { searchParams } = new URL(req.url);
-        const id = searchParams.get("id");
+export async function POST(req) {
+  try {
+    const body = await req.json();
+    const { name, email = "", phone = "", service = "webdev", message = "" } = body;
 
-        if (!id) {
-            return NextResponse.json(
-                { success: false, error: "Enquiry ID required" },
-                { status: 400 }
-            );
-        }
-
-        await Enquiry.findByIdAndDelete(id);
-        return NextResponse.json({ success: true, message: "Enquiry deleted" });
-    } catch (error) {
-        console.error("Delete Enquiry Error:", error);
-        return NextResponse.json(
-            { success: false, error: "Failed to delete enquiry" },
-            { status: 500 }
-        );
+    if (!name || !name.trim()) {
+      return NextResponse.json({ success: false, error: "Name is required." }, { status: 400 });
     }
+
+    if (!email.trim() && !phone.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Please provide either an email or phone number." },
+        { status: 400 }
+      );
+    }
+
+    const sql = getDb();
+    const rows = await sql`
+      INSERT INTO enquiries (name, email, phone, service, message)
+      VALUES (${name.trim()}, ${email.trim()}, ${phone.trim()}, ${service}, ${message.trim()})
+      RETURNING *;
+    `;
+
+    return NextResponse.json({
+      success: true,
+      message: "Thank you! Your enquiry has been received. Our team will contact you shortly.",
+      enquiry: rows[0],
+    }, { status: 201 });
+  } catch (err) {
+    console.error("Enquiry submission error:", err);
+    return NextResponse.json({ success: false, error: "Failed to submit enquiry." }, { status: 500 });
+  }
 }
+

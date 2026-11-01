@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Inline SVG for Instagram
@@ -38,6 +39,8 @@ const WhatsappIcon = () => (
 );
 
 export default function FloatingSocials() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {

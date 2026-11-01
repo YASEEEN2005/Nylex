@@ -1,18 +1,15 @@
 import { NextResponse } from "next/server";
+import { clearAdminSessionCookie } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
 
 export async function POST() {
-    const response = NextResponse.json(
-        { success: true, message: "Logged out successfully" },
-        { status: 200 }
-    );
-
-    response.cookies.set({
-        name: "nylex_admin_token",
-        value: "",
-        httpOnly: true,
-        expires: new Date(0),
-        path: "/",
-    });
-
-    return response;
+  try {
+    await clearAdminSessionCookie();
+    return NextResponse.json({ success: true, message: "Logged out successfully." });
+  } catch (err) {
+    console.error("Logout error:", err);
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  }
 }
+

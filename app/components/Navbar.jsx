@@ -1,20 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight, Mail, Phone, MapPin } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
+
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const navLinks = [
-    { name: "Home", href: "#top", id: "top" },
-    { name: "Services", href: "#services", id: "services" },
-    { name: "About", href: "#about", id: "about" },
-    { name: "Work", href: "#work", id: "work" },
-    { name: "Blog", href: "#blog", id: "blog" },
-    { name: "Contact", href: "#contact", id: "contact" },
+    { name: "Home", href: "/", id: "top" },
+    { name: "Services", href: "/services", id: "services" },
+    { name: "About", href: "/about", id: "about" },
+    { name: "Work", href: "/work", id: "work" },
+    { name: "Blog", href: "/blog", id: "blog" },
+    { name: "Contact", href: "/contact", id: "contact" },
   ];
 
   useEffect(() => {
@@ -43,17 +48,23 @@ export default function Navbar() {
     };
   }, [mobileMenu]);
 
-  const handleLinkClick = (e, id) => {
-    e.preventDefault();
+  const handleLinkClick = (e, link) => {
     setMobileMenu(false);
 
-    const targetElement = document.getElementById(id === "top" ? "hero" : id);
-    if (targetElement) {
-      targetElement.scrollIntoView({
-        behavior: "smooth",
-      });
+    if (pathname === "/") {
+      const targetId = link.id === "top" ? "hero" : link.id;
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
     }
   };
+
+  // Only use dark transparent style on homepage before user scrolls
+  const isDarkHero = pathname === "/" && !scrolled;
 
   return (
     <>
@@ -62,17 +73,17 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? "h-16 sm:h-20 bg-white/95 backdrop-blur-md border-b border-black/5 shadow-xs"
-            : "h-20 sm:h-24 bg-gradient-to-b from-black/60 to-transparent"
+          isDarkHero
+            ? "h-20 sm:h-24 bg-gradient-to-b from-black/60 to-transparent"
+            : "h-16 sm:h-20 bg-white/95 backdrop-blur-md border-b border-black/5 shadow-xs"
         }`}
       >
         <div className="h-full w-full px-4 sm:px-6 lg:px-8 xl:px-[120px]">
           <div className="flex h-full items-center justify-between">
             {/* Logo */}
-            <a
-              href="#top"
-              onClick={(e) => handleLinkClick(e, "top")}
+            <Link
+              href="/"
+              onClick={(e) => handleLinkClick(e, { href: "/", id: "top" })}
               className="flex shrink-0 items-center gap-2.5 sm:gap-3 group cursor-pointer"
               aria-label="Nylex Home"
             >
@@ -86,66 +97,78 @@ export default function Navbar() {
               <div className="flex flex-col items-start leading-none">
                 <span
                   className={`font-manrope text-base sm:text-xl font-extrabold tracking-tight transition-colors ${
-                    scrolled
-                      ? "text-neutral-950 group-hover:text-[#00507D]"
-                      : "text-white group-hover:text-[#53e6ff]"
+                    isDarkHero
+                      ? "text-white group-hover:text-[#53e6ff]"
+                      : "text-neutral-950 group-hover:text-[#00507D]"
                   }`}
                 >
                   NYLEX
                 </span>
                 <span
                   className={`font-inter text-[8px] sm:text-[9px] font-bold tracking-[0.22em] uppercase transition-colors ${
-                    scrolled ? "text-neutral-500" : "text-neutral-300"
+                    isDarkHero ? "text-neutral-300" : "text-neutral-500"
                   }`}
                 >
                   DIGITAL STUDIO
                 </span>
               </div>
-            </a>
+            </Link>
 
             {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-6 lg:gap-8">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.id)}
-                  className={`group relative font-inter text-sm font-semibold transition-colors duration-200 py-1 ${
-                    scrolled
-                      ? "text-neutral-600 hover:text-neutral-950"
-                      : "text-neutral-200 hover:text-white"
-                  }`}
-                >
-                  <span className="relative inline-block">
-                    {link.name}
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-x-0 -bottom-0.5 h-[1.5px] origin-left scale-x-0 bg-[#00507D] transition-transform duration-300 ease-out group-hover:scale-x-100"
-                    />
-                  </span>
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname === link.href ||
+                  (link.href !== "/" && pathname?.startsWith(link.href));
+
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleLinkClick(e, link)}
+                    className={`group relative font-inter text-sm font-semibold transition-colors duration-200 py-1 ${
+                      isActive
+                        ? isDarkHero
+                          ? "text-[#53e6ff]"
+                          : "text-[#00507D]"
+                        : isDarkHero
+                        ? "text-neutral-200 hover:text-white"
+                        : "text-neutral-600 hover:text-neutral-950"
+                    }`}
+                  >
+                    <span className="relative inline-block">
+                      {link.name}
+                      <span
+                        aria-hidden="true"
+                        className={`absolute inset-x-0 -bottom-0.5 h-[1.5px] origin-left transition-transform duration-300 ease-out ${
+                          isActive
+                            ? "scale-x-100 bg-[#00507D]"
+                            : "scale-x-0 bg-[#00507D] group-hover:scale-x-100"
+                        }`}
+                      />
+                    </span>
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Right Action / Mobile Trigger */}
             <div className="flex items-center gap-3 sm:gap-4">
-              <motion.a
-                href="#contact"
-                onClick={(e) => handleLinkClick(e, "contact")}
-                whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.96 }}
-                className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#00507D] hover:bg-[#003e61] px-5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs transition-all duration-200 hover:shadow-md cursor-pointer"
+              <Link
+                href="/contact"
+                onClick={(e) => handleLinkClick(e, { href: "/contact", id: "contact" })}
+                className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#00507D] hover:bg-[#003e61] px-5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs transition-all duration-200 hover:shadow-md cursor-pointer hover:scale-105"
               >
                 Start a Project
-              </motion.a>
+              </Link>
 
               {/* Mobile Menu Hamburger Button */}
               <button
                 onClick={() => setMobileMenu(true)}
                 className={`md:hidden flex h-10 w-10 items-center justify-center rounded-full transition-all focus:outline-none cursor-pointer ${
-                  scrolled
-                    ? "bg-neutral-100 text-neutral-900 border border-neutral-200 hover:bg-neutral-200"
-                    : "bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-md"
+                  isDarkHero
+                    ? "bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-md"
+                    : "bg-neutral-100 text-neutral-900 border border-neutral-200 hover:bg-neutral-200"
                 }`}
                 aria-label="Open Navigation Menu"
               >
@@ -172,9 +195,9 @@ export default function Navbar() {
 
             {/* Top Bar inside Drawer */}
             <div className="relative z-10 flex items-center justify-between px-6 py-5 border-b border-white/[0.08] bg-[#07090e]/80 backdrop-blur-md">
-              <a
-                href="#top"
-                onClick={(e) => handleLinkClick(e, "top")}
+              <Link
+                href="/"
+                onClick={(e) => handleLinkClick(e, { href: "/", id: "top" })}
                 className="flex items-center gap-2.5 cursor-pointer"
               >
                 <img
@@ -190,7 +213,7 @@ export default function Navbar() {
                     DIGITAL STUDIO
                   </span>
                 </div>
-              </a>
+              </Link>
 
               <button
                 onClick={() => setMobileMenu(false)}
@@ -211,34 +234,37 @@ export default function Navbar() {
                   </span>
                 </div>
                 <span className="text-[10px] text-neutral-400 font-mono tracking-wider">
-                  06 SECTIONS
+                  06 PAGES
                 </span>
               </div>
 
               <div className="flex flex-col space-y-1">
                 {navLinks.map((link, idx) => (
-                  <motion.a
+                  <motion.div
                     key={link.name}
-                    href={link.href}
-                    onClick={(e) => handleLinkClick(e, link.id)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 + idx * 0.04, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className="group py-3.5 flex items-center justify-between border-b border-white/[0.05] hover:border-[#53e6ff]/40 transition-colors"
                   >
-                    <div className="flex items-center gap-3.5">
-                      <span className="font-mono text-xs text-[#53e6ff]/80 font-medium tracking-wider">
-                        0{idx + 1}
-                      </span>
-                      <span className="font-manrope text-[28px] xs:text-[32px] font-normal tracking-tight text-neutral-200 group-hover:text-white group-hover:translate-x-1.5 transition-all duration-200">
-                        {link.name}
-                      </span>
-                    </div>
+                    <Link
+                      href={link.href}
+                      onClick={(e) => handleLinkClick(e, link)}
+                      className="group py-3.5 flex items-center justify-between border-b border-white/[0.05] hover:border-[#53e6ff]/40 transition-colors"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <span className="font-mono text-xs text-[#53e6ff]/80 font-medium tracking-wider">
+                          0{idx + 1}
+                        </span>
+                        <span className="font-manrope text-[28px] xs:text-[32px] font-normal tracking-tight text-neutral-200 group-hover:text-white group-hover:translate-x-1.5 transition-all duration-200">
+                          {link.name}
+                        </span>
+                      </div>
 
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.04] border border-white/[0.06] group-hover:bg-[#00507D] group-hover:border-[#00507D] text-neutral-400 group-hover:text-white transition-all duration-300">
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </div>
-                  </motion.a>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.04] border border-white/[0.06] group-hover:bg-[#00507D] group-hover:border-[#00507D] text-neutral-400 group-hover:text-white transition-all duration-300">
+                        <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </div>
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -246,16 +272,14 @@ export default function Navbar() {
             {/* Bottom Drawer Footer & CTA */}
             <div className="relative z-10 px-6 pb-7 pt-4 border-t border-white/[0.08] bg-[#07090e]/90 flex flex-col gap-4">
               {/* Main CTA */}
-              <motion.a
-                href="#contact"
-                onClick={(e) => handleLinkClick(e, "contact")}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <Link
+                href="/contact"
+                onClick={(e) => handleLinkClick(e, { href: "/contact", id: "contact" })}
                 className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#00507D] via-[#006ca8] to-[#0088dd] hover:from-[#003e61] hover:to-[#006ca8] text-white font-semibold text-sm text-center shadow-[0_0_25px_rgba(0,112,243,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Start a Project</span>
                 <ArrowUpRight className="h-4 w-4" />
-              </motion.a>
+              </Link>
 
               {/* Direct Contact Links */}
               <div className="grid grid-cols-2 gap-2 pt-1">

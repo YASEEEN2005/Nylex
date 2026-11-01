@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function MouseFollower() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   

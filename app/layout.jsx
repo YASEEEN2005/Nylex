@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import CanvasBackground from "./components/CanvasBackground";
@@ -6,6 +7,7 @@ import Footer from "./components/Footer";
 import FloatingSocials from "./components/FloatingSocials";
 import SmoothScroll from "./components/SmoothScroll";
 import MouseFollower from "./components/MouseFollower";
+import AnalyticsTracker from "./components/AnalyticsTracker";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -212,6 +214,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.className} font-inter antialiased select-none bg-[#0a0a0a] text-[#f7fafc] overflow-x-clip`}>
+        {/* Privacy-Preserving Analytics Tracker */}
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
+        </Suspense>
+
         {/* Momentum Smooth Scrolling */}
         <SmoothScroll />
 

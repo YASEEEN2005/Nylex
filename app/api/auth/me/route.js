@@ -1,22 +1,27 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { getAdminSession } from "@/lib/auth";
 
-const JWT_SECRET = process.env.JWT_SECRET || "nylex_fallback_secret_key_2026";
+export const dynamic = "force-dynamic";
 
-export async function GET(req) {
-    try {
-        const token = req.cookies.get("nylex_admin_token")?.value;
+export async function GET() {
+  try {
+    const session = await getAdminSession();
 
-        if (!token) {
-            return NextResponse.json({ authenticated: false }, { status: 401 });
-        }
-
-        const decoded = jwt.verify(token, JWT_SECRET);
-        return NextResponse.json({
-            authenticated: true,
-            user: { username: decoded.username, role: decoded.role },
-        });
-    } catch (error) {
-        return NextResponse.json({ authenticated: false }, { status: 401 });
+    if (!session) {
+      return NextResponse.json({ authenticated: false, admin: null });
     }
+
+    return NextResponse.json({
+      authenticated: true,
+      admin: {
+        id: session.id,
+        username: session.username,
+        role: session.role,
+      },
+    });
+  } catch (err) {
+    console.error("Auth Me GET error:", err);
+    return NextResponse.json({ authenticated: false, admin: null });
+  }
 }
+

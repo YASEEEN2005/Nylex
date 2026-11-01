@@ -1,31 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
-
-const blogPosts = [
-  {
-    title: "How to Build a Modern Business Website",
-    category: "Web Development",
-    date: "June 10, 2024",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    desc: "Key principles for building fast, high-converting digital storefronts that drive leads.",
-  },
-  {
-    title: "The Future of AI in Business",
-    category: "AI & Automation",
-    date: "June 5, 2024",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
-    desc: "How modern machine learning and generative workflows empower operational scale.",
-  },
-  {
-    title: "UI/UX Trends in 2024",
-    category: "Design",
-    date: "May 28, 2024",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
-    desc: "Crafting minimalist interfaces, micro-interactions, and accessible user journeys.",
-  },
-];
+import { blogPosts } from "@/lib/blogData";
 
 export default function Blog() {
   return (
@@ -35,7 +13,7 @@ export default function Blog() {
     >
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-[120px]">
         {/* Header */}
-        <div className="text-center lg:text-left pb-12 sm:pb-16 max-w-2xl">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-12 sm:pb-16 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -46,16 +24,24 @@ export default function Blog() {
               OUR BLOG
             </h2>
             <p className="mt-3 font-inter text-base sm:text-lg text-neutral-600">
-              Insights, tips and updates from our team.
+              Insights, tips and updates from our engineering team.
             </p>
           </motion.div>
+
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#00507D] hover:underline"
+          >
+            <span>View all articles</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* 3 Blog Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {blogPosts.map((post, index) => (
+          {blogPosts.slice(0, 3).map((post, index) => (
             <motion.article
-              key={post.title}
+              key={post.slug || post.title}
               initial={{ opacity: 0, y: 40, scale: 0.97 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
@@ -64,7 +50,10 @@ export default function Blog() {
               className="group relative flex flex-col rounded-2xl border border-neutral-200/90 bg-white overflow-hidden shadow-xs hover:border-[#00507D]/50 hover:shadow-xl transition-all duration-300"
             >
               {/* Image with Smooth Zoom */}
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100">
+              <Link
+                href={`/blog/${post.slug}`}
+                className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100 block"
+              >
                 <img
                   src={post.image}
                   alt={post.title}
@@ -74,13 +63,13 @@ export default function Blog() {
                 <div className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-[11px] font-semibold text-neutral-800 shadow-xs">
                   {post.category}
                 </div>
-              </div>
+              </Link>
 
               {/* Content & Footer */}
               <div className="p-6 flex flex-1 flex-col justify-between">
                 <div>
                   <h3 className="font-manrope text-lg sm:text-xl font-bold text-neutral-950 group-hover:text-[#00507D] transition-colors leading-snug">
-                    {post.title}
+                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                   </h3>
                   <p className="mt-2 font-inter text-xs sm:text-sm text-neutral-600 line-clamp-2 leading-relaxed">
                     {post.desc}
@@ -93,9 +82,13 @@ export default function Blog() {
                     {post.date}
                   </span>
 
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 group-hover:border-[#00507D] group-hover:bg-[#00507D] group-hover:text-white transition-all duration-300">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-300 bg-white text-neutral-700 group-hover:border-[#00507D] group-hover:bg-[#00507D] group-hover:text-white transition-all duration-300"
+                    aria-label={`Read ${post.title}`}
+                  >
                     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </div>
+                  </Link>
                 </div>
               </div>
             </motion.article>
